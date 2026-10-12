@@ -1,0 +1,316 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>LUMEN</title>
+  <meta name="description" content="Reliez les orbes de même éclat, fusionnez-les et faites monter la lumière.">
+  <meta name="theme-color" content="#100b29">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="LUMEN">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon-192.png" type="image/png">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="preload" href="fonts/unbounded-latin-900-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- ================= Accueil ================= -->
+  <section id="home" class="screen" aria-label="Accueil">
+    <header class="topbar">
+      <button class="rank-chip" data-act="open" data-to="stats" aria-label="Rang et statistiques">
+        <canvas id="rankRing" width="88" height="88" aria-hidden="true"></canvas>
+        <span class="rank-txt"><b id="rankTitle">Étincelle</b><small id="rankSub">Rang 1</small></span>
+      </button>
+      <span class="spacer"></span>
+      <button class="eclats" data-act="open" data-to="shop" aria-label="Éclats et boutique">
+        <svg class="shard" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2l5 9-5 11-5-11z"/></svg>
+        <b id="ecCount">0</b>
+      </button>
+      <button class="icon-btn" data-act="open" data-to="settings" aria-label="Réglages">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg>
+      </button>
+    </header>
+
+    <div class="hero">
+      <canvas id="heroCanvas" aria-hidden="true"></canvas>
+      <h1 class="title">LUMEN</h1>
+      <p class="tagline">Reliez. Fusionnez. Faites monter la lumière.</p>
+    </div>
+
+    <button class="streak-row" data-act="open" data-to="missions" aria-label="Série de connexion">
+      <span class="sr-n" id="srN">0<small>jours</small></span>
+      <span class="moons" id="moons"></span>
+    </button>
+
+    <div class="modes">
+      <button class="adv-card" data-act="map">
+        <canvas id="advConst" aria-hidden="true"></canvas>
+        <span class="adv-body">
+          <span class="adv-kicker" id="advChapter">La Petite Ourse</span>
+          <span class="adv-name">Aventure</span>
+          <span class="adv-sub" id="advSub">Niveau 1</span>
+        </span>
+        <span class="adv-stars" id="advStars">0<small>/ 360</small></span>
+      </button>
+      <div class="tiles">
+        <button class="tile classic" data-act="classic">
+          <canvas class="orb-ico" data-level="7" width="96" height="96"></canvas>
+          <span class="tile-name">Classique</span>
+          <span class="tile-sub" id="homeBest">Record 0</span>
+        </button>
+        <button class="tile daily" data-act="daily">
+          <canvas class="orb-ico" data-level="4" width="96" height="96"></canvas>
+          <span class="tile-name">Défi du jour</span>
+          <span class="tile-sub" id="homeDaily">LUMEN #1</span>
+        </button>
+      </div>
+      <button class="event-band" data-act="event" id="eventBand">
+        <span class="ev-glyph" id="evGlyph" aria-hidden="true"></span>
+        <span class="ev-body"><span class="ev-name" id="evName">Semaine</span><span class="ev-sub" id="evSub"></span></span>
+        <span class="ev-best" id="evBest"></span>
+      </button>
+    </div>
+
+    <nav class="dock-nav" aria-label="Menu">
+      <button data-act="open" data-to="missions"><svg viewBox="0 0 24 24"><path d="M5 4h14v16l-7-4-7 4z"/></svg><span>Missions</span><i class="badge" id="misBadge" hidden></i></button>
+      <button data-act="open" data-to="shop"><svg viewBox="0 0 24 24"><path d="M4 9h16l-1.5 11h-13zM8 9V7a4 4 0 0 1 8 0v2"/></svg><span>Boutique</span></button>
+      <button data-act="open" data-to="ach"><svg viewBox="0 0 24 24"><circle cx="12" cy="9" r="5.5"/><path d="M8.5 13.5L7 21l5-2.6 5 2.6-1.5-7.5"/></svg><span>Succès</span></button>
+      <button data-act="open" data-to="themes"><svg viewBox="0 0 24 24"><circle cx="8" cy="9" r="3.5"/><circle cx="16" cy="9" r="3.5"/><circle cx="12" cy="16" r="3.5"/></svg><span>Thèmes</span></button>
+      <button data-act="open" data-to="stats"><svg viewBox="0 0 24 24"><path d="M4 20V11M10 20V5M16 20v-6M22 20H2"/></svg><span>Stats</span></button>
+    </nav>
+  </section>
+
+  <!-- ================= Carte de l'Aventure ================= -->
+  <section id="map" class="screen panel" aria-label="Aventure" hidden>
+    <header class="panel-head floating">
+      <button class="icon-btn back" data-act="home" aria-label="Retour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <div class="map-title"><b id="mapChapter">La Petite Ourse</b><small id="mapStars">0 étoiles</small></div>
+      <span class="eclats small"><svg class="shard" viewBox="0 0 24 24"><path d="M12 2l5 9-5 11-5-11z"/></svg><b class="ec-live">0</b></span>
+    </header>
+    <div class="map-view">
+      <canvas id="mapCanvas" aria-hidden="true"></canvas>
+      <div class="map-scroll" id="mapScroll">
+        <div class="map-inner" id="mapInner"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= Partie ================= -->
+  <section id="game" class="screen" aria-label="Partie" hidden>
+    <div class="hud">
+      <button class="icon-btn" aria-label="Pause" data-act="pause">
+        <svg viewBox="0 0 24 24" fill="currentColor"><rect x="6.5" y="5" width="3.6" height="14" rx="1.6"/><rect x="13.9" y="5" width="3.6" height="14" rx="1.6"/></svg>
+      </button>
+      <div class="scorebox">
+        <div class="mode-label" id="modeLabel">Classique</div>
+        <div class="score" id="score">0</div>
+        <div class="subline" id="subline">
+          <span id="bestWrap">Record <b id="best">0</b></span>
+        </div>
+      </div>
+      <div class="moves-orb" id="movesWrap" hidden><b id="moves">40</b><small>coups</small></div>
+      <button class="icon-btn mute-btn" id="muteGame" aria-label="Couper le son" data-act="mute"></button>
+    </div>
+    <div class="goals" id="goals" hidden></div>
+    <canvas id="spectrum" class="spectrum" aria-hidden="true"></canvas>
+    <div class="coach" id="coach" hidden><p id="coachText"></p><button class="btn solid small" id="coachBtn" data-act="coachNext" hidden>Continuer</button></div>
+    <div class="board-wrap">
+      <canvas id="board" aria-label="Plateau de jeu"></canvas>
+      <div class="combo" id="combo"></div>
+      <div class="toast" id="toast"></div>
+      <div class="target-bar" id="targetBar" hidden><span id="targetText">Touchez une orbe</span><button class="link tight" data-act="cancelTarget">Annuler</button></div>
+    </div>
+    <div class="boosters" id="boosters">
+      <button class="boost" data-act="boost" data-b="pulse" id="bPulse"><span class="lens pulse"></span><span class="b-name">Pulse</span><i class="b-count" id="cPulse">1</i></button>
+      <button class="boost" data-act="boost" data-b="hammer"><span class="lens hammer"><svg viewBox="0 0 24 24"><path d="M5 9l5-5 4 4-5 5zM10.5 11.5L19 20"/></svg></span><span class="b-name">Marteau</span><i class="b-count" id="cHammer">0</i></button>
+      <button class="boost" data-act="boost" data-b="spark"><span class="lens spark"><svg viewBox="0 0 24 24"><path d="M12 3v6M12 15v6M3 12h6M15 12h6M6 6l3 3M15 15l3 3M6 18l3-3M15 9l3-3"/></svg></span><span class="b-name">Étincelle</span><i class="b-count" id="cSpark">0</i></button>
+      <button class="boost" data-act="boost" data-b="moves" id="bMoves"><span class="lens moves"><b>+5</b></span><span class="b-name">Coups</span><i class="b-count" id="cMoves">0</i></button>
+    </div>
+  </section>
+
+  <!-- ================= Panneaux ================= -->
+  <section id="shop" class="screen panel" aria-label="Boutique" hidden>
+    <header class="panel-head">
+      <button class="icon-btn back" data-act="back" aria-label="Retour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <h2>Boutique</h2>
+      <span class="eclats small"><svg class="shard" viewBox="0 0 24 24"><path d="M12 2l5 9-5 11-5-11z"/></svg><b class="ec-live">0</b></span>
+    </header>
+    <div class="panel-body">
+      <p class="lede">Les éclats se gagnent en jouant : fin de partie, missions, série et succès. Rien ne s'achète avec de l'argent réel.</p>
+      <div class="shop-list" id="shopList"></div>
+      <h3 class="sect">Thèmes</h3>
+      <div class="theme-strip" id="shopThemes"></div>
+    </div>
+  </section>
+
+  <section id="missions" class="screen panel" aria-label="Missions" hidden>
+    <header class="panel-head">
+      <button class="icon-btn back" data-act="back" aria-label="Retour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <h2>Missions du jour</h2>
+      <span class="eclats small"><svg class="shard" viewBox="0 0 24 24"><path d="M12 2l5 9-5 11-5-11z"/></svg><b class="ec-live">0</b></span>
+    </header>
+    <div class="panel-body">
+      <div class="mis-list" id="misList"></div>
+      <p class="fine" id="misReset">Nouvelles missions à minuit.</p>
+      <h3 class="sect">Série</h3>
+      <div class="streak-card" id="streakCard"></div>
+      <h3 class="sect">Événement de la semaine</h3>
+      <div class="event-card" id="eventCard"></div>
+    </div>
+  </section>
+
+  <section id="ach" class="screen panel" aria-label="Succès" hidden>
+    <header class="panel-head">
+      <button class="icon-btn back" data-act="back" aria-label="Retour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <h2>Succès</h2>
+      <span class="ach-total" id="achTotal">0 / 33</span>
+    </header>
+    <div class="panel-body"><div class="ach-list" id="achList"></div></div>
+  </section>
+
+  <section id="themes" class="screen panel" aria-label="Thèmes" hidden>
+    <header class="panel-head">
+      <button class="icon-btn back" data-act="back" aria-label="Retour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <h2>Thèmes</h2>
+      <span class="eclats small"><svg class="shard" viewBox="0 0 24 24"><path d="M12 2l5 9-5 11-5-11z"/></svg><b class="ec-live">0</b></span>
+    </header>
+    <div class="panel-body"><div class="theme-list" id="themeList"></div></div>
+  </section>
+
+  <section id="stats" class="screen panel" aria-label="Statistiques" hidden>
+    <header class="panel-head">
+      <button class="icon-btn back" data-act="back" aria-label="Retour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <h2>Statistiques</h2>
+      <span></span>
+    </header>
+    <div class="panel-body">
+      <div class="rank-card" id="rankCard"></div>
+      <div class="stat-grid" id="statGrid"></div>
+    </div>
+  </section>
+
+  <section id="settings" class="screen panel" aria-label="Réglages" hidden>
+    <header class="panel-head">
+      <button class="icon-btn back" data-act="back" aria-label="Retour"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <h2>Réglages</h2>
+      <span></span>
+    </header>
+    <div class="panel-body">
+      <div class="set-group">
+        <label class="toggle"><span>Sons</span><input type="checkbox" id="setSnd"><i></i></label>
+        <label class="toggle"><span>Musique d'ambiance<small>Nappes douces générées en direct</small></span><input type="checkbox" id="setMus"><i></i></label>
+        <label class="toggle"><span>Vibrations</span><input type="checkbox" id="setVib"><i></i></label>
+      </div>
+      <div class="set-group">
+        <button class="set-row" data-act="replayTuto">Rejouer le tutoriel</button>
+      </div>
+      <h3 class="sect">Sauvegarde</h3>
+      <div class="set-group pad">
+        <p class="fine">Changement de téléphone ? Copiez ce code et collez-le dans LUMEN sur le nouvel appareil (PWA ou appli Android).</p>
+        <textarea id="saveCode" readonly rows="3" aria-label="Code de sauvegarde"></textarea>
+        <div class="row2">
+          <button class="btn" data-act="exportSave">Copier le code</button>
+          <button class="btn" data-act="showImport">Importer un code</button>
+        </div>
+        <div id="importBox" hidden>
+          <textarea id="importCode" rows="3" placeholder="Collez ici un code LUMEN2…" aria-label="Code à importer"></textarea>
+          <p class="err" id="importErr" hidden>Ce code est incomplet ou abîmé. Vérifiez qu'il commence par LUMEN2 et qu'il a été copié en entier.</p>
+          <button class="btn solid" data-act="doImport">Remplacer ma progression</button>
+        </div>
+      </div>
+      <h3 class="sect">Zone sensible</h3>
+      <div class="set-group pad">
+        <button class="btn danger" id="resetBtn" data-act="reset">Réinitialiser la progression</button>
+        <div class="confirm" id="resetConfirm" hidden>
+          <p>Tout sera effacé : étoiles, éclats, boosters, thèmes, succès. Exportez votre code avant si vous voulez revenir en arrière.</p>
+          <div class="row2">
+            <button class="btn" data-act="resetCancel">Garder ma progression</button>
+            <button class="btn danger solid" data-act="resetConfirm">Tout effacer</button>
+          </div>
+        </div>
+      </div>
+      <p class="fine center">LUMEN v2 · aucune donnée ne quitte votre appareil</p>
+    </div>
+  </section>
+
+  <!-- ================= Feuilles ================= -->
+  <div class="veil" id="pauseVeil" hidden>
+    <div class="sheet" role="dialog" aria-label="Pause">
+      <h2>Pause</h2>
+      <div class="final" id="pauseScore">0</div>
+      <div class="pause-goals" id="pauseGoals"></div>
+      <div class="actions three" style="margin-top:20px">
+        <button class="btn solid" data-act="resume">Reprendre</button>
+        <button class="btn" data-act="restart">Recommencer</button>
+      </div>
+      <button class="link" data-act="quit">Quitter la partie</button>
+    </div>
+  </div>
+
+  <div class="veil" id="overVeil" hidden>
+    <div class="sheet" role="dialog" aria-label="Fin de partie">
+      <h2 id="overTitle">Plus aucune chaîne possible</h2>
+      <div class="stars-big" id="overStars" hidden></div>
+      <div class="final" id="finalScore">0</div>
+      <span class="newbest" id="newBest" hidden>Nouveau record</span>
+      <div class="stats">
+        <div class="stat"><canvas id="overOrb" width="132" height="132"></canvas><span>Niveau max</span></div>
+        <div class="stat"><b id="overBest">0</b><span id="overBestLbl">Record</span></div>
+        <div class="stat"><b id="overMoves">0</b><span>Fusions</span></div>
+      </div>
+      <div class="gains" id="gains"></div>
+      <pre class="share-preview" id="sharePreview" hidden></pre>
+      <div class="actions">
+        <button class="btn" data-act="share" id="shareBtn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>
+          Partager
+        </button>
+        <button class="btn solid" data-act="replay" id="replayBtn">Rejouer</button>
+      </div>
+      <button class="link" data-act="leave" id="leaveBtn">Retour à l'accueil</button>
+    </div>
+  </div>
+
+  <div class="veil" id="levelVeil" hidden>
+    <div class="sheet level-sheet" role="dialog" aria-label="Niveau">
+      <div class="lv-orb" id="lvOrb"></div>
+      <h2 id="lvChapter">Cassiopée</h2>
+      <div class="final small" id="lvTitle">Niveau 21</div>
+      <div class="stars-big dim" id="lvStars"></div>
+      <p class="lv-intro" id="lvIntro"></p>
+      <ul class="lv-goals" id="lvGoals"></ul>
+      <p class="lv-moves" id="lvMoves">25 coups</p>
+      <div class="actions">
+        <button class="btn" data-act="closeLevel">Fermer</button>
+        <button class="btn solid" data-act="playLevel">Jouer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="veil" id="giftVeil" hidden>
+    <div class="sheet gift-sheet" role="dialog" aria-label="Récompense">
+      <canvas id="giftMoon" width="240" height="240" aria-hidden="true"></canvas>
+      <h2 id="giftTitle">Jour 1 de votre série</h2>
+      <div class="final small" id="giftAmount">+20</div>
+      <p class="lv-intro" id="giftText"></p>
+      <button class="btn solid wide" data-act="closeGift">Récupérer</button>
+    </div>
+  </div>
+
+  <div class="intro-card" id="introCard" hidden role="dialog" aria-label="Nouvelle orbe">
+    <canvas id="introIco" width="120" height="120" aria-hidden="true"></canvas>
+    <div><b id="introName">Pierre</b><p id="introText"></p></div>
+    <button class="btn solid small" data-act="closeIntro">Compris</button>
+  </div>
+
+  <div class="ticker" id="ticker" aria-live="polite"></div>
+
+  <script src="engine.js"></script>
+  <script src="progress.js"></script>
+  <script src="audio.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
