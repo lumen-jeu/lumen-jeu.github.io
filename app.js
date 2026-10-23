@@ -1399,6 +1399,8 @@
       case 'reset': $('resetConfirm').hidden = false; $('resetBtn').hidden = true; break;
       case 'resetCancel': $('resetConfirm').hidden = true; $('resetBtn').hidden = false; break;
       case 'resetConfirm':
+        // Anti-clickjacking : GitHub Pages ne permet pas d'en-tête frame-ancestors ; pas d'effacement depuis un cadre.
+        if (window.top !== window.self) { toastAny('Ouvrez LUMEN directement pour effacer'); sfx.deny(); break; }
         var keepSet = S.set; S = P.newSave(); S.set = keepSet; S.tuto = 1; save(); applyTheme('nuit'); toastAny('Progression effacée'); showScreen('home'); break;
     }
   });

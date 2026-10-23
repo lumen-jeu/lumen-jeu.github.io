@@ -106,9 +106,26 @@
       }
     }
     merge(d, s);
+    // Bornes (mêmes que Save.fromMap côté Android) : un code LUMEN2 se forge (FNV sans clé),
+    // xp = 1e300 figeait rankFor, adv = ['<img…>'] finissait en innerHTML.
+    (function clean(dst, def) {
+      for (var k in def) {
+        if (typeof def[k] === 'number') dst[k] = bound(dst[k], Math.min(0, def[k]), MAX_VAL, def[k]);
+        else if (k !== 'ach' && def[k] && typeof def[k] === 'object' && !Array.isArray(def[k])) clean(dst[k], def[k]);
+      }
+    })(d, newSave());
+    for (var x in d.ach) d.ach[x] = bound(d.ach[x], 0, 3, 0);
+    d.adv = d.adv.slice(0, MAX_ADV).map(function (n) { return bound(n, 0, 3, 0); });
+    d.mis.p = [0, 1, 2].map(function (i) { return bound(d.mis.p[i], 0, MAX_VAL, 0); });
+    d.mis.done = [0, 1, 2].map(function (i) { return bound(d.mis.done[i], 0, 1, 0); });
+    d.themes = d.themes.filter(function (t) { return typeof t === 'string'; });
+    d.seen = d.seen.filter(function (t) { return typeof t === 'string'; });
     if (d.themes.indexOf('nuit') < 0) d.themes.unshift('nuit');
     return d;
   }
+  var MAX_VAL = 1000000000, MAX_ADV = 10000;
+  /** Entier fini dans [lo, hi], sinon d. */
+  function bound(v, lo, hi, d) { return typeof v === 'number' && isFinite(v) ? Math.max(lo, Math.min(hi, Math.floor(v))) : d; }
 
   /* ---------- Codec texte (UTF-8 → base64url + somme de contrôle FNV-1a) ---------- */
   var B64 = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_';
