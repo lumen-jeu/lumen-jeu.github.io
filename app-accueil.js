@@ -92,6 +92,7 @@
     ad.style.setProperty('--ch', ch.hue);
     $('advChapter').textContent = ch.name;
     $('advSub').textContent = n > 120 ? 'Constellation ' + (n - 120) : tr('Niveau {0} sur 120', n);
+    $('playSub').textContent = tr('Aventure') + ' · ' + (n > 120 ? 'Constellation ' + (n - 120) : tr('Niveau {0}', n));
     $('advStars').innerHTML = P.starsTotal(S) + '<small> / 360</small>';
     drawAdvConst(n);
     $('homeBest').textContent = tr('Record {0}', fmt(S.best));

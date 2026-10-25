@@ -142,6 +142,7 @@
       case 'classic': startGame('classic'); break;
       case 'daily': startGame('daily'); break;
       case 'event': startGame('event'); break;
+      case 'play': startGame('adventure', { n: currentLevel() }); break;
       case 'map': showScreen('map'); break;
       case 'level': openLevel(+b.getAttribute('data-n')); break;
       case 'closeLevel': $('levelVeil').hidden = true; break;

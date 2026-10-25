@@ -15,6 +15,8 @@
 
 - **25/10 (lot 18)** : refactorisation pure de `app.js` (1 537 lignes) en 8 scripts de 60 à 294 lignes (`app-etat`, `app-sprites`, `app-partie`, `app-chaine`, `app-fin`, `app-rendu`, `app-accueil`, `app`), tranches contiguës dans l'ordre d'origine (concaténation identique au corps de l'ancien fichier) ; `index.html` et `sw.js` mis à jour, cache `lumen-v2.2.1` ; `tests/modules-app.test.js` (3 tests, 28 au total) ; instantané Playwright avant/après identique (Défi du jour, panneaux, fr et en).
 
+- **25/10** : contact **aulit42369@gmail.com** dans `privacy.html` (FR et EN, lien `mailto:`, tickets GitHub en second). Bouton **« Jouer »** sur l'accueil, au-dessus des cartes : lance directement l'Aventure au niveau en cours (sous-titre « Aventure · Niveau N », orbe à halo ambré qui pulse, coupé si mouvement réduit) ; carte Aventure (ouvre la carte des niveaux), Classique et Défi du jour restent dessous, carte Aventure plus basse (96 px). Même bouton dans l'appli Android 2.1.0 (`ui/Accueil.kt`, `PlayButton`). Cache `lumen-v2.2.2`. 28 tests verts ; contrôle Chromium sans tête 390×844 (fr) et 390×667 (en) : rendu, clic → partie du niveau en cours, zéro erreur console.
+
 ## En cours
 - Rien.
 
@@ -25,14 +27,13 @@
 - Remplacer les liens web de `autres-jeux.js` par les liens Play Store quand les applis seront publiées (même chose dans les 3 autres jeux).
 - Manifeste et `<meta description>` restent en français (référencement visé en France) : à traduire si une version anglaise du référencement est voulue.
 
-- Ajouter une adresse e-mail de contact publique dans `privacy.html` si souhaité (aujourd'hui : tickets GitHub). URL à donner au Play Store : `https://lumen-jeu.github.io/privacy.html`.
 - Mesure d'audience : rien d'installé (à décider ; option sans cookie si oui).
-- Accueil : plusieurs entrées de même poids (Aventure, Classique, Défi du jour) ; la carte Aventure est la plus grande, pas de bouton unique « Jouer » (à décider si besoin).
 
 ## Décisions prises
 - **25/10** : langue par défaut = navigateur (`fr*` → français, toute autre langue → anglais) ; changer de langue recharge la page (plus simple et sûr que de tout redessiner).
 - **25/10** : la carte « autres jeux » va dans les **Réglages** (l'accueil est déjà plein) ; la carte image dessine une orbe par coup (même information que les carrés du texte, dans le style du jeu).
-- **25/10** : contact = page « Issues » du dépôt GitHub (aucune adresse personnelle publiée sans accord) ; CGU et mentions légales dans `privacy.html`.
+- **25/10** (décision d'Olivier) : contact public = **aulit42369@gmail.com** (lien `mailto:` dans `privacy.html`, toutes les langues), les tickets GitHub restent proposés en second. CGU et mentions légales dans `privacy.html` (URL Play Store : `https://lumen-jeu.github.io/privacy.html`).
+- **25/10** (décision d'Olivier) : un bouton « Jouer » unique et dominant sur l'accueil = Aventure au niveau en cours (le mode principal), sans passer par la carte ni la fiche du niveau ; les autres modes restent dessous, plus discrets.
 - **24/10** : le défi change à **minuit heure de Paris** pour tout le monde (Q1, option sûre appliquée en attendant ta réponse).
 - **24/10** : série du défi **séparée** de la série d'ouverture, sans récompense (Q2, option sûre). Libellés : « jours de suite » (ouverture) / « Série du défi ».
 - **24/10** : un défi compte dans la série quand la partie se termine (feuille de fin, y compris « Abandonner » une fois bloqué) ; quitter en cours de partie ne compte pas.

@@ -35,7 +35,7 @@ des tranches (sans leur en-tête de 2 lignes) est identique, ligne pour ligne, a
 | 4 | `app-chaine.js` (187 l.) | Tracé de chaîne au doigt, validation d'un coup (`commit`), chutes, toasts, particules, tutoriel | 381–564 | 1–3 |
 | 5 | `app-fin.js` (239 l.) | Orbes spéciales (présentation), boosters, fin de partie, continuer, partage texte et image | 565–800 | 1–4 |
 | 6 | `app-rendu.js` (179 l.) | Dessin du plateau (`draw`), `roundRect` | 801–976 | 1–3 |
-| 7 | `app-accueil.js` (272 l.) | Accueil (orbes, anneau, lunes, tuile Aventure) et carte de l'Aventure | 977–1245 | 1–3 |
+| 7 | `app-accueil.js` (272 l.) | Accueil (orbes, anneau, lunes, bouton « Jouer » = `playSub`, tuile Aventure) et carte de l'Aventure | 977–1245 | 1–3 |
 | 8 | `app.js` (294 l.) | Panneaux (boutique, missions, succès, stats, réglages), série quotidienne, écrans, clics, boucle, démarrage, `window.__lumen` | 1246–1537 | tout |
 
 Règles : (a) aucun nom de premier niveau en double entre ces fichiers et aucun nom réservé de `window` (`name`, `top`,
@@ -67,7 +67,7 @@ Aucun secret, aucun serveur, aucun appel réseau sauf le chargement des fichiers
 
 ## 5. Identité
 Domaine `lumen-jeu.github.io` (organisation dédiée). Manifeste sans `id` (donc id = `start_url`) : ne pas en ajouter.
-Cache SW `lumen-v2.2.1`, le SW ne supprime que les caches `lumen-*`. Identifiant de jeu dans la graine : `'lumen'`.
+Cache SW `lumen-v2.2.2`, le SW ne supprime que les caches `lumen-*`. Identifiant de jeu dans la graine : `'lumen'`.
 
 ## 6. Dépendances externes
 Aucune. Polices et icônes locales. Partage texte : `navigator.share` → presse-papiers → zone de texte à copier. Partage image : `navigator.share` avec fichier si `canShare({files})`, sinon téléchargement du PNG. Liens sortants vers les 3 autres jeux (nouvel onglet).
