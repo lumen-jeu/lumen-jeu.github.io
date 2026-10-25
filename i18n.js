@@ -13,11 +13,11 @@
     'Rang et statistiques': 'Rank and stats', 'Éclats et boutique': 'Shards and shop', 'Réglages': 'Settings',
     ': jeu de puzzle gratuit': ': a free puzzle game', 'Reliez. Fusionnez. Faites monter la lumière.': 'Link. Merge. Raise the light.',
     'Série de connexion': 'Daily streak', 'jours': 'days', 'Aventure': 'Adventure', 'Classique': 'Classic', 'Défi du jour': 'Daily Challenge',
-    'Semaine': 'Week', 'Boutique': 'Shop', 'Succès': 'Awards', 'Thèmes': 'Themes', 'Retour': 'Back', 'Partie': 'Game',
+    'Semaine': 'Week', 'Boutique': 'Shop', 'Succès': 'Achievements', 'Thèmes': 'Themes', 'Retour': 'Back', 'Partie': 'Game',
     'Couper le son': 'Mute', 'Activer le son': 'Unmute', 'coups': 'moves', 'Continuer': 'Continue', 'Plateau de jeu': 'Game board',
     'Touchez une orbe': 'Tap an orb', 'Annuler': 'Cancel', 'Marteau': 'Hammer', 'Étincelle': 'Spark', 'Coups': 'Moves',
     'Les éclats se gagnent en jouant : fin de partie, missions, série et succès. Rien ne s\'achète avec de l\'argent réel.':
-      'Shards are earned by playing: finished games, missions, streaks and awards. Nothing is bought with real money.',
+      'Shards are earned by playing: finished games, missions, streaks and achievements. Nothing is bought with real money.',
     'Missions du jour': 'Daily missions', 'Nouvelles missions à minuit.': 'New missions at midnight.', 'Série': 'Streak',
     'Événement de la semaine': 'Weekly event', 'Statistiques': 'Statistics', 'Sons': 'Sounds', 'Musique d\'ambiance': 'Ambient music',
     'Nappes douces générées en direct': 'Soft soundscapes generated live', 'Rejouer le tutoriel': 'Replay the tutorial', 'Sauvegarde': 'Backup',
@@ -29,7 +29,7 @@
       'This code is incomplete or damaged. Check that it starts with LUMEN2 and was copied in full.',
     'Remplacer ma progression': 'Replace my progress', 'Zone sensible': 'Danger zone', 'Réinitialiser la progression': 'Reset progress',
     'Tout sera effacé : étoiles, éclats, boosters, thèmes, succès. Exportez votre code avant si vous voulez revenir en arrière.':
-      'Everything will be erased: stars, shards, boosters, themes, awards. Export your code first if you might want to go back.',
+      'Everything will be erased: stars, shards, boosters, themes, achievements. Export your code first if you might want to go back.',
     'Garder ma progression': 'Keep my progress', 'Tout effacer': 'Erase everything',
     'LUMEN v2 · aucune donnée ne quitte votre appareil': 'LUMEN v2 · no data ever leaves your device',
     'Confidentialité, conditions et mentions légales': 'Privacy, terms and legal notice',
