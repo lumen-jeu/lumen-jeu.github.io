@@ -16,6 +16,7 @@
 - **25/10 (lot 18)** : refactorisation pure de `app.js` (1 537 lignes) en 8 scripts de 60 à 294 lignes (`app-etat`, `app-sprites`, `app-partie`, `app-chaine`, `app-fin`, `app-rendu`, `app-accueil`, `app`), tranches contiguës dans l'ordre d'origine (concaténation identique au corps de l'ancien fichier) ; `index.html` et `sw.js` mis à jour, cache `lumen-v2.2.1` ; `tests/modules-app.test.js` (3 tests, 28 au total) ; instantané Playwright avant/après identique (Défi du jour, panneaux, fr et en).
 
 - **25/10** : contact **aulit42369@gmail.com** dans `privacy.html` (FR et EN, lien `mailto:`, tickets GitHub en second). Bouton **« Jouer »** sur l'accueil, au-dessus des cartes : lance directement l'Aventure au niveau en cours (sous-titre « Aventure · Niveau N », orbe à halo ambré qui pulse, coupé si mouvement réduit) ; carte Aventure (ouvre la carte des niveaux), Classique et Défi du jour restent dessous, carte Aventure plus basse (96 px). Même bouton dans l'appli Android 2.1.0 (`ui/Accueil.kt`, `PlayButton`). Cache `lumen-v2.2.2`. 28 tests verts ; contrôle Chromium sans tête 390×844 (fr) et 390×667 (en) : rendu, clic → partie du niveau en cours, zéro erreur console.
+- **25/10** : relecture de l'anglais avec DeepL (334 textes : `i18n.js`, `privacy.html` #english, fiche Play en-US), journal `JEUX\lumen\RELECTURE-DEEPL.md`. 3 corrections mineures : « Little Dipper » → « Ursa Minor » (noms latins comme les autres chapitres), « Soft pads » → « Soft soundscapes generated live », phrase des cookies complétée dans `privacy.html`. Mêmes corrections dans `TextesEn.kt` (Android). Cache `lumen-v2.2.3`. 28 tests verts.
 
 ## En cours
 - Rien.
@@ -26,6 +27,8 @@
 - `engine.js` (586), `progress.js` (490), `style.css` (587) dépassent 400 lignes : à découper seulement avec leurs jumeaux Android (`GameEngine.kt`, `Progression.kt`) et l'API `require` des tests (décision à prendre).
 - Remplacer les liens web de `autres-jeux.js` par les liens Play Store quand les applis seront publiées (même chose dans les 3 autres jeux).
 - Manifeste et `<meta description>` restent en français (référencement visé en France) : à traduire si une version anglaise du référencement est voulue.
+
+- Décision d'Olivier : garder « Awards » pour Succès ou passer à « Achievements » (plus courant, plus long ; à changer partout, fiche Play comprise).
 
 - Mesure d'audience : rien d'installé (à décider ; option sans cookie si oui).
 

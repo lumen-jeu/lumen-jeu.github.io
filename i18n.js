@@ -20,7 +20,7 @@
       'Shards are earned by playing: finished games, missions, streaks and awards. Nothing is bought with real money.',
     'Missions du jour': 'Daily missions', 'Nouvelles missions à minuit.': 'New missions at midnight.', 'Série': 'Streak',
     'Événement de la semaine': 'Weekly event', 'Statistiques': 'Statistics', 'Sons': 'Sounds', 'Musique d\'ambiance': 'Ambient music',
-    'Nappes douces générées en direct': 'Soft pads generated live', 'Rejouer le tutoriel': 'Replay the tutorial', 'Sauvegarde': 'Backup',
+    'Nappes douces générées en direct': 'Soft soundscapes generated live', 'Rejouer le tutoriel': 'Replay the tutorial', 'Sauvegarde': 'Backup',
     'Changement de téléphone ? Copiez ce code et collez-le dans LUMEN sur le nouvel appareil (PWA ou appli Android).':
       'New phone? Copy this code and paste it into LUMEN on the new device (web app or Android app).',
     'Code de sauvegarde': 'Save code', 'Copier le code': 'Copy code', 'Importer un code': 'Import a code',
@@ -39,7 +39,7 @@
     'Niveau': 'Level', 'Fermer': 'Close', 'Jouer': 'Play', 'Récompense': 'Reward', 'Récupérer': 'Collect', 'Nouvelle orbe': 'New orb',
     'Pierre': 'Stone', 'Compris': 'Got it', 'Accueil': 'Home', 'Langue': 'Language', 'Language': 'Langue',
     // ---------- chapitres (levels.json) ----------
-    'La Petite Ourse': 'Little Dipper', 'Cassiopée': 'Cassiopeia', 'La Lyre': 'Lyra', 'Le Cygne': 'Cygnus', 'Le Dragon': 'Draco',
+    'La Petite Ourse': 'Ursa Minor', 'Cassiopée': 'Cassiopeia', 'La Lyre': 'Lyra', 'Le Cygne': 'Cygnus', 'Le Dragon': 'Draco',
     'Les bases : tracez, fusionnez, montez.': 'The basics: trace, merge, rise.',
     'Les pierres bloquent le passage. Fusionnez juste à côté pour les briser.': 'Stones block the way. Merge right next to them to break them.',
     'Certaines orbes sont prises dans la glace. Une fusion voisine les libère.': 'Some orbs are trapped in ice. A merge next to them sets them free.',

@@ -24,3 +24,5 @@
 - **Fichier `google9ad7f8bd44912903.html` (25/10)** : validation Google Search Console (propriété + sitemap envoyé). Ne jamais le supprimer ni le renommer, sinon la propriété perd sa validation.
 
 - **Interface en 8 scripts (lot 18)** : `app-etat.js` … `app.js` partagent la portée globale (pas de fonction englobante). Un nom de premier niveau (`var`, `function`) déclaré deux fois s'écrase en silence, et un nom comme `name`/`top`/`status` écraserait `window` : `tests/modules-app.test.js` le refuse. Le code qui s'exécute **au chargement** d'un fichier ne doit appeler que des fichiers déjà chargés (les appels dans les fonctions, eux, peuvent viser n'importe quel fichier). Nouveau fichier = l'ajouter dans `index.html`, `sw.js` et `MODULES` du test, dans le même ordre.
+
+- **Anglais partagé avec Android (25/10)** : `TextesEn.kt` (appli) doit garder les mêmes traductions que `EN` ; le test Android `memes_traductions_que_la_pwa` lit ce `i18n.js` et échoue au moindre écart. Corriger un anglais ici = le corriger aussi dans `TextesEn.kt`.

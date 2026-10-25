@@ -1,5 +1,5 @@
 /* LUMEN — service worker : cache d'abord, hors ligne après le premier chargement. */
-var CACHE = 'lumen-v2.2.2';
+var CACHE = 'lumen-v2.2.3';
 var ASSETS = [
   './',
   'index.html',
