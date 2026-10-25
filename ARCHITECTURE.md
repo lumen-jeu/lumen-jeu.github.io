@@ -46,4 +46,4 @@ Aucune. Polices et icônes locales. Partage : `navigator.share` → presse-papie
 - Manuel : capture accueil + fin du défi, zéro erreur console, hors ligne après installation.
 
 ## 8. Risques connus
-Voir `PIEGES.md`. Le défi Android (`Rules.dateSeed()`, date locale) n'est plus le même que la PWA tant qu'il n'est pas porté.
+Voir `PIEGES.md`. Le défi Android (`game/Defi.kt`, 25/10) suit la même date de Paris et la même graine que `defi.js`.

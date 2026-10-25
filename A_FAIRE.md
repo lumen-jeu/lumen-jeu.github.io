@@ -12,7 +12,7 @@
 - Rien.
 
 ## À faire
-- Android (`JEUX\lumen\android`) : porter la date de Paris et la graine dans `Rules.dateSeed()` / `Progression.today()`, puis refaire l'APK/AAB.
+- Android : AAB signé par Olivier quand le compte Play Console sera validé. (25/10 : `JEUX\lumen\android` 2.0.1 a le même Défi du jour, `game/Defi.kt`, testé contre `defi.js`.)
 - Les tests de parité de `JEUX\lumen` pointent vers un `pwa\` vide : les faire pointer vers ce dépôt.
 - Découper `app.js` (> 1 500 lignes).
 
