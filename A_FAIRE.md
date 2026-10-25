@@ -13,13 +13,15 @@
 
 - **25/10 (soir)** : lots 4, 6, 7 : partage du Défi du jour **en image** (`carte.js`, carte 1080×1920 : orbe, LUMEN, « Défi du jour #N », score, une orbe par coup, détail, série, lien ; partage natif avec fichier, sinon téléchargement), bouton « Partager l'image » à côté de « Partager le résultat » ; carte « Les autres jeux d'Aulit » dans les Réglages (`autres-jeux.js`) ; **anglais** (`i18n.js`, langue du navigateur + sélecteur Français/English mémorisé `lumen.lang`, titre de page, chapitres, missions, succès, événements, texte partagé) ; `privacy.html` : section anglaise `#english` + image, avis Play, liens ; cache `lumen-v2.2.0` ; `tests/i18n-carte.test.js` (6 tests, 25 au total).
 
+- **25/10 (lot 18)** : refactorisation pure de `app.js` (1 537 lignes) en 8 scripts de 60 à 294 lignes (`app-etat`, `app-sprites`, `app-partie`, `app-chaine`, `app-fin`, `app-rendu`, `app-accueil`, `app`), tranches contiguës dans l'ordre d'origine (concaténation identique au corps de l'ancien fichier) ; `index.html` et `sw.js` mis à jour, cache `lumen-v2.2.1` ; `tests/modules-app.test.js` (3 tests, 28 au total) ; instantané Playwright avant/après identique (Défi du jour, panneaux, fr et en).
+
 ## En cours
 - Rien.
 
 ## À faire
 - Android : AAB signé par Olivier quand le compte Play Console sera validé. (25/10 : `JEUX\lumen\android` 2.0.1 a le même Défi du jour, `game/Defi.kt`, testé contre `defi.js`.)
 - Les tests de parité de `JEUX\lumen` pointent vers un `pwa\` vide : les faire pointer vers ce dépôt.
-- Découper `app.js` (> 1 500 lignes).
+- `engine.js` (586), `progress.js` (490), `style.css` (587) dépassent 400 lignes : à découper seulement avec leurs jumeaux Android (`GameEngine.kt`, `Progression.kt`) et l'API `require` des tests (décision à prendre).
 - Remplacer les liens web de `autres-jeux.js` par les liens Play Store quand les applis seront publiées (même chose dans les 3 autres jeux).
 - Manifeste et `<meta description>` restent en français (référencement visé en France) : à traduire si une version anglaise du référencement est voulue.
 

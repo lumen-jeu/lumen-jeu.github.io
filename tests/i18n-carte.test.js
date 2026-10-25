@@ -35,7 +35,8 @@ test('traduction : clé française, valeurs insérées, pluriels', () => {
 
 test('chaque texte passé à tr()/trn()/T() dans le code a sa traduction anglaise', () => {
   const manquants = [];
-  for (const f of ['app.js', 'progress.js', 'carte.js', 'autres-jeux.js']) {
+  const appJs = fs.readdirSync(racine).filter((f) => /^app(-[a-z]+)?\.js$/.test(f)); // app.js et ses modules app-*.js
+  for (const f of appJs.concat(['progress.js', 'carte.js', 'autres-jeux.js'])) {
     const src = fs.readFileSync(path.join(racine, f), 'utf8');
     for (const m of src.matchAll(/\b(?:tr|trn\([^,]+,|T|t)\(\s*'((?:[^'\\]|\\.)*)'/g)) {
       const k = m[1].replace(/\\'/g, '\'');

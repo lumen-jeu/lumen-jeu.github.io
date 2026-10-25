@@ -22,3 +22,5 @@
 - **Partage d'image** : `navigator.share` exige un geste récent de l'utilisateur ; la carte est dessinée juste après le clic (attente des polices courte). Sans `canShare({files})` (ordinateur), le PNG est téléchargé.
 
 - **Fichier `google9ad7f8bd44912903.html` (25/10)** : validation Google Search Console (propriété + sitemap envoyé). Ne jamais le supprimer ni le renommer, sinon la propriété perd sa validation.
+
+- **Interface en 8 scripts (lot 18)** : `app-etat.js` … `app.js` partagent la portée globale (pas de fonction englobante). Un nom de premier niveau (`var`, `function`) déclaré deux fois s'écrase en silence, et un nom comme `name`/`top`/`status` écraserait `window` : `tests/modules-app.test.js` le refuse. Le code qui s'exécute **au chargement** d'un fichier ne doit appeler que des fichiers déjà chargés (les appels dans les fonctions, eux, peuvent viser n'importe quel fichier). Nouveau fichier = l'ajouter dans `index.html`, `sw.js` et `MODULES` du test, dans le même ordre.
