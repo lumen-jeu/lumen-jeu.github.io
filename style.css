@@ -13,7 +13,7 @@
   --encre: #1c1545;
   --velours: #2a2063;
   --lin: #f1ecff;
-  --brume: #8d86b5;
+  --brume: #a19bc9;
   --braise: #ff7a2f;
   --ambre: #ffb627;
   --cyan: #2cc9f0;
@@ -305,6 +305,7 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; bord
 .lede { margin: 0 0 16px; color: var(--brume); font-size: 14px; line-height: 1.45; }
 .fine { color: var(--brume); font-size: 13px; line-height: 1.45; margin: 10px 2px; }
 .fine.center { text-align: center; margin-top: 26px; }
+.fine a { display: inline-block; padding: 10px 4px; color: var(--accent); }
 .sect { font-family: var(--display); font-weight: 700; font-size: 14px; margin: 26px 2px 10px; color: var(--lin); }
 
 /* boutique */

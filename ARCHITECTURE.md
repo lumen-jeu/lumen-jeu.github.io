@@ -11,6 +11,8 @@ Rédigée le 24/10/2026 d'après le code réel (cas 1, mobile).
 | `audio.js` | Sons WebAudio synthétisés. | ~120 |
 | `app.js` | Interface, rendu canvas, écrans. | ~1520 |
 | `index.html`, `style.css`, `sw.js`, `manifest.webmanifest`, `levels.json` | Page, styles, cache hors ligne, manifeste, niveaux d'Aventure. | |
+| `privacy.html` | Confidentialité + conditions d'utilisation + mentions légales (lien en bas des Réglages). URL stable pour le Play Store. | |
+| `404.html`, `robots.txt`, `sitemap.xml`, `og-image.png` | Page introuvable (chemins absolus), référencement, aperçu des liens 1200×630. | |
 
 Ordre de chargement : `defi.js` → `engine.js` → `progress.js` → `audio.js` → `app.js`.
 Écart connu : `app.js`, `engine.js`, `progress.js` et `style.css` dépassent 400 lignes (antérieur au 24/10).
@@ -34,7 +36,7 @@ Aucun secret, aucun serveur, aucun appel réseau sauf le chargement des fichiers
 
 ## 5. Identité
 Domaine `lumen-jeu.github.io` (organisation dédiée). Manifeste sans `id` (donc id = `start_url`) : ne pas en ajouter.
-Cache SW `lumen-v2.1.0`, le SW ne supprime que les caches `lumen-*`. Identifiant de jeu dans la graine : `'lumen'`.
+Cache SW `lumen-v2.1.1`, le SW ne supprime que les caches `lumen-*`. Identifiant de jeu dans la graine : `'lumen'`.
 
 ## 6. Dépendances externes
 Aucune. Polices et icônes locales. Partage : `navigator.share` → presse-papiers → zone de texte à copier.
