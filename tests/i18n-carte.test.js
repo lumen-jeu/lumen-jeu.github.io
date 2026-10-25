@@ -20,7 +20,7 @@ test('langue : choix mémorisé, sinon langue du navigateur', () => {
 });
 
 test('traduction : clé française, valeurs insérées, pluriels', () => {
-  assert.equal(I.lang, 'fr', 'sous Node : français par défaut');
+  I.set('fr'); // Node 21+ a un navigator (langue du système) : on fixe la langue
   assert.equal(I.t('Niveau {0}', 7), 'Niveau 7');
   assert.equal(I.tn(0, '{0} jour', '{0} jours'), '0 jour');
   I.set('en');
