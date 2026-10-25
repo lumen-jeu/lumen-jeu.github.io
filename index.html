@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-  <title>LUMEN — jeu de puzzle : reliez les orbes, faites monter la lumière</title>
-  <meta name="description" content="Reliez les orbes de même éclat, fusionnez-les et faites monter la lumière. Jeu de puzzle gratuit : Aventure de 120 niveaux, Défi du jour, jouable hors ligne.">
+  <title>Jeu de puzzle gratuit : reliez les orbes de lumière | LUMEN</title>
+  <meta name="description" content="Jeu de puzzle gratuit : reliez les orbes de même éclat, fusionnez-les et faites monter la lumière. 120 niveaux d'Aventure, Défi du jour, jouable hors ligne.">
   <meta name="theme-color" content="#100b29">
   <meta name="mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -17,8 +17,8 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="LUMEN">
   <meta property="og:locale" content="fr_FR">
-  <meta property="og:title" content="LUMEN — reliez les orbes, faites monter la lumière">
-  <meta property="og:description" content="Reliez les orbes de même éclat, fusionnez-les et faites monter la lumière. Jeu de puzzle gratuit : Aventure de 120 niveaux, Défi du jour, jouable hors ligne.">
+  <meta property="og:title" content="Jeu de puzzle gratuit : reliez les orbes de lumière | LUMEN">
+  <meta property="og:description" content="Jeu de puzzle gratuit : reliez les orbes de même éclat, fusionnez-les et faites monter la lumière. 120 niveaux d'Aventure, Défi du jour, jouable hors ligne.">
   <meta property="og:url" content="https://lumen-jeu.github.io/">
   <meta property="og:image" content="https://lumen-jeu.github.io/og-image.png">
   <meta property="og:image:width" content="1200">
@@ -29,6 +29,7 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <noscript><p style="padding:24px;color:#fff8ec;font:16px/1.5 system-ui,sans-serif">LUMEN est un jeu de puzzle gratuit : reliez les orbes de même éclat, fusionnez-les et faites monter la lumière. 120 niveaux d'Aventure, un Défi du jour, jouable hors ligne. Activez JavaScript pour jouer.</p></noscript>
   <!-- ================= Accueil ================= -->
   <section id="home" class="screen" aria-label="Accueil">
     <header class="topbar">
@@ -48,7 +49,7 @@
 
     <div class="hero">
       <canvas id="heroCanvas" aria-hidden="true"></canvas>
-      <h1 class="title">LUMEN</h1>
+      <h1 class="title">LUMEN<span class="sr"> : jeu de puzzle gratuit</span></h1>
       <p class="tagline">Reliez. Fusionnez. Faites monter la lumière.</p>
     </div>
 
@@ -328,5 +329,37 @@
   <script src="progress.js"></script>
   <script src="audio.js"></script>
   <script src="app.js"></script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "VideoGame",
+  "name": "LUMEN",
+  "url": "https://lumen-jeu.github.io/",
+  "description": "Jeu de puzzle gratuit : reliez les orbes de même éclat, fusionnez-les et faites monter la lumière. 120 niveaux d'Aventure, Défi du jour, jouable hors ligne.",
+  "image": "https://lumen-jeu.github.io/og-image.png",
+  "inLanguage": "fr",
+  "genre": [
+    "Puzzle",
+    "Réflexion"
+  ],
+  "gamePlatform": [
+    "Android",
+    "Navigateur web"
+  ],
+  "applicationCategory": "GameApplication",
+  "operatingSystem": "Android, Web",
+  "isAccessibleForFree": true,
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "EUR"
+  },
+  "author": {
+    "@type": "Person",
+    "name": "Aulit42369",
+    "url": "https://aulit42369.github.io/Site/"
+  }
+}
+  </script>
 </body>
 </html>

@@ -14,3 +14,4 @@
 - **Partage** : le lien est dans le texte, ne pas remettre `url:` dans `navigator.share` (deux messages dans WhatsApp/Discord),
   ni `location.href` (donnerait `file://` dans une appli WebView).
 - **Jour du déploiement** : la grille du défi change ce jour-là pour ceux qui l'ont déjà joué (graine différente) ; le record du jour reste.
+- **JSON-LD en fin de `<body>`** (25/10) : `tests/defi.test.js` exige que `defi.js` soit le **premier** `<script>` de `index.html` ; un bloc `application/ld+json` dans le `<head>` fait échouer le test.

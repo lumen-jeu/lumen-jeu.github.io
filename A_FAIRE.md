@@ -9,6 +9,7 @@
 - **24/10** : README, ARCHITECTURE, A_FAIRE, PIEGES créés d'après le code.
 
 - **25/10** : checklist « avant lancement » : `privacy.html` créée (confidentialité exacte d'après le code, cookies, conditions d'utilisation, mentions légales), lien en bas des Réglages, titre + description + Open Graph + `og-image.png` 1200×630, `404.html`, `robots.txt` + `sitemap.xml`, icônes recompressées sans perte (−45 Ko), `--brume` #8d86b5 → #a19bc9 (contraste AA sur les 5 thèmes), cache `lumen-v2.1.1` (+ `privacy.html` hors ligne).
+- **25/10** : passe SEO éditoriale (requête « jeu de puzzle gratuit ») : `<title>`, description, Open Graph alignés ; `<h1>` « LUMEN » complété d'un texte masqué « jeu de puzzle gratuit » + paragraphe `<noscript>` ; données structurées `VideoGame` en fin de `<body>` ; cache `lumen-v2.1.2`.
 
 ## En cours
 - Rien.
