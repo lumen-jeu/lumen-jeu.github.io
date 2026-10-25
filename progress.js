@@ -3,9 +3,9 @@
  * Portage exact : android/.../game/Progression.kt (mêmes nombres, même code de sauvegarde).
  */
 (function (root, factory) {
-  if (typeof module === 'object' && module.exports) module.exports = factory(require('./engine.js'));
-  else root.LumenProgress = factory(root.LumenEngine);
-})(typeof self !== 'undefined' ? self : this, function (E) {
+  if (typeof module === 'object' && module.exports) module.exports = factory(require('./engine.js'), require('./defi.js'));
+  else root.LumenProgress = factory(root.LumenEngine, root.Defi);
+})(typeof self !== 'undefined' ? self : this, function (E, D) {
   'use strict';
 
   /* ================= Dates (entiers uniquement) ================= */
@@ -19,7 +19,15 @@
     return era * 146097 + doe - 719468;
   }
   function dayFromSeed(seed) { return dayNumber(Math.floor(seed / 10000), Math.floor(seed / 100) % 100, seed % 100); }
-  function today(d) { d = d || new Date(); return dayNumber(d.getFullYear(), d.getMonth() + 1, d.getDate()); }
+  /** Jour du jeu = date de Paris : un seul « jour » pour la série d'ouverture, les missions, l'événement et le défi. */
+  function today(d) { return D.today(d).day; }
+  /** Défi du jour figé au lancement : date de Paris (num AAAAMMJJ → S.daily.seed) + graine commune aux 4 jeux. */
+  function dailyFor(d) { var t = D.today(d); t.seed = D.seed('lumen', t.key); return t; }
+  /** Millisecondes avant le prochain défi (minuit heure de Paris, été comme hiver). */
+  function msToNextDaily(d) {
+    var now = d == null ? Date.now() : +d, t = D.parisDate(now), base = Date.UTC(t.y, t.m - 1, t.d + 1);
+    return (D.parisDate(base - 2 * 3600000).key !== t.key ? base - 2 * 3600000 : base - 3600000) - now;
+  }
   /** 0 = lundi … 6 = dimanche */
   function weekday(day) { return ((day + 3) % 7 + 7) % 7; }
   function weekStart(day) { return day - weekday(day); }
@@ -454,19 +462,16 @@
     if (lv <= 10) return SQUARES[7];
     return SQUARES[8];
   }
-  function shareDaily(day, score, history, peak, longest) {
-    var lines = ['LUMEN #' + puzzleNumber(day) + ' ✨ ' + fmtInt(score)];
-    for (var i = 0; i < history.length; i += 8) {
-      var row = '';
-      for (var j = i; j < Math.min(i + 8, history.length); j++) row += squareFor(history[j]);
-      lines.push(row);
-    }
-    lines.push('Niveau max ' + peak + ', chaîne de ' + longest);
-    return lines.join('\n');
+  var URL = 'https://lumen-jeu.github.io/';
+  /** Texte commun aux 4 jeux (defi.js) : titre, grille de carrés (8 par ligne, 5 lignes = 40 coups), détail, série, lien. */
+  function shareDaily(day, score, history, peak, longest, serie) {
+    var pal = {}; history.forEach(function (lv) { pal[lv] = squareFor(lv); });
+    return D.shareText({ nom: 'LUMEN', n: puzzleNumber(day), emoji: '✨', score: fmtInt(score), serie: serie || 0, url: URL,
+      lignes: D.grid(history, pal, 8), detail: 'Niveau max ' + peak + ', chaîne de ' + longest });
   }
 
   return {
-    dayNumber: dayNumber, dayFromSeed: dayFromSeed, today: today, weekday: weekday, weekStart: weekStart, puzzleNumber: puzzleNumber,
+    dayNumber: dayNumber, dayFromSeed: dayFromSeed, today: today, dailyFor: dailyFor, msToNextDaily: msToNextDaily, URL: URL, weekday: weekday, weekStart: weekStart, puzzleNumber: puzzleNumber,
     PRICES: PRICES, STREAK_REWARDS: STREAK_REWARDS, MISSION_REWARD: MISSION_REWARD, EVENT_REWARD: EVENT_REWARD, ACH_REWARD: ACH_REWARD,
     eclatsForGame: eclatsForGame, xpForGame: xpForGame,
     xpForRank: xpForRank, rankFor: rankFor, titleFor: titleFor, TITLES: TITLES,

@@ -1,10 +1,11 @@
 /* LUMEN v2 — interface, rendu canvas, progression. Logique : engine.js + progress.js */
 (function () {
   'use strict';
-  var E = window.LumenEngine, P = window.LumenProgress, A = window.LumenAudio;
+  var E = window.LumenEngine, P = window.LumenProgress, A = window.LumenAudio, D = window.Defi;
   var COLS = E.COLS, ROWS = E.ROWS, PRISM = E.PRISM, STONE = E.STONE;
   var $ = function (id) { return document.getElementById(id); };
   var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var FLAME = '<svg class="flame" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c.6 3.4 5.5 5.6 5.5 11a5.5 5.5 0 0 1-11 0c0-2.6 1.5-4.4 2.6-5.3.1 1.8.9 2.9 2 3.2-.4-3 .1-6.2.9-8.9z"/></svg>';
   var SHARD = '<svg class="shard" viewBox="0 0 24 24"><path d="M12 2l5 9-5 11-5-11z"/></svg>';
   var STAR = function (on, cls) { return '<svg class="' + (on ? 'on ' : '') + (cls || '') + '" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" fill="' + (on ? '#ffd36a' : 'rgba(255,255,255,.12)') + '" stroke="' + (on ? '#fff3c8' : 'rgba(255,255,255,.1)') + '" stroke-width="1"/></svg>'; };
 
@@ -28,7 +29,7 @@
   var S = loadSave();
   function save() { lsSet(KEY, JSON.stringify(S)); }
   var DAY = P.today();
-  var todaySeed = E.dateSeed();
+  var todaySeed = P.dailyFor().num; // date de Paris AAAAMMJJ (S.daily.seed)
   var LEVELS_DATA = null;
 
   /* ================= Thème & palette ================= */
@@ -265,7 +266,7 @@
     var seed = (Date.now() ^ (Math.random() * 0x7fffffff)) | 0;
     gameCtx = { mode: mode, levelN: 0 };
     tuto = null;
-    if (mode === 'daily') { todaySeed = E.dateSeed(); DAY = P.dayFromSeed(todaySeed); game = E.newGame('daily', todaySeed); }
+    if (mode === 'daily') { gameCtx.defi = P.dailyFor(); todaySeed = gameCtx.defi.num; DAY = gameCtx.defi.day; game = E.newGame('daily', gameCtx.defi.seed); }
     else if (mode === 'adventure') { gameCtx.levelN = opts.n; game = E.newGame('adventure', 0, { level: levelDef(opts.n) }); }
     else if (mode === 'event') { var ev = P.eventFor(DAY); gameCtx.ev = ev; game = E.newGame('event', seed, { rules: ev.rules, moves: ev.moves || 0 }); }
     else if (mode === 'tutorial') {
@@ -281,7 +282,7 @@
       var v = vis[r][c];
       v.from = r - ROWS - 1; v.y = v.from; v.t0 = now + (reduceMotion ? 0 : c * 35 + (ROWS - r) * 22); v.dur = reduceMotion ? 1 : 420;
     }
-    var labels = { classic: 'Classique', daily: 'Défi du jour, LUMEN #' + P.puzzleNumber(DAY), adventure: 'Niveau ' + gameCtx.levelN, event: gameCtx.ev ? gameCtx.ev.name : '', tutorial: 'Tutoriel' };
+    var labels = { classic: 'Classique', daily: 'Défi du jour, LUMEN #' + (gameCtx.defi ? gameCtx.defi.n : ''), adventure: 'Niveau ' + gameCtx.levelN, event: gameCtx.ev ? gameCtx.ev.name : '', tutorial: 'Tutoriel' };
     $('modeLabel').textContent = labels[mode];
     $('movesWrap').hidden = game.movesLeft < 0;
     $('bestWrap').hidden = mode === 'adventure' || mode === 'tutorial';
@@ -314,7 +315,7 @@
     sc.textContent = fmt(game.score);
     if (bump && !reduceMotion) { sc.classList.remove('bump'); void sc.offsetWidth; sc.classList.add('bump'); }
     var best = 0;
-    if (game.mode === 'daily') best = Math.max(S.daily.seed === todaySeed ? S.daily.best : 0, game.score);
+    if (game.mode === 'daily') best = Math.max(S.daily.seed === gameCtx.defi.num ? S.daily.best : 0, game.score);
     else if (game.mode === 'event') best = Math.max(S.ev.week === (gameCtx.ev && gameCtx.ev.week) ? S.ev.best : 0, game.score);
     else best = Math.max(S.best, game.score);
     $('best').textContent = fmt(best);
@@ -670,6 +671,7 @@
     $('gains').innerHTML = game.level ? E.goalProgress(game).map(function (q) { return '<span>' + goalLabel(q.type, q.target) + ' <b>' + (q.type === 'level' ? (q.done ? '✓' : '–') : fmt(q.value) + '/' + fmt(q.target)) + '</b></span>'; }).join('') : '';
     $('sharePreview').hidden = true;
     $('shareBtn').hidden = true;
+    resetShare();
     $('replayBtn').textContent = kind === 'moves' ? '+5 coups (' + S.inv.moves + ')' : 'Pulse (' + S.inv.pulse + ')';
     $('replayBtn').setAttribute('data-act', 'continue');
     $('leaveBtn').textContent = 'Abandonner';
@@ -697,10 +699,12 @@
     finalized = true;
     $('introCard').hidden = true;
     pendingContinue = null;
-    var mode = game.mode, isNew = false, prevBest = S.best, prevDaily = S.daily.seed === todaySeed ? S.daily.best : 0;
+    var dSeed = gameCtx.defi ? gameCtx.defi.num : todaySeed; // défi figé au lancement (partie commencée avant minuit)
+    var mode = game.mode, isNew = false, prevBest = S.best, prevDaily = S.daily.seed === dSeed ? S.daily.best : 0;
     var prevEv = gameCtx.ev && S.ev.week === gameCtx.ev.week ? S.ev.best : 0;
-    var res = P.onGameEnd(S, DAY, { mode: mode, score: game.score, peak: game.peak, won: game.won, stars: game.stars || 0, levelN: gameCtx.levelN, dailySeed: todaySeed });
+    var res = P.onGameEnd(S, DAY, { mode: mode, score: game.score, peak: game.peak, won: game.won, stars: game.stars || 0, levelN: gameCtx.levelN, dailySeed: dSeed });
     save();
+    if (mode === 'daily') D.record('lumen', gameCtx.defi, game.score);
     if (game.won) sfx.win(); else sfx.over();
     vibrate([30, 60, 30]);
     var title = 'Plus aucune chaîne possible', bestVal = 0, bestLbl = 'Record';
@@ -725,10 +729,21 @@
     $('gains').innerHTML = gains;
     // partage
     $('shareBtn').hidden = mode === 'adventure' && !game.won;
+    $('shareLbl').textContent = mode === 'daily' ? 'Partager le résultat' : 'Partager';
+    resetShare();
     lastShare = shareText();
     var prev = $('sharePreview');
     prev.hidden = mode !== 'daily';
-    if (mode === 'daily') prev.textContent = lastShare;
+    $('defiLine').hidden = mode !== 'daily';
+    if (mode === 'daily') {
+      prev.textContent = lastShare;
+      D.record('lumen', gameCtx.defi, game.score, lastShare);
+      var ds = D.load('lumen'), sr = D.serie('lumen', gameCtx.defi);
+      prev.setAttribute('aria-label', 'Défi ' + gameCtx.defi.n + ' terminé, score ' + fmt(game.score) + (sr >= 2 ? ', série de ' + sr + ' jours' : ''));
+      var left = P.msToNextDaily(), h = Math.floor(left / 3600000), mn = Math.floor(left / 60000) % 60;
+      $('defiLine').innerHTML = '<span class="defi-serie' + (sr >= 2 ? ' hot' : '') + '">' + FLAME + 'Série du défi : <b>' + sr + ' jour' + (sr > 1 ? 's' : '') + '</b> (record ' + ds.best + ')</span>' +
+        '<span>Prochain défi dans <b>' + h + ' h ' + (mn < 10 ? '0' : '') + mn + '</b></span>';
+    }
     // boutons
     var rb = $('replayBtn'), lb = $('leaveBtn');
     if (mode === 'adventure' && game.won) { rb.textContent = 'Niveau suivant'; rb.setAttribute('data-act', 'nextLevel'); lb.textContent = 'Voir la carte'; lb.setAttribute('data-act', 'map'); }
@@ -741,27 +756,30 @@
   }
 
   function shareText() {
-    if (game.mode === 'daily') return P.shareDaily(DAY, game.score, game.history, game.peak, game.st.longest);
+    if (game.mode === 'daily') return P.shareDaily(gameCtx.defi.day, game.score, game.history, game.peak, game.st.longest, D.serie('lumen', gameCtx.defi));
+    return otherShare() + '\n' + P.URL;
+  }
+  function otherShare() {
     if (game.mode === 'adventure') return 'LUMEN ✨ Niveau ' + gameCtx.levelN + ' réussi avec ' + '★★★'.slice(0, game.stars) + ' (' + chapterOf(gameCtx.levelN).name + ')';
     if (game.mode === 'event') return 'LUMEN ✨ ' + gameCtx.ev.name + ' : ' + fmt(game.score) + ' points';
     return 'J\'ai fait ' + fmt(game.score) + ' sur LUMEN ✨ niveau max ' + game.bestLevel;
   }
   function share() {
+    // le lien est dans le texte (pas de champ url à part : WhatsApp/Discord en feraient deux messages)
     var text = lastShare || shareText();
-    var url = location.href.split('#')[0].split('?')[0];
-    var full = text + '\n' + url;
-    function fallback() {
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(full).then(function () { toastAny('Résultat copié, collez-le où vous voulez'); }, function () { manualCopy(full); });
-      } else manualCopy(full);
-    }
-    if (navigator.share) navigator.share({ title: 'LUMEN', text: text, url: url }).catch(function (e) { if (!e || e.name !== 'AbortError') fallback(); });
-    else fallback();
+    D.share(text).then(function (r) {
+      if (r === 'partage') $('shareStatus').textContent = 'Résultat partagé';
+      else if (r === 'copie') $('shareStatus').textContent = 'Résultat copié, collez-le où vous voulez';
+      else if (r === 'manuel') manualCopy(text);
+    });
   }
   function manualCopy(text) {
-    var prev = $('sharePreview'); prev.hidden = false; prev.textContent = text;
-    toastAny('Copiez le texte ci-dessus');
+    var box = $('shareManual'), ta = $('shareManualText');
+    box.hidden = false; ta.value = text; $('sharePreview').hidden = true; // l'aperçu ferait doublon
+    $('shareStatus').textContent = 'Copiez le texte ci-dessous';
+    ta.focus(); ta.select();
   }
+  function resetShare() { $('shareStatus').textContent = ''; $('shareManual').hidden = true; }
   function toastAny(msg) {
     ticker([{ kind: 'info', text: msg }]);
   }
@@ -1036,8 +1054,10 @@
     $('advStars').innerHTML = P.starsTotal(S) + '<small> / 360</small>';
     drawAdvConst(n);
     $('homeBest').textContent = 'Record ' + fmt(S.best);
-    var played = S.daily.seed === todaySeed && S.daily.plays > 0;
-    $('homeDaily').textContent = played ? 'Meilleur ' + fmt(S.daily.best) : 'LUMEN #' + P.puzzleNumber(DAY);
+    // défi du jour : « #24 · à faire » / « #24 · fait ✓ · 7 420 » + série du défi (distincte de la série d'ouverture)
+    var td = P.dailyFor(), played = D.aJoue('lumen', td), dsr = D.serie('lumen', td);
+    $('homeDaily').innerHTML = '#' + td.n + ' · ' + (played ? 'fait ✓ · ' + fmt(D.load('lumen').jours[td.key].score) : 'à faire') +
+      (dsr ? ' <span class="defi-serie" title="Série du défi">' + FLAME + dsr + '<span class="sr"> jour' + (dsr > 1 ? 's' : '') + ' de défi de suite</span></span>' : '');
     $('homeDaily').parentNode.classList.toggle('done', played);
     var ev = P.eventFor(DAY), evBest = S.ev.week === ev.week ? S.ev.best : 0, claimed = S.ev.week === ev.week && S.ev.claimed;
     var band = $('eventBand');
@@ -1417,7 +1437,7 @@
   /** Partie abandonnée : on compte la partie sans afficher la feuille de fin. */
   function finalizeSilently() {
     finalized = true;
-    var res = P.onGameEnd(S, DAY, { mode: game.mode, score: game.score, peak: game.peak, won: false, stars: 0, levelN: gameCtx.levelN, dailySeed: todaySeed });
+    var res = P.onGameEnd(S, DAY, { mode: game.mode, score: game.score, peak: game.peak, won: false, stars: 0, levelN: gameCtx.levelN, dailySeed: gameCtx.defi ? gameCtx.defi.num : todaySeed });
     save();
     if (res.events.length) setTimeout(function () { ticker(res.events); }, 400);
   }
@@ -1449,7 +1469,7 @@
     else {
       A.resume();
       var d = P.today();
-      if (d !== DAY) { DAY = d; todaySeed = E.dateSeed(); if (current === 'home') { refreshHome(); if (S.tuto) dailyCheckIn(); } }
+      if (d !== DAY) { DAY = d; todaySeed = P.dailyFor().num; if (current === 'home') { refreshHome(); if (S.tuto) dailyCheckIn(); } }
     }
   });
   document.addEventListener('gesturestart', function (e) { e.preventDefault(); });

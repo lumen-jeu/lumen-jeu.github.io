@@ -262,14 +262,17 @@
         <div class="stat"><b id="overMoves">0</b><span>Fusions</span></div>
       </div>
       <div class="gains" id="gains"></div>
-      <pre class="share-preview" id="sharePreview" hidden></pre>
+      <pre class="share-preview" id="sharePreview" role="img" hidden></pre>
+      <p class="defi-line" id="defiLine" hidden></p>
+      <label class="share-manual" id="shareManual" hidden>Texte à copier<textarea id="shareManualText" readonly rows="8"></textarea></label>
       <div class="actions">
         <button class="btn" data-act="share" id="shareBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>
-          Partager
+          <span id="shareLbl">Partager</span>
         </button>
         <button class="btn solid" data-act="replay" id="replayBtn">Rejouer</button>
       </div>
+      <p class="share-status" id="shareStatus" role="status" aria-live="polite"></p>
       <button class="link" data-act="leave" id="leaveBtn">Retour à l'accueil</button>
     </div>
   </div>
@@ -308,6 +311,7 @@
 
   <div class="ticker" id="ticker" aria-live="polite"></div>
 
+  <script src="defi.js"></script>
   <script src="engine.js"></script>
   <script src="progress.js"></script>
   <script src="audio.js"></script>
