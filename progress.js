@@ -7,6 +7,11 @@
   else root.LumenProgress = factory(root.LumenEngine, root.Defi);
 })(typeof self !== 'undefined' ? self : this, function (E, D) {
   'use strict';
+  /** Texte affiché : traduit par i18n.js dans la page ; tel quel (français) sous Node et dans les tests. */
+  function T(fr) {
+    if (typeof I18N !== 'undefined') return I18N.t.apply(null, arguments);
+    var a = arguments; return String(fr).replace(/\{(\d)\}/g, function (m, i) { return a[+i + 1] == null ? m : a[+i + 1]; });
+  }
 
   /* ================= Dates (entiers uniquement) ================= */
   /** Nombre de jours depuis le 1970-01-01 pour une date civile (algorithme de H. Hinnant). */
@@ -63,7 +68,7 @@
   function xpForRank(n) { return 50 * n * (n - 1); }
   function rankFor(xp) { var n = 1; while (xp >= xpForRank(n + 1)) n++; return n; }
   var TITLES = [[1, 'Étincelle'], [3, 'Braise'], [5, 'Flammèche'], [8, 'Lanterne'], [12, 'Phare'], [16, 'Comète'], [20, 'Étoile filante'], [25, 'Nova'], [30, 'Supernova'], [40, 'Constellation']];
-  function titleFor(rank) { var t = TITLES[0][1]; for (var i = 0; i < TITLES.length; i++) if (rank >= TITLES[i][0]) t = TITLES[i][1]; return t; }
+  function titleFor(rank) { var t = TITLES[0][1]; for (var i = 0; i < TITLES.length; i++) if (rank >= TITLES[i][0]) t = TITLES[i][1]; return T(t); }
 
   /* ================= Thèmes ================= */
   // levels : 12 paires [corps, lueur] ; bg : [nuit, haut, bas, plaque] ; accent
@@ -226,7 +231,7 @@
       if (used[i]) continue;
       used[i] = true;
       var tier = rng.int(3), t = MISSIONS[i];
-      out.push({ id: t[0], tier: tier, target: t[2][tier], sum: t[3], text: t[1].replace('#', fmtInt(t[2][tier])), reward: MISSION_REWARD[tier] });
+      out.push({ id: t[0], tier: tier, target: t[2][tier], sum: t[3], text: T(t[1]).replace('#', fmtInt(t[2][tier])), reward: MISSION_REWARD[tier] });
     }
     return out;
   }
@@ -246,7 +251,7 @@
     var w = weekStart(day);
     var idx = ((Math.floor(w / 7) * 5 + 3) % EVENTS.length + EVENTS.length) % EVENTS.length;
     var e = EVENTS[idx];
-    return { id: e.id, name: e.name, desc: e.desc, rules: e.rules, moves: e.moves || 0, goal: e.goal, hue: e.hue, week: w, endsIn: 7 - weekday(day) };
+    return { id: e.id, name: T(e.name), desc: T(e.desc), rules: e.rules, moves: e.moves || 0, goal: e.goal, hue: e.hue, week: w, endsIn: 7 - weekday(day) };
   }
 
   /* ================= Succès ================= */
@@ -286,7 +291,7 @@
     return ACH.map(function (a) {
       var v = achValue(s, a[0]), tier = s.ach[a[0]] || 0;
       var next = tier < 3 ? a[3][tier] : a[3][2];
-      return { id: a[0], name: a[1], desc: a[2].replace('#', fmtInt(next)), tier: tier, value: v, next: next, tiers: a[3] };
+      return { id: a[0], name: T(a[1]), desc: T(a[2]).replace('#', fmtInt(next)), tier: tier, value: v, next: next, tiers: a[3] };
     });
   }
 
@@ -296,11 +301,11 @@
     s.xp += xp;
     var after = rankFor(s.xp);
     for (var r = before + 1; r <= after; r++) {
-      out.push({ kind: 'rank', rank: r, text: 'Rang ' + r + ' : ' + titleFor(r) });
+      out.push({ kind: 'rank', rank: r, text: T('Rang {0} : {1}', r, titleFor(r)) });
       for (var i = 0; i < THEMES.length; i++)
         if (THEMES[i].rank === r && s.themes.indexOf(THEMES[i].id) < 0) {
           s.themes.push(THEMES[i].id);
-          out.push({ kind: 'theme', id: THEMES[i].id, text: 'Thème débloqué : ' + THEMES[i].name });
+          out.push({ kind: 'theme', id: THEMES[i].id, text: T('Thème débloqué : {0}', T(THEMES[i].name)) });
         }
     }
   }
@@ -317,7 +322,7 @@
       if (s.mis.p[i] >= m.target) {
         s.mis.p[i] = m.target; s.mis.done[i] = 1;
         s.ec += m.reward;
-        out.push({ kind: 'mission', text: 'Mission accomplie : ' + m.text, ec: m.reward });
+        out.push({ kind: 'mission', text: T('Mission accomplie : {0}', m.text), ec: m.reward });
         addXp(s, 50, out);
       }
     }
@@ -330,7 +335,7 @@
         tier++;
         s.ach[a[0]] = tier;
         s.ec += rw[0];
-        out.push({ kind: 'ach', tier: tier, text: a[1] + (tier === 1 ? ' (bronze)' : tier === 2 ? ' (argent)' : ' (or)'), ec: rw[0] });
+        out.push({ kind: 'ach', tier: tier, text: T(a[1]) + T(tier === 1 ? ' (bronze)' : tier === 2 ? ' (argent)' : ' (or)'), ec: rw[0] });
         addXp(s, rw[1], out);
       }
     }
@@ -388,7 +393,7 @@
       if (info.score > s.ev.best) s.ev.best = info.score;
       if (!s.ev.claimed && s.ev.best >= ev.goal) {
         s.ev.claimed = 1; s.ec += EVENT_REWARD;
-        out.push({ kind: 'event', text: ev.name + ' : objectif atteint', ec: EVENT_REWARD });
+        out.push({ kind: 'event', text: T('{0} : objectif atteint', ev.name), ec: EVENT_REWARD });
       }
     }
     var gi = { mode: info.mode, score: info.score, won: info.won, newStars: newStars, firstDaily: firstDaily };
@@ -466,8 +471,8 @@
   /** Texte commun aux 4 jeux (defi.js) : titre, grille de carrés (8 par ligne, 5 lignes = 40 coups), détail, série, lien. */
   function shareDaily(day, score, history, peak, longest, serie) {
     var pal = {}; history.forEach(function (lv) { pal[lv] = squareFor(lv); });
-    return D.shareText({ nom: 'LUMEN', n: puzzleNumber(day), emoji: '✨', score: fmtInt(score), serie: serie || 0, url: URL,
-      lignes: D.grid(history, pal, 8), detail: 'Niveau max ' + peak + ', chaîne de ' + longest });
+    return D.shareText({ nom: 'LUMEN', n: puzzleNumber(day), emoji: '✨', score: fmtInt(score), serie: serie || 0, url: URL, libelleSerie: T('{0} jours de suite'),
+      lignes: D.grid(history, pal, 8), detail: T('Niveau max {0}, chaîne de {1}', peak, longest) });
   }
 
   return {

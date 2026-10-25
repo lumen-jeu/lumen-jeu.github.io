@@ -212,6 +212,10 @@
       <span></span>
     </header>
     <div class="panel-body">
+      <div class="set-group lang-row" role="group" aria-label="Langue · Language">
+        <span>Langue<small>Language</small></span>
+        <div class="seg"><button data-act="lang" data-lang="fr" lang="fr">Français</button><button data-act="lang" data-lang="en" lang="en">English</button></div>
+      </div>
       <div class="set-group">
         <label class="toggle"><span>Sons</span><input type="checkbox" id="setSnd"><i></i></label>
         <label class="toggle"><span>Musique d'ambiance<small>Nappes douces générées en direct</small></span><input type="checkbox" id="setMus"><i></i></label>
@@ -245,6 +249,7 @@
           </div>
         </div>
       </div>
+      <div id="autresJeux"></div>
       <p class="fine center">LUMEN v2 · aucune donnée ne quitte votre appareil<br><a href="privacy.html">Confidentialité, conditions et mentions légales</a></p>
     </div>
   </section>
@@ -282,6 +287,10 @@
         <button class="btn" data-act="share" id="shareBtn">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 8l5-5 5 5M5 14v5a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-5"/></svg>
           <span id="shareLbl">Partager</span>
+        </button>
+        <button class="btn" data-act="shareImg" id="shareImgBtn" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2.5" width="16" height="19" rx="3"/><circle cx="12" cy="9.5" r="3"/><path d="M8 17h8"/></svg>
+          <span>Partager l'image</span>
         </button>
         <button class="btn solid" data-act="replay" id="replayBtn">Rejouer</button>
       </div>
@@ -325,9 +334,12 @@
   <div class="ticker" id="ticker" aria-live="polite"></div>
 
   <script src="defi.js"></script>
+  <script src="i18n.js"></script>
   <script src="engine.js"></script>
   <script src="progress.js"></script>
   <script src="audio.js"></script>
+  <script src="carte.js"></script>
+  <script src="autres-jeux.js"></script>
   <script src="app.js"></script>
 <script type="application/ld+json">
 {

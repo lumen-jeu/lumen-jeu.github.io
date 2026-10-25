@@ -1,7 +1,9 @@
 /* LUMEN v2 — interface, rendu canvas, progression. Logique : engine.js + progress.js */
 (function () {
   'use strict';
-  var E = window.LumenEngine, P = window.LumenProgress, A = window.LumenAudio, D = window.Defi;
+  var E = window.LumenEngine, P = window.LumenProgress, A = window.LumenAudio, D = window.Defi, I = window.I18N;
+  var tr = I.t, trn = I.tn; // textes : français dans le code, anglais dans i18n.js
+  I.apply(document);
   var COLS = E.COLS, ROWS = E.ROWS, PRISM = E.PRISM, STONE = E.STONE;
   var $ = function (id) { return document.getElementById(id); };
   var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -194,7 +196,7 @@
   function renderMute() {
     document.querySelectorAll('.mute-btn').forEach(function (b) {
       b.innerHTML = S.set.snd ? MUTE_ON : MUTE_OFF;
-      b.setAttribute('aria-label', S.set.snd ? 'Couper le son' : 'Activer le son');
+      b.setAttribute('aria-label', tr(S.set.snd ? 'Couper le son' : 'Activer le son'));
     });
   }
   var sfx = A.sfx;
@@ -222,7 +224,7 @@
       if (anim && !reduceMotion) { var p = b.parentNode; p.classList.remove('gain'); void p.offsetWidth; p.classList.add('gain'); }
     });
   }
-  function fmt(n) { return Number(n).toLocaleString('fr-FR'); }
+  function fmt(n) { return Number(n).toLocaleString(I.locale()); }
 
   /* ================= État de partie ================= */
   var game = null, gameCtx = null; // gameCtx = {mode, levelN, eventWeek}
@@ -282,7 +284,7 @@
       var v = vis[r][c];
       v.from = r - ROWS - 1; v.y = v.from; v.t0 = now + (reduceMotion ? 0 : c * 35 + (ROWS - r) * 22); v.dur = reduceMotion ? 1 : 420;
     }
-    var labels = { classic: 'Classique', daily: 'Défi du jour, LUMEN #' + (gameCtx.defi ? gameCtx.defi.n : ''), adventure: 'Niveau ' + gameCtx.levelN, event: gameCtx.ev ? gameCtx.ev.name : '', tutorial: 'Tutoriel' };
+    var labels = { classic: tr('Classique'), daily: tr('Défi du jour, LUMEN #{0}', gameCtx.defi ? gameCtx.defi.n : ''), adventure: tr('Niveau {0}', gameCtx.levelN), event: gameCtx.ev ? gameCtx.ev.name : '', tutorial: tr('Tutoriel') };
     $('modeLabel').textContent = labels[mode];
     $('movesWrap').hidden = game.movesLeft < 0;
     $('bestWrap').hidden = mode === 'adventure' || mode === 'tutorial';
@@ -297,7 +299,7 @@
     renderGoals(false);
     updateHud(false);
     lastAction = now; hint = null;
-    if (tuto) setTimeout(function () { coach(TUTO_STEPS[0].text); }, 700);
+    if (tuto) setTimeout(function () { coach(tr(TUTO_STEPS[0].text)); }, 700);
     else setTimeout(checkIntro, 900);
   }
 
@@ -306,7 +308,7 @@
     return E.endlessLevel(n);
   }
   function chapterOf(n) {
-    if (n > 120 || !LEVELS_DATA) return { n: 7, name: 'Constellations infinies', intro: 'Des niveaux sans fin, de plus en plus exigeants.', hue: '#c9b6ff', hue2: '#6fe3ff' };
+    if (n > 120 || !LEVELS_DATA) return { n: 7, name: tr('Constellations infinies'), intro: tr('Des niveaux sans fin, de plus en plus exigeants.'), hue: '#c9b6ff', hue2: '#6fe3ff' };
     return LEVELS_DATA.chapters[Math.floor((n - 1) / 20)];
   }
 
@@ -345,7 +347,7 @@
       prog.forEach(function (q, i) { paintGoalIcon(box.children[i].querySelector('canvas'), q.type, q.target); });
     }
     prog.forEach(function (q, i) {
-      var el = box.children[i], txt = q.type === 'level' ? (q.done ? '' : 'Niveau ' + q.target) : fmt(q.value) + ' / ' + fmt(q.target);
+      var el = box.children[i], txt = q.type === 'level' ? (q.done ? '' : tr('Niveau {0}', q.target)) : fmt(q.value) + ' / ' + fmt(q.target);
       var span = el.querySelector('span');
       if (span.textContent !== txt) { span.textContent = txt; if (tick && !reduceMotion) { el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick'); } }
       el.classList.toggle('done', q.done);
@@ -434,7 +436,7 @@
     if (chain.length < 2) { chain = []; return; }
     var played = chain.slice();
     chain = [];
-    if (tuto && !tutoAccepts(played)) { sfx.deny(); vibrate([10, 30, 10]); coach(TUTO_STEPS[tuto.step].text, true); return; }
+    if (tuto && !tutoAccepts(played)) { sfx.deny(); vibrate([10, 30, 10]); coach(tr(TUTO_STEPS[tuto.step].text), true); return; }
     commit(played);
   }
   board.addEventListener('pointerup', release);
@@ -507,15 +509,15 @@
       vibrate(played.length >= 5 ? [18, 40, 30] : 22);
       updateHud(true);
       renderGoals(true);
-      if (res.bomb) combo('Bombe ×' + played.length, '#ff6a4a');
-      else if (played.length >= 5) combo((played.length >= 9 ? 'Supernova' : played.length >= 7 ? 'Éblouissant' : 'Éclat') + ' ×' + played.length, ncol);
+      if (res.bomb) combo(tr('Bombe') + ' ×' + played.length, '#ff6a4a');
+      else if (played.length >= 5) combo(tr(played.length >= 9 ? 'Supernova' : played.length >= 7 ? 'Éblouissant' : 'Éclat') + ' ×' + played.length, ncol);
       if (evs.length) ticker(evs);
       if (tuto) tutoNext();
       else checkIntro();
     }, reduceMotion ? 0 : delay - 30);
 
     if (game.over) setTimeout(function () { if (game === gref) endGame(); }, delay + (game.won ? 500 : 700));
-    else if (res.stuck) setTimeout(function () { if (game !== gref) return; toast('Plus aucune chaîne. Lancez un Pulse.'); renderBoosters(); }, delay + 450);
+    else if (res.stuck) setTimeout(function () { if (game !== gref) return; toast(tr('Plus aucune chaîne. Lancez un Pulse.')); renderBoosters(); }, delay + 450);
   }
 
   function combo(text, col) {
@@ -546,10 +548,10 @@
   }
   function tutoNext() {
     tuto.step++;
-    if (tuto.step < TUTO_STEPS.length) { coach(TUTO_STEPS[tuto.step].text); return; }
-    coach('Voilà l\'essentiel. Plus le niveau monte, plus la lumière vaut de points. Pierres, glace, prismes et bombes vous attendent dans l\'<b>Aventure</b>.');
+    if (tuto.step < TUTO_STEPS.length) { coach(tr(TUTO_STEPS[tuto.step].text)); return; }
+    coach(tr('Voilà l\'essentiel. Plus le niveau monte, plus la lumière vaut de points. Pierres, glace, prismes et bombes vous attendent dans l\'<b>Aventure</b>.'));
     $('coachBtn').hidden = false;
-    $('coachBtn').textContent = 'Commencer à jouer';
+    $('coachBtn').textContent = tr('Commencer à jouer');
   }
   function finishTutorial() {
     var first = !S.tuto;
@@ -580,7 +582,7 @@
   function showIntro(k) {
     S.seen.push(k); save();
     var it = INTROS[k], cv = $('introIco');
-    $('introName').textContent = it[0]; $('introText').textContent = it[1];
+    $('introName').textContent = tr(it[0]); $('introText').textContent = tr(it[1]);
     var g = cv.getContext('2d'); g.clearRect(0, 0, 120, 120);
     if (it[2] === 'ice') paintGoalIcon(cv, 'ice');
     else if (it[2] === 'bomb') { paintOrbIcon(cv, 6, 0.7); g.strokeStyle = '#ff6a4a'; g.lineWidth = 4; g.setLineDash([6, 6]); g.beginPath(); g.arc(60, 60, 46, 0, Math.PI * 2); g.stroke(); g.setLineDash([]); }
@@ -609,18 +611,18 @@
       if (game.movesLeft < 0) return;
       if (!S.inv.moves) return offerShop('moves');
       S.inv.moves--; E.addMoves(game, 5); save();
-      sfx.coin(); toast('+5 coups'); updateHud(true);
+      sfx.coin(); toast(tr('+5 coups')); updateHud(true);
       return;
     }
     if (!S.inv[b]) return offerShop(b);
     targeting = targeting === b ? null : b;
     $('targetBar').hidden = !targeting;
-    $('targetText').textContent = b === 'hammer' ? 'Marteau : touchez la case à retirer' : 'Étincelle : touchez l\'orbe à faire monter';
+    $('targetText').textContent = tr(b === 'hammer' ? 'Marteau : touchez la case à retirer' : 'Étincelle : touchez l\'orbe à faire monter');
     renderBoosters();
   }
   function offerShop(b) {
     var names = { pulse: 'Pulse', hammer: 'Marteau', spark: 'Étincelle', moves: '+5 coups' };
-    toast('Plus de ' + names[b] + '. La boutique en vend contre des éclats.');
+    toast(tr('Plus de {0}. La boutique en vend contre des éclats.', tr(names[b])));
   }
   function useTarget(hit) {
     var b = targeting, res = null, gref = game;
@@ -664,7 +666,7 @@
     pendingContinue = kind;
     $('introCard').hidden = true;
     sfx.over();
-    $('overTitle').textContent = kind === 'moves' ? 'Plus de coups' : 'Plus aucune chaîne possible';
+    $('overTitle').textContent = tr(kind === 'moves' ? 'Plus de coups' : 'Plus aucune chaîne possible');
     $('overStars').hidden = true;
     $('finalScore').textContent = fmt(game.score);
     $('newBest').hidden = true;
@@ -672,25 +674,25 @@
     $('sharePreview').hidden = true;
     $('shareBtn').hidden = true;
     resetShare();
-    $('replayBtn').textContent = kind === 'moves' ? '+5 coups (' + S.inv.moves + ')' : 'Pulse (' + S.inv.pulse + ')';
+    $('replayBtn').textContent = kind === 'moves' ? tr('+5 coups') + ' (' + S.inv.moves + ')' : 'Pulse (' + S.inv.pulse + ')';
     $('replayBtn').setAttribute('data-act', 'continue');
-    $('leaveBtn').textContent = 'Abandonner';
+    $('leaveBtn').textContent = tr('Abandonner');
     $('leaveBtn').setAttribute('data-act', 'giveup');
     paintOrbIcon($('overOrb'), game.bestLevel);
     $('overBest').textContent = game.movesLeft >= 0 ? game.movesLeft : fmt(S.best);
-    $('overBestLbl').textContent = game.movesLeft >= 0 ? 'Coups' : 'Record';
+    $('overBestLbl').textContent = tr(game.movesLeft >= 0 ? 'Coups' : 'Record');
     $('overMoves').textContent = game.movesPlayed;
     $('overVeil').hidden = false;
   }
   function doContinue() {
     var kind = pendingContinue; pendingContinue = null;
     $('overVeil').hidden = true;
-    if (kind === 'moves') { S.inv.moves--; E.addMoves(game, 5); sfx.coin(); toast('+5 coups'); }
+    if (kind === 'moves') { S.inv.moves--; E.addMoves(game, 5); sfx.coin(); toast(tr('+5 coups')); }
     else { S.inv.pulse--; E.pulse(game, true); sfx.pulse(); syncVis(); var now = performance.now(); for (var r = 0; r < ROWS; r++) for (var c = 0; c < COLS; c++) vis[r][c].pop = now + (Math.abs(r - 3.5) + Math.abs(c - 2.5)) * 30; }
     save(); updateHud(true);
   }
   function goalLabel(type, target) {
-    return { level: 'Orbe ' + target, score: 'Score', stone: 'Pierres', ice: 'Glace', prism: 'Prismes' }[type];
+    return { level: tr('Orbe {0}', target), score: 'Score', stone: tr('Pierres'), ice: tr('Glace'), prism: tr('Prismes') }[type];
   }
 
   var lastShare = '';
@@ -707,10 +709,10 @@
     if (mode === 'daily') D.record('lumen', gameCtx.defi, game.score);
     if (game.won) sfx.win(); else sfx.over();
     vibrate([30, 60, 30]);
-    var title = 'Plus aucune chaîne possible', bestVal = 0, bestLbl = 'Record';
-    if (mode === 'daily') { title = game.movesLeft === 0 ? 'Défi du jour terminé' : title; isNew = game.score > prevDaily && prevDaily > 0; bestVal = S.daily.best; bestLbl = 'Meilleur du jour'; }
-    else if (mode === 'event') { title = gameCtx.ev.name; isNew = game.score > prevEv && prevEv > 0; bestVal = S.ev.best; bestLbl = 'Record semaine'; }
-    else if (mode === 'adventure') { title = game.won ? 'Niveau ' + gameCtx.levelN + ' réussi' : 'Niveau ' + gameCtx.levelN + ' manqué'; bestVal = (S.adv[gameCtx.levelN - 1] || 0); bestLbl = 'Étoiles max'; }
+    var title = tr('Plus aucune chaîne possible'), bestVal = 0, bestLbl = tr('Record');
+    if (mode === 'daily') { title = game.movesLeft === 0 ? tr('Défi du jour terminé') : title; isNew = game.score > prevDaily && prevDaily > 0; bestVal = S.daily.best; bestLbl = tr('Meilleur du jour'); }
+    else if (mode === 'event') { title = gameCtx.ev.name; isNew = game.score > prevEv && prevEv > 0; bestVal = S.ev.best; bestLbl = tr('Record semaine'); }
+    else if (mode === 'adventure') { title = tr(game.won ? 'Niveau {0} réussi' : 'Niveau {0} manqué', gameCtx.levelN); bestVal = (S.adv[gameCtx.levelN - 1] || 0); bestLbl = tr('Étoiles max'); }
     else { isNew = game.score > prevBest && prevBest > 0; bestVal = S.best; }
     $('overTitle').textContent = title;
     var st = $('overStars');
@@ -718,18 +720,20 @@
     else st.hidden = true;
     $('finalScore').textContent = fmt(game.score);
     $('newBest').hidden = !isNew;
-    $('newBest').textContent = mode === 'daily' ? 'Meilleur score du jour' : mode === 'event' ? 'Record de la semaine' : 'Nouveau record';
+    $('newBest').textContent = tr(mode === 'daily' ? 'Meilleur score du jour' : mode === 'event' ? 'Record de la semaine' : 'Nouveau record');
     $('overBest').textContent = fmt(bestVal);
     $('overBestLbl').textContent = bestLbl;
     $('overMoves').textContent = game.movesPlayed;
     var gains = '';
-    if (res.ec) gains += '<span>' + SHARD + '<b>+' + res.ec + '</b> éclats</span>';
-    if (res.xp) gains += '<span><b>+' + res.xp + '</b> lueur</span>';
+    if (res.ec) gains += '<span>' + SHARD + '<b>+' + res.ec + '</b> ' + tr('éclats') + '</span>';
+    if (res.xp) gains += '<span><b>+' + res.xp + '</b> ' + tr('lueur') + '</span>';
     if (res.newStars) gains += '<span><b>+' + res.newStars + '</b> ★</span>';
     $('gains').innerHTML = gains;
     // partage
     $('shareBtn').hidden = mode === 'adventure' && !game.won;
-    $('shareLbl').textContent = mode === 'daily' ? 'Partager le résultat' : 'Partager';
+    $('shareLbl').textContent = tr(mode === 'daily' ? 'Partager le résultat' : 'Partager');
+    $('shareImgBtn').hidden = mode !== 'daily';
+    $('overVeil').querySelector('.actions').classList.toggle('defi', mode === 'daily');
     resetShare();
     lastShare = shareText();
     var prev = $('sharePreview');
@@ -739,16 +743,16 @@
       prev.textContent = lastShare;
       D.record('lumen', gameCtx.defi, game.score, lastShare);
       var ds = D.load('lumen'), sr = D.serie('lumen', gameCtx.defi);
-      prev.setAttribute('aria-label', 'Défi ' + gameCtx.defi.n + ' terminé, score ' + fmt(game.score) + (sr >= 2 ? ', série de ' + sr + ' jours' : ''));
+      prev.setAttribute('aria-label', tr('Défi {0} terminé, score {1}', gameCtx.defi.n, fmt(game.score)) + (sr >= 2 ? tr(', série de {0} jours', sr) : ''));
       var left = P.msToNextDaily(), h = Math.floor(left / 3600000), mn = Math.floor(left / 60000) % 60;
-      $('defiLine').innerHTML = '<span class="defi-serie' + (sr >= 2 ? ' hot' : '') + '">' + FLAME + 'Série du défi : <b>' + sr + ' jour' + (sr > 1 ? 's' : '') + '</b> (record ' + ds.best + ')</span>' +
-        '<span>Prochain défi dans <b>' + h + ' h ' + (mn < 10 ? '0' : '') + mn + '</b></span>';
+      $('defiLine').innerHTML = '<span class="defi-serie' + (sr >= 2 ? ' hot' : '') + '">' + FLAME + tr('Série du défi : ') + '<b>' + trn(sr, '{0} jour', '{0} jours') + '</b> ' + tr('(record {0})', ds.best) + '</span>' +
+        '<span>' + tr('Prochain défi dans ') + '<b>' + h + ' h ' + (mn < 10 ? '0' : '') + mn + '</b></span>';
     }
     // boutons
     var rb = $('replayBtn'), lb = $('leaveBtn');
-    if (mode === 'adventure' && game.won) { rb.textContent = 'Niveau suivant'; rb.setAttribute('data-act', 'nextLevel'); lb.textContent = 'Voir la carte'; lb.setAttribute('data-act', 'map'); }
-    else if (mode === 'adventure') { rb.textContent = 'Réessayer'; rb.setAttribute('data-act', 'replay'); lb.textContent = 'Voir la carte'; lb.setAttribute('data-act', 'map'); }
-    else { rb.textContent = 'Rejouer'; rb.setAttribute('data-act', 'replay'); lb.textContent = 'Retour à l\'accueil'; lb.setAttribute('data-act', 'home'); }
+    if (mode === 'adventure' && game.won) { rb.textContent = tr('Niveau suivant'); rb.setAttribute('data-act', 'nextLevel'); lb.textContent = tr('Voir la carte'); lb.setAttribute('data-act', 'map'); }
+    else if (mode === 'adventure') { rb.textContent = tr('Réessayer'); rb.setAttribute('data-act', 'replay'); lb.textContent = tr('Voir la carte'); lb.setAttribute('data-act', 'map'); }
+    else { rb.textContent = tr('Rejouer'); rb.setAttribute('data-act', 'replay'); lb.textContent = tr('Retour à l\'accueil'); lb.setAttribute('data-act', 'home'); }
     paintOrbIcon($('overOrb'), game.bestLevel);
     $('overVeil').hidden = false;
     if (res.events.length) setTimeout(function () { ticker(res.events); }, 900);
@@ -760,24 +764,34 @@
     return otherShare() + '\n' + P.URL;
   }
   function otherShare() {
-    if (game.mode === 'adventure') return 'LUMEN ✨ Niveau ' + gameCtx.levelN + ' réussi avec ' + '★★★'.slice(0, game.stars) + ' (' + chapterOf(gameCtx.levelN).name + ')';
-    if (game.mode === 'event') return 'LUMEN ✨ ' + gameCtx.ev.name + ' : ' + fmt(game.score) + ' points';
-    return 'J\'ai fait ' + fmt(game.score) + ' sur LUMEN ✨ niveau max ' + game.bestLevel;
+    if (game.mode === 'adventure') return tr('LUMEN ✨ Niveau {0} réussi avec {1} ({2})', gameCtx.levelN, '★★★'.slice(0, game.stars), chapterOf(gameCtx.levelN).name);
+    if (game.mode === 'event') return tr('LUMEN ✨ {0} : {1} points', gameCtx.ev.name, fmt(game.score));
+    return tr('J\'ai fait {0} sur LUMEN ✨ niveau max {1}', fmt(game.score), game.bestLevel);
   }
   function share() {
     // le lien est dans le texte (pas de champ url à part : WhatsApp/Discord en feraient deux messages)
     var text = lastShare || shareText();
     D.share(text).then(function (r) {
-      if (r === 'partage') $('shareStatus').textContent = 'Résultat partagé';
-      else if (r === 'copie') $('shareStatus').textContent = 'Résultat copié, collez-le où vous voulez';
+      if (r === 'partage') $('shareStatus').textContent = tr('Résultat partagé');
+      else if (r === 'copie') $('shareStatus').textContent = tr('Résultat copié, collez-le où vous voulez');
       else if (r === 'manuel') manualCopy(text);
     });
   }
   function manualCopy(text) {
     var box = $('shareManual'), ta = $('shareManualText');
     box.hidden = false; ta.value = text; $('sharePreview').hidden = true; // l'aperçu ferait doublon
-    $('shareStatus').textContent = 'Copiez le texte ci-dessous';
+    $('shareStatus').textContent = tr('Copiez le texte ci-dessous');
     ta.focus(); ta.select();
+  }
+  /** Carte image 1080×1920 du défi (carte.js) : partage natif avec fichier, sinon téléchargement du PNG. */
+  function shareImage() {
+    if (!game || game.mode !== 'daily') return;
+    var m = window.LumenCarte.model({ n: gameCtx.defi.n, score: fmt(game.score), history: game.history, peak: game.peak, longest: game.st.longest,
+      serie: D.serie('lumen', gameCtx.defi), url: P.URL, t: tr, tn: trn });
+    window.LumenCarte.share(m, { theme: THEME, orb: orbSprite, text: lastShare || shareText() }).then(function (r) {
+      if (r === 'partage') $('shareStatus').textContent = tr('Image partagée');
+      else if (r === 'fichier') $('shareStatus').textContent = tr('Image enregistrée dans vos téléchargements');
+    });
   }
   function resetShare() { $('shareStatus').textContent = ''; $('shareManual').hidden = true; }
   function toastAny(msg) {
@@ -1039,33 +1053,33 @@
   function refreshHome() {
     var rank = P.rankFor(S.xp);
     $('rankTitle').textContent = P.titleFor(rank);
-    $('rankSub').textContent = 'Rang ' + rank;
+    $('rankSub').textContent = tr('Rang {0}', rank);
     drawRing($('rankRing'), 44);
     refreshEc(false);
     renderMoons($('moons'));
     var sc = S.streak.last >= DAY - 1 ? S.streak.count : 0;
-    $('srN').innerHTML = sc + '<small>jour' + (sc > 1 ? 's' : '') + ' de suite</small>';
+    $('srN').innerHTML = sc + '<small>' + trn(sc, 'jour de suite', 'jours de suite') + '</small>';
     // aventure
     var n = currentLevel(), ch = chapterOf(n);
     var ad = $('advChapter').closest('.adv-card');
     ad.style.setProperty('--ch', ch.hue);
     $('advChapter').textContent = ch.name;
-    $('advSub').textContent = n > 120 ? 'Constellation ' + (n - 120) : 'Niveau ' + n + ' sur 120';
+    $('advSub').textContent = n > 120 ? 'Constellation ' + (n - 120) : tr('Niveau {0} sur 120', n);
     $('advStars').innerHTML = P.starsTotal(S) + '<small> / 360</small>';
     drawAdvConst(n);
-    $('homeBest').textContent = 'Record ' + fmt(S.best);
+    $('homeBest').textContent = tr('Record {0}', fmt(S.best));
     // défi du jour : « #24 · à faire » / « #24 · fait ✓ · 7 420 » + série du défi (distincte de la série d'ouverture)
     var td = P.dailyFor(), played = D.aJoue('lumen', td), dsr = D.serie('lumen', td);
-    $('homeDaily').innerHTML = '#' + td.n + ' · ' + (played ? 'fait ✓ · ' + fmt(D.load('lumen').jours[td.key].score) : 'à faire') +
-      (dsr ? ' <span class="defi-serie" title="Série du défi">' + FLAME + dsr + '<span class="sr"> jour' + (dsr > 1 ? 's' : '') + ' de défi de suite</span></span>' : '');
+    $('homeDaily').innerHTML = '#' + td.n + ' · ' + (played ? tr('fait ✓ · ') + fmt(D.load('lumen').jours[td.key].score) : tr('à faire')) +
+      (dsr ? ' <span class="defi-serie" title="' + tr('Série du défi') + '">' + FLAME + dsr + '<span class="sr">' + trn(dsr, ' jour de défi de suite', ' jours de défi de suite') + '</span></span>' : '');
     $('homeDaily').parentNode.classList.toggle('done', played);
     var ev = P.eventFor(DAY), evBest = S.ev.week === ev.week ? S.ev.best : 0, claimed = S.ev.week === ev.week && S.ev.claimed;
     var band = $('eventBand');
     band.style.setProperty('--ev', ev.hue);
     $('evGlyph').innerHTML = '<svg viewBox="0 0 24 24">' + EV_ICONS[ev.id] + '</svg>';
     $('evName').textContent = ev.name;
-    $('evSub').textContent = claimed ? 'Objectif atteint, encore ' + ev.endsIn + ' j' : 'Objectif ' + fmt(ev.goal) + ', encore ' + ev.endsIn + ' j';
-    $('evBest').innerHTML = evBest ? fmt(evBest) + '<small>record</small>' : '<small>+' + P.EVENT_REWARD + ' éclats</small>';
+    $('evSub').textContent = claimed ? tr('Objectif atteint, encore {0} j', ev.endsIn) : tr('Objectif {0}, encore {1} j', fmt(ev.goal), ev.endsIn);
+    $('evBest').innerHTML = evBest ? fmt(evBest) + '<small>' + tr('record') + '</small>' : '<small>+' + P.EVENT_REWARD + ' ' + tr('éclats') + '</small>';
     var ms = P.ensureMissions(S, DAY), left = S.mis.done.filter(function (d) { return !d; }).length;
     var bd = $('misBadge'); bd.hidden = !left; bd.textContent = left;
   }
@@ -1120,12 +1134,12 @@
     var html = '';
     labels.forEach(function (l) {
       var locked = l.n > cur;
-      html += '<div class="chapter-label' + (locked ? ' locked' : '') + (l.n > 120 ? ' endless-label' : '') + '" style="top:' + (l.y - 40) + 'px;--cc:' + l.ch.hue + '"><b>' + esc(l.ch.name) + '</b><span>' + (l.n > 120 ? 'Au-delà des 120 niveaux' : 'Chapitre ' + l.ch.n + ', niveaux ' + l.n + ' à ' + (l.n + 19)) + '</span></div>';
+      html += '<div class="chapter-label' + (locked ? ' locked' : '') + (l.n > 120 ? ' endless-label' : '') + '" style="top:' + (l.y - 40) + 'px;--cc:' + l.ch.hue + '"><b>' + esc(l.ch.name) + '</b><span>' + (l.n > 120 ? tr('Au-delà des 120 niveaux') : tr('Chapitre {0}, niveaux {1} à {2}', l.ch.n, l.n, l.n + 19)) + '</span></div>';
     });
     nodes.forEach(function (nd) {
       var st = S.adv[nd.n - 1] || 0, locked = nd.n > cur, isCur = nd.n === cur;
       var cls = 'node' + (locked ? ' locked' : '') + (isCur ? ' current' : '') + (st === 3 ? ' perfect' : '');
-      html += '<button class="' + cls + '" data-act="level" data-n="' + nd.n + '" style="left:' + nd.x.toFixed(1) + 'px;top:' + nd.y.toFixed(1) + 'px;--nc:' + nd.ch.hue + ';--nc2:' + nd.ch.hue2 + '"' + (locked ? ' aria-disabled="true"' : '') + ' aria-label="Niveau ' + nd.n + (locked ? ', verrouillé' : '') + (st ? ', ' + st + ' étoiles' : '') + '">' +
+      html += '<button class="' + cls + '" data-act="level" data-n="' + nd.n + '" style="left:' + nd.x.toFixed(1) + 'px;top:' + nd.y.toFixed(1) + 'px;--nc:' + nd.ch.hue + ';--nc2:' + nd.ch.hue2 + '"' + (locked ? ' aria-disabled="true"' : '') + ' aria-label="' + tr('Niveau {0}', nd.n) + (locked ? tr(', verrouillé') : '') + (st ? tr(', {0} étoiles', st) : '') + '">' +
         '<span class="core">' + (locked ? '' : nd.n) + '</span>' +
         (!locked ? '<span class="st">' + [1, 2, 3].map(function (i) { return '<i class="' + (st >= i ? 'on' : '') + '"></i>'; }).join('') + '</span>' : '') + '</button>';
     });
@@ -1133,7 +1147,7 @@
     var rng = new E.Rng(99);
     mapStars = [];
     for (var k = 0; k < 260; k++) mapStars.push([rng.next() * w, rng.next() * mapH, rng.next() * 1.4 + 0.3, rng.next()]);
-    $('mapStars').textContent = P.starsTotal(S) + ' étoiles sur 360';
+    $('mapStars').textContent = tr('{0} étoiles sur 360', P.starsTotal(S));
     var curNode = nodes[cur - 1];
     scroll.scrollTop = Math.max(0, curNode.y - scroll.clientHeight * 0.6);
     updateMapTitle();
@@ -1215,18 +1229,17 @@
     var lv = levelDef(n), ch = chapterOf(n), st = S.adv[n - 1] || 0;
     $('levelVeil').querySelector('.sheet').style.setProperty('--cc', ch.hue);
     $('lvChapter').textContent = ch.name;
-    $('lvTitle').textContent = 'Niveau ' + n;
+    $('lvTitle').textContent = tr('Niveau {0}', n);
     $('lvStars').innerHTML = [1, 2, 3].map(function (i) { return STAR(st >= i); }).join('');
     var firstOfCh = n <= 120 ? (n - 1) % 20 === 0 : n === 121;
     $('lvIntro').textContent = firstOfCh ? ch.intro : '';
     $('lvIntro').hidden = !firstOfCh;
     $('lvGoals').innerHTML = lv.goals.map(function (q) {
-      var txt = { level: 'Créer une orbe de niveau ' + q[1], score: 'Marquer ' + fmt(q[1]) + ' points', stone: 'Briser ' + q[1] + ' pierres', ice: 'Libérer ' + q[1] + ' orbes de la glace', prism: 'Utiliser ' + q[1] + ' prismes' }[q[0]];
+      var txt = tr({ level: 'Créer une orbe de niveau {0}', score: 'Marquer {0} points', stone: 'Briser {0} pierres', ice: 'Libérer {0} orbes de la glace', prism: 'Utiliser {0} prismes' }[q[0]], q[0] === 'score' ? fmt(q[1]) : q[1]);
       return '<li><canvas width="60" height="60" data-t="' + q[0] + '" data-v="' + q[1] + '"></canvas><span>' + txt + '</span></li>';
     }).join('');
     $('lvGoals').querySelectorAll('canvas').forEach(function (cv) { paintGoalIcon(cv, cv.getAttribute('data-t'), +cv.getAttribute('data-v')); });
-    var pl = function (n) { return n + ' coup' + (n > 1 ? 's' : ''); };
-    $('lvMoves').textContent = pl(lv.moves) + '. ★★ s\'il en reste ' + lv.st[0] + ', ★★★ s\'il en reste ' + lv.st[1] + '.';
+    $('lvMoves').textContent = trn(lv.moves, '{0} coup', '{0} coups') + tr('. ★★ s\'il en reste {0}, ★★★ s\'il en reste {1}.', lv.st[0], lv.st[1]);
     $('levelVeil').hidden = false;
   }
 
@@ -1241,7 +1254,7 @@
     $('shopList').innerHTML = BOOSTERS.map(function (b) {
       var lens = b[0] === 'pulse' ? '<span class="lens pulse"></span>' : document.querySelector('.boost[data-b=' + b[0] + '] .lens').outerHTML;
       var price = P.PRICES[b[0]];
-      return '<div class="shop-item">' + lens + '<div><b>' + b[1] + '</b><p>' + b[2] + '</p><span class="own">En réserve : ' + S.inv[b[0]] + '</span></div>' +
+      return '<div class="shop-item">' + lens + '<div><b>' + tr(b[1]) + '</b><p>' + tr(b[2]) + '</p><span class="own">' + tr('En réserve : {0}', S.inv[b[0]]) + '</span></div>' +
         '<button class="price" data-act="buy" data-b="' + b[0] + '"' + (S.ec < price ? ' disabled' : '') + '>' + SHARD + price + '</button></div>';
     }).join('');
     renderThemeCards($('shopThemes'), true);
@@ -1264,10 +1277,10 @@
     var rank = P.rankFor(S.xp);
     box.innerHTML = P.THEMES.map(function (t) {
       var own = S.themes.indexOf(t.id) >= 0, on = S.theme === t.id;
-      var act = on ? '<span class="pill use">Actif</span>' : own ? '<button class="pill" data-act="useTheme" data-id="' + t.id + '">Utiliser</button>'
+      var act = on ? '<span class="pill use">' + tr('Actif') + '</span>' : own ? '<button class="pill" data-act="useTheme" data-id="' + t.id + '">' + tr('Utiliser') + '</button>'
         : '<button class="pill" data-act="buyTheme" data-id="' + t.id + '"' + (S.ec < t.price ? ' disabled' : '') + '>' + SHARD + fmt(t.price) + '</button>';
-      var sub = own ? (on ? 'Thème actuel' : 'Débloqué') : 'Offert au rang ' + t.rank + (rank < t.rank ? '' : '');
-      return '<div class="theme-card' + (on ? ' on' : '') + '" style="--t-nuit:' + t.bg[0] + ';--t-haut:' + t.bg[2] + ';--t-acc:' + t.accent + '"><canvas></canvas><div><b>' + t.name + '</b><small>' + sub + '</small></div>' + act + '</div>';
+      var sub = own ? tr(on ? 'Thème actuel' : 'Débloqué') : tr('Offert au rang {0}', t.rank);
+      return '<div class="theme-card' + (on ? ' on' : '') + '" style="--t-nuit:' + t.bg[0] + ';--t-haut:' + t.bg[2] + ';--t-acc:' + t.accent + '"><canvas></canvas><div><b>' + tr(t.name) + '</b><small>' + sub + '</small></div>' + act + '</div>';
     }).join('');
     box.querySelectorAll('canvas').forEach(function (cv, i) { themeCanvas(P.THEMES[i], cv); });
   }
@@ -1278,12 +1291,13 @@
       return '<div class="mission' + (done ? ' done' : '') + '"><b>' + esc(m.text) + '</b><span class="rw">+' + m.reward + ' ' + SHARD + '</span><div class="bar"><i style="width:' + Math.round(100 * Math.min(1, p / m.target)) + '%"></i></div><span class="val">' + fmt(Math.min(p, m.target)) + ' / ' + fmt(m.target) + '</span></div>';
     }).join('');
     var sc = $('streakCard');
-    sc.innerHTML = '<strong>' + (S.streak.last >= DAY - 1 ? S.streak.count : 0) + ' jour' + (S.streak.count > 1 ? 's' : '') + ' de suite</strong><p>Ouvrez LUMEN chaque jour. Le 7<sup>e</sup> jour offre 150 éclats et une Étincelle. Un jour manqué, et la série repart de zéro. Record : ' + S.streak.best + ' jours.</p><div class="moons"></div>';
+    var scn = S.streak.last >= DAY - 1 ? S.streak.count : 0;
+    sc.innerHTML = '<strong>' + trn(scn, '{0} jour de suite', '{0} jours de suite') + '</strong><p>' + tr('Ouvrez LUMEN chaque jour. Le 7<sup>e</sup> jour offre 150 éclats et une Étincelle. Un jour manqué, et la série repart de zéro. Record : {0} jours.', S.streak.best) + '</p><div class="moons"></div>';
     renderMoons(sc.querySelector('.moons'));
     var ev = P.eventFor(DAY), evBest = S.ev.week === ev.week ? S.ev.best : 0, claimed = S.ev.week === ev.week && S.ev.claimed;
     var ec = $('eventCard'); ec.style.setProperty('--ev', ev.hue);
-    ec.innerHTML = '<strong>' + ev.name + '</strong><p>' + ev.desc + ' Atteignez ' + fmt(ev.goal) + ' points en une partie pour gagner ' + P.EVENT_REWARD + ' éclats' + (claimed ? ' (déjà gagnés).' : '.') + ' Fin dans ' + ev.endsIn + ' jour' + (ev.endsIn > 1 ? 's' : '') + '.</p>' +
-      '<div class="row2"><div class="stat-cell"><b>' + fmt(evBest) + '</b><span>Record de la semaine</span></div><button class="btn solid" data-act="event">Jouer</button></div>';
+    ec.innerHTML = '<strong>' + ev.name + '</strong><p>' + ev.desc + tr(' Atteignez {0} points en une partie pour gagner {1} éclats', fmt(ev.goal), P.EVENT_REWARD) + (claimed ? tr(' (déjà gagnés).') : '.') + trn(ev.endsIn, ' Fin dans {0} jour.', ' Fin dans {0} jours.') + '</p>' +
+      '<div class="row2"><div class="stat-cell"><b>' + fmt(evBest) + '</b><span>' + tr('Record de la semaine') + '</span></div><button class="btn solid" data-act="event">' + tr('Jouer') + '</button></div>';
   }
   var MEDAL = function (tier) {
     var cols = [['#3a3358', '#2a2448'], ['#f0b07a', '#a8602c'], ['#f4f8ff', '#9aa6ba'], ['#fff1b0', '#e0a020']][tier];
@@ -1296,29 +1310,30 @@
     $('achTotal').textContent = total + ' / ' + list.length * 3;
     $('achList').innerHTML = list.map(function (a) {
       var prev = a.tier ? a.tiers[a.tier - 1] : 0, f = a.tier >= 3 ? 1 : Math.max(0, Math.min(1, (a.value - prev) / (a.next - prev)));
-      return '<div class="ach"><div class="medal">' + MEDAL(a.tier) + '</div><div><span class="tiers"><i class="' + (a.tier >= 1 ? 't1' : '') + '"></i><i class="' + (a.tier >= 2 ? 't2' : '') + '"></i><i class="' + (a.tier >= 3 ? 't3' : '') + '"></i></span><b>' + esc(a.name) + '</b><p>' + (a.tier >= 3 ? 'Terminé : ' : '') + esc(a.desc) + ' (' + fmt(Math.min(a.value, a.next)) + ' / ' + fmt(a.next) + ')</p><div class="bar"><i style="width:' + Math.round(f * 100) + '%"></i></div></div></div>';
+      return '<div class="ach"><div class="medal">' + MEDAL(a.tier) + '</div><div><span class="tiers"><i class="' + (a.tier >= 1 ? 't1' : '') + '"></i><i class="' + (a.tier >= 2 ? 't2' : '') + '"></i><i class="' + (a.tier >= 3 ? 't3' : '') + '"></i></span><b>' + esc(a.name) + '</b><p>' + (a.tier >= 3 ? tr('Terminé : ') : '') + esc(a.desc) + ' (' + fmt(Math.min(a.value, a.next)) + ' / ' + fmt(a.next) + ')</p><div class="bar"><i style="width:' + Math.round(f * 100) + '%"></i></div></div></div>';
     }).join('');
   }
   function renderStats() {
     var rank = P.rankFor(S.xp), next = P.xpForRank(rank + 1), lo = P.xpForRank(rank);
     var nextTheme = P.THEMES.filter(function (t) { return t.rank > rank && S.themes.indexOf(t.id) < 0; })[0];
     var nextTitle = P.TITLES.filter(function (t) { return t[0] > rank; })[0];
-    $('rankCard').innerHTML = '<canvas id="rankBig"></canvas><div><b>' + P.titleFor(rank) + '</b><small>Rang ' + rank + ', ' + fmt(S.xp - lo) + ' / ' + fmt(next - lo) + ' lueur</small><div class="bar"><i style="width:' + Math.round(100 * (S.xp - lo) / (next - lo)) + '%"></i></div>' +
-      '<div class="unl">' + (nextTitle ? 'Rang ' + nextTitle[0] + ' : titre « ' + nextTitle[1] + ' »' : 'Tous les titres obtenus') + (nextTheme ? '<br>Rang ' + nextTheme.rank + ' : thème ' + nextTheme.name : '') + '</div></div>';
+    $('rankCard').innerHTML = '<canvas id="rankBig"></canvas><div><b>' + P.titleFor(rank) + '</b><small>' + tr('Rang {0}, {1} / {2} lueur', rank, fmt(S.xp - lo), fmt(next - lo)) + '</small><div class="bar"><i style="width:' + Math.round(100 * (S.xp - lo) / (next - lo)) + '%"></i></div>' +
+      '<div class="unl">' + (nextTitle ? tr('Rang {0} : titre « {1} »', nextTitle[0], tr(nextTitle[1])) : tr('Tous les titres obtenus')) + (nextTheme ? '<br>' + tr('Rang {0} : thème {1}', nextTheme.rank, tr(nextTheme.name)) : '') + '</div></div>';
     drawRing($('rankBig'), 84);
     var st = S.stats;
     var cells = [
       [fmt(st.games), 'Parties jouées'], [fmt(S.best), 'Meilleur score'], [st.maxLv, 'Niveau d\'orbe max'], [st.longest, 'Plus longue chaîne'],
-      [fmt(st.merges), 'Fusions au total'], [P.starsTotal(S) + ' ★', 'Étoiles en Aventure'], [S.streak.best + ' j', 'Record de série'], [fmt(st.stones), 'Pierres brisées'],
+      [fmt(st.merges), 'Fusions au total'], [P.starsTotal(S) + ' ★', 'Étoiles en Aventure'], [tr('{0} j', S.streak.best), 'Record de série'], [fmt(st.stones), 'Pierres brisées'],
       [fmt(st.ice), 'Orbes dégelées'], [fmt(st.blasts), 'Bombes déclenchées']
     ];
-    $('statGrid').innerHTML = cells.map(function (c) { return '<div class="stat-cell"><b>' + c[0] + '</b><span>' + c[1] + '</span></div>'; }).join('');
+    $('statGrid').innerHTML = cells.map(function (c) { return '<div class="stat-cell"><b>' + c[0] + '</b><span>' + tr(c[1]) + '</span></div>'; }).join('');
   }
   function renderSettings() {
     $('setSnd').checked = !!S.set.snd; $('setMus').checked = !!S.set.mus; $('setVib').checked = !!S.set.vib;
     $('saveCode').value = P.exportCode(S);
     $('importBox').hidden = true; $('importErr').hidden = true; $('importCode').value = '';
     $('resetConfirm').hidden = true; $('resetBtn').hidden = false;
+    document.querySelectorAll('[data-act=lang]').forEach(function (b) { b.setAttribute('aria-pressed', String(b.getAttribute('data-lang') === I.lang)); });
   }
 
   /* ================= Série quotidienne ================= */
@@ -1326,9 +1341,9 @@
     var r = P.checkIn(S, DAY);
     if (!r) return;
     save();
-    $('giftTitle').textContent = r.broke ? 'La série repart à zéro' : 'Jour ' + r.day + ' de votre série';
+    $('giftTitle').textContent = r.broke ? tr('La série repart à zéro') : tr('Jour {0} de votre série', r.day);
     $('giftAmount').innerHTML = '+' + r.ec + ' ' + SHARD;
-    $('giftText').textContent = r.spark ? 'Septième jour : une Étincelle en prime. Le cycle recommence demain.' : r.broke ? 'Un jour a été manqué. Revenez demain pour le jour 2.' : r.day < 6 ? 'Revenez demain : la récompense grandit chaque jour jusqu\'au 7e.' : 'Demain : 150 éclats et une Étincelle.';
+    $('giftText').textContent = tr(r.spark ? 'Septième jour : une Étincelle en prime. Le cycle recommence demain.' : r.broke ? 'Un jour a été manqué. Revenez demain pour le jour 2.' : r.day < 6 ? 'Revenez demain : la récompense grandit chaque jour jusqu\'au 7e.' : 'Demain : 150 éclats et une Étincelle.');
     var cv = $('giftMoon'), g = cv.getContext('2d');
     g.clearRect(0, 0, 240, 240);
     var gl = g.createRadialGradient(120, 120, 10, 120, 120, 120); gl.addColorStop(0, 'rgba(255,215,122,.6)'); gl.addColorStop(1, 'rgba(255,215,122,0)');
@@ -1392,6 +1407,8 @@
       case 'continue': doContinue(); break;
       case 'giveup': $('overVeil').hidden = true; finalize(); break;
       case 'share': share(); break;
+      case 'shareImg': shareImage(); break;
+      case 'lang': if (b.getAttribute('data-lang') !== I.lang) { I.set(b.getAttribute('data-lang')); location.reload(); } break;
       case 'home': showScreen('home'); break;
       case 'leave': showScreen('home'); break;
       case 'coachNext': finishTutorial(); break;
@@ -1407,21 +1424,21 @@
       case 'replayTuto': startGame('tutorial'); break;
       case 'exportSave':
         var code = P.exportCode(S); $('saveCode').value = code;
-        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(function () { toastAny('Code copié'); }, function () { $('saveCode').select(); toastAny('Sélectionnez et copiez le code'); });
-        else { $('saveCode').select(); toastAny('Sélectionnez et copiez le code'); }
+        if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(code).then(function () { toastAny(tr('Code copié')); }, function () { $('saveCode').select(); toastAny(tr('Sélectionnez et copiez le code')); });
+        else { $('saveCode').select(); toastAny(tr('Sélectionnez et copiez le code')); }
         break;
       case 'showImport': $('importBox').hidden = false; $('importCode').focus(); break;
       case 'doImport':
         var imp = P.importCode($('importCode').value);
         if (!imp) { $('importErr').hidden = false; sfx.deny(); break; }
-        S = imp; save(); applyTheme(S.theme); syncAudio(); toastAny('Progression restaurée'); renderSettings(); refreshEc(false);
+        S = imp; save(); applyTheme(S.theme); syncAudio(); toastAny(tr('Progression restaurée')); renderSettings(); refreshEc(false);
         break;
       case 'reset': $('resetConfirm').hidden = false; $('resetBtn').hidden = true; break;
       case 'resetCancel': $('resetConfirm').hidden = true; $('resetBtn').hidden = false; break;
       case 'resetConfirm':
         // Anti-clickjacking : GitHub Pages ne permet pas d'en-tête frame-ancestors ; pas d'effacement depuis un cadre.
-        if (window.top !== window.self) { toastAny('Ouvrez LUMEN directement pour effacer'); sfx.deny(); break; }
-        var keepSet = S.set; S = P.newSave(); S.set = keepSet; S.tuto = 1; save(); applyTheme('nuit'); toastAny('Progression effacée'); showScreen('home'); break;
+        if (window.top !== window.self) { toastAny(tr('Ouvrez LUMEN directement pour effacer')); sfx.deny(); break; }
+        var keepSet = S.set; S = P.newSave(); S.set = keepSet; S.tuto = 1; save(); applyTheme('nuit'); toastAny(tr('Progression effacée')); showScreen('home'); break;
     }
   });
   function openLevelFromGame(n) { showScreen('map'); setTimeout(function () { openLevel(n); }, 350); }
@@ -1491,7 +1508,12 @@
     if (!S.tuto) startGame('tutorial');
     else { showScreen('home'); setTimeout(dailyCheckIn, 500); }
   }
-  fetch('levels.json').then(function (r) { return r.json(); }).then(function (d) { LEVELS_DATA = d; boot(); }, function () { boot(); });
+  fetch('levels.json').then(function (r) { return r.json(); }).then(function (d) {
+    d.chapters.forEach(function (c) { c.name = tr(c.name); c.intro = tr(c.intro); });
+    LEVELS_DATA = d; boot();
+  }, function () { boot(); });
+  window.LumenAutresJeux.render($('autresJeux'), tr);
+  if (I.lang === 'en') document.querySelectorAll('a[href="privacy.html"]').forEach(function (a) { a.href = 'privacy.html#english'; });
   if (document.fonts && document.fonts.load) {
     Promise.all([document.fonts.load('700 20px Unbounded'), document.fonts.load('900 20px Unbounded')]).then(function () { spriteCache = {}; paintIcons(); if (current === 'home') refreshHome(); }, function () {});
   }

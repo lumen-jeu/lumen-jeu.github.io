@@ -6,7 +6,9 @@ PWA publiée sur https://lumen-jeu.github.io/ (GitHub Pages). L'appli Android (K
 
 ## Modes
 Classique, Aventure (120 niveaux de `levels.json` + niveaux sans fin), **Défi du jour** (`LUMEN #N`, 40 coups,
-même grille pour tout le monde, change à minuit heure de Paris), événement de la semaine, tutoriel.
+même grille pour tout le monde, change à minuit heure de Paris, partage en texte **ou en image 1080×1920**), événement de la semaine, tutoriel.
+
+En **français et en anglais** (langue du navigateur, sélecteur dans les Réglages). Carte « Les autres jeux d'Aulit » dans les Réglages.
 
 ## Tests
 À la racine du dépôt : `node --test` (Node 24, aucune dépendance npm ; ne pas écrire `node --test tests/`).

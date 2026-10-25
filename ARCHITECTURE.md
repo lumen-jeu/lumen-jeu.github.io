@@ -9,25 +9,31 @@ Rédigée le 24/10/2026 d'après le code réel (cas 1, mobile).
 | `engine.js` | Moteur pur (grille, chaînes, fusions, objectifs). Parité avec `GameEngine.kt`. | ~590 |
 | `progress.js` | Progression pure : sauvegarde `LUMEN2`, économie, missions, événement, série d'ouverture, succès, thèmes, texte du défi (`shareDaily`, `dailyFor`, `msToNextDaily`). | ~490 |
 | `audio.js` | Sons WebAudio synthétisés. | ~120 |
-| `app.js` | Interface, rendu canvas, écrans. | ~1520 |
+| `i18n.js` | Langue (fr/en) : choix `lumen.lang` sinon langue du navigateur ; dictionnaire anglais `EN` (clé = texte français du code) ; `t`, `tn` (pluriels), `apply` (traduit la page statique). Source unique des traductions. | ~175 |
+| `carte.js` | Carte image 1080×1920 du Défi du jour : `model` (pur, testé), `draw` (canvas, orbes de app.js), `share` (`navigator.share({files,text})`, sinon téléchargement du PNG). | ~110 |
+| `autres-jeux.js` | Carte « Les autres jeux d'Aulit » (Réglages) : liste `JEUX` des 4 jeux (même texte partout), affiche les 3 autres. | ~30 |
+| `app.js` | Interface, rendu canvas, écrans. | ~1540 |
 | `index.html`, `style.css`, `sw.js`, `manifest.webmanifest`, `levels.json` | Page, styles, cache hors ligne, manifeste, niveaux d'Aventure. | |
 | `privacy.html` | Confidentialité + conditions d'utilisation + mentions légales (lien en bas des Réglages). URL stable pour le Play Store. | |
 | `404.html`, `robots.txt`, `sitemap.xml`, `og-image.png` | Page introuvable (chemins absolus), référencement, aperçu des liens 1200×630. | |
 
-Ordre de chargement : `defi.js` → `engine.js` → `progress.js` → `audio.js` → `app.js`.
-Écart connu : `app.js`, `engine.js`, `progress.js` et `style.css` dépassent 400 lignes (antérieur au 24/10).
+Ordre de chargement : `defi.js` → `i18n.js` → `engine.js` → `progress.js` → `audio.js` → `carte.js` → `autres-jeux.js` → `app.js`.
+Écart connu : `app.js`, `engine.js`, `progress.js` et `style.css` dépassent 400 lignes (antérieur au 24/10 ; le 25/10, le nouveau code est allé dans de nouveaux modules, `app.js` +22 lignes).
 
 ## 2. Sources de vérité uniques
 - Date du jour, numéro `#N`, graine du défi, série du défi, format du texte partagé : `defi.js`.
 - Jour du jeu (série d'ouverture, missions, événement, défi) : `P.today()` = date de Paris via `defi.js`.
 - URL canonique de partage : `P.URL` (`https://lumen-jeu.github.io/`), jamais `location.href`.
-- Thèmes, prix, récompenses : `progress.js`. Niveaux : `levels.json`. Textes : français, dans le code.
+- Thèmes, prix, récompenses : `progress.js`. Niveaux : `levels.json`.
+- Textes : français dans le code (= clés) ; anglais **uniquement** dans `EN` de `i18n.js`. `app.js` appelle `tr()`/`trn()`, `progress.js` appelle `T()` (identité sous Node), la page statique est traduite par `I18N.apply`, les chapitres de `levels.json` au chargement.
+- Liens des autres jeux : `JEUX` de `autres-jeux.js` (à remplacer par les liens Play Store une fois publiés).
 
 ## 3. Persistance (localStorage du navigateur)
 | Clé | Contenu | Survit à une mise à jour |
 |---|---|---|
 | `lumen.save2` | Sauvegarde complète (JSON, exportable en code `LUMEN2.…`), dont `daily` = meilleur score du jour et `streak` = série d'ouverture | oui |
 | `lumen.defi.v1` | Série du défi `{v,last,count,best,jours}` (30 derniers jours), écrite par `defi.js`, **hors** code `LUMEN2` | oui |
+| `lumen.lang` | `fr` / `en` choisi dans les Réglages (absent = langue du navigateur), hors code `LUMEN2` | oui |
 | `lumen.best`, `lumen.bestLevel`, `lumen.mute` | Ancienne v1, lue une fois pour migration | — |
 
 ## 4. Sécurité
@@ -36,16 +42,17 @@ Aucun secret, aucun serveur, aucun appel réseau sauf le chargement des fichiers
 
 ## 5. Identité
 Domaine `lumen-jeu.github.io` (organisation dédiée). Manifeste sans `id` (donc id = `start_url`) : ne pas en ajouter.
-Cache SW `lumen-v2.1.2`, le SW ne supprime que les caches `lumen-*`. Identifiant de jeu dans la graine : `'lumen'`.
+Cache SW `lumen-v2.2.0`, le SW ne supprime que les caches `lumen-*`. Identifiant de jeu dans la graine : `'lumen'`.
 
 ## 6. Dépendances externes
-Aucune. Polices et icônes locales. Partage : `navigator.share` → presse-papiers → zone de texte à copier.
+Aucune. Polices et icônes locales. Partage texte : `navigator.share` → presse-papiers → zone de texte à copier. Partage image : `navigator.share` avec fichier si `canShare({files})`, sinon téléchargement du PNG. Liens sortants vers les 3 autres jeux (nouvel onglet).
 
 ## 7. Plan de tests (`node --test`)
 - `tests/sauvegarde.test.js` : bornes du code `LUMEN2`.
 - `tests/defi.test.js` (commun aux 4 jeux) : vecteurs FNV/graines, date de Paris = `Intl` toutes les heures 2026-2035, série, texte, partage, empreinte du fichier `defi.js`, ordre des scripts et SW.
 - `tests/defi-lumen.test.js` : même grille pour la même graine, date de Paris à 23h30 UTC, prochain défi, `shareDaily`.
-- Manuel : capture accueil + fin du défi, zéro erreur console, hors ligne après installation.
+- `tests/i18n-carte.test.js` : choix de la langue, `t`/`tn`, **chaque texte passé à `tr`/`trn`/`T` a sa traduction**, missions/événements/thèmes/titres/chapitres traduits, contenu de la carte du défi, liste des autres jeux, nouveaux modules en cache et chargés avant `app.js`.
+- Manuel / sans tête (Playwright de `F:\GITHUB\Site\tests`, 390×844, fr-FR et en-US) : accueil, fin du défi, carte PNG, Réglages, zéro erreur console.
 
 ## 8. Risques connus
 Voir `PIEGES.md`. Le défi Android (`game/Defi.kt`, 25/10) suit la même date de Paris et la même graine que `defi.js`.

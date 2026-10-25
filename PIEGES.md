@@ -16,4 +16,8 @@
 - **Jour du déploiement** : la grille du défi change ce jour-là pour ceux qui l'ont déjà joué (graine différente) ; le record du jour reste.
 - **JSON-LD en fin de `<body>`** (25/10) : `tests/defi.test.js` exige que `defi.js` soit le **premier** `<script>` de `index.html` ; un bloc `application/ld+json` dans le `<head>` fait échouer le test.
 
+- **Traductions (25/10)** : le texte français du code **est** la clé de `EN` (`i18n.js`). Modifier un texte français = modifier aussi sa clé, sinon l'anglais retombe sur le français ; `tests/i18n-carte.test.js` le détecte pour les appels `tr('…')`/`T('…')` littéraux (pas pour les textes passés en variable : tableaux `INTROS`, `BOOSTERS`, données de `progress.js` — les vérifier à la main).
+- **`progress.js` reste pur** : il appelle `T()`, qui n'utilise `I18N` que s'il existe (sous Node : français tel quel, pour les tests de parité Android).
+- **Partage d'image** : `navigator.share` exige un geste récent de l'utilisateur ; la carte est dessinée juste après le clic (attente des polices courte). Sans `canShare({files})` (ordinateur), le PNG est téléchargé.
+
 - **Fichier `google9ad7f8bd44912903.html` (25/10)** : validation Google Search Console (propriété + sitemap envoyé). Ne jamais le supprimer ni le renommer, sinon la propriété perd sa validation.
