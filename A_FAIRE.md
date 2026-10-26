@@ -18,11 +18,13 @@
 - **25/10** : contact **aulit42369@gmail.com** dans `privacy.html` (FR et EN, lien `mailto:`, tickets GitHub en second). Bouton **« Jouer »** sur l'accueil, au-dessus des cartes : lance directement l'Aventure au niveau en cours (sous-titre « Aventure · Niveau N », orbe à halo ambré qui pulse, coupé si mouvement réduit) ; carte Aventure (ouvre la carte des niveaux), Classique et Défi du jour restent dessous, carte Aventure plus basse (96 px). Même bouton dans l'appli Android 2.1.0 (`ui/Accueil.kt`, `PlayButton`). Cache `lumen-v2.2.2`. 28 tests verts ; contrôle Chromium sans tête 390×844 (fr) et 390×667 (en) : rendu, clic → partie du niveau en cours, zéro erreur console.
 - **25/10** : décision d'Olivier : « Succès » se dit **Achievements** en anglais (et non Awards), partout : interface, `privacy.html`, fiche Play en-US, `TextesEn.kt`. Cache `lumen-v2.2.4`.
 - **25/10** : relecture de l'anglais avec DeepL (334 textes : `i18n.js`, `privacy.html` #english, fiche Play en-US), journal `JEUX\lumen\RELECTURE-DEEPL.md`. 3 corrections mineures : « Little Dipper » → « Ursa Minor » (noms latins comme les autres chapitres), « Soft pads » → « Soft soundscapes generated live », phrase des cookies complétée dans `privacy.html`. Mêmes corrections dans `TextesEn.kt` (Android). Cache `lumen-v2.2.3`. 28 tests verts.
+- **26/10** : politique conforme LCEN/RGPD : mentions légales complètes (éditeur et directeur de la publication Aulit42369, personne physique non professionnelle anonyme, identité communiquée à l'hébergeur ; GitHub, Inc. avec adresse, téléphone, page de contact), transferts hors UE (DPF / clauses types) dans « Hébergement », contact et réclamation CNIL dans « Vos droits » (FR + EN, le français fait foi). Cache `lumen-v2.2.5`.
 
 ## En cours
 - Rien.
 
 ## À faire
+- Play Console (à la publication) : fiche « Sécurité des données » cohérente avec `privacy.html` (aucune donnée collectée).
 - Android : AAB signé par Olivier quand le compte Play Console sera validé. (25/10 : `JEUX\lumen\android` 2.0.1 a le même Défi du jour, `game/Defi.kt`, testé contre `defi.js`.)
 - Les tests de parité de `JEUX\lumen` pointent vers un `pwa\` vide : les faire pointer vers ce dépôt.
 - `engine.js` (586), `progress.js` (490), `style.css` (587) dépassent 400 lignes : à découper seulement avec leurs jumeaux Android (`GameEngine.kt`, `Progression.kt`) et l'API `require` des tests (décision à prendre).
