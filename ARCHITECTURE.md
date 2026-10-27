@@ -70,7 +70,7 @@ Aucun secret, aucun serveur, aucun appel réseau sauf le chargement des fichiers
 
 ## 5. Identité
 Domaine `lumen-jeu.github.io` (organisation dédiée). Manifeste sans `id` (donc id = `start_url`) : ne pas en ajouter.
-Cache SW `lumen-v2.2.6`, le SW ne supprime que les caches `lumen-*`. Identifiant de jeu dans la graine : `'lumen'`.
+Cache SW `lumen-v2.2.7`, le SW ne supprime que les caches `lumen-*`. Identifiant de jeu dans la graine : `'lumen'`.
 
 ## 6. Dépendances externes
 Aucune. Polices et icônes locales. Partage texte : `navigator.share` → presse-papiers → zone de texte à copier. Partage image : `navigator.share` avec fichier si `canShare({files})`, sinon téléchargement du PNG. Liens sortants vers les 3 autres jeux (nouvel onglet).
@@ -88,3 +88,6 @@ Aucune. Polices et icônes locales. Partage texte : `navigator.share` → presse
 
 ## 8. Risques connus
 Voir `PIEGES.md`. Le défi Android (`game/Defi.kt`, 25/10) suit la même date de Paris et la même graine que `defi.js`.
+
+## Statistiques de visite (28/10/2026)
+GoatCounter sans cookie, chemins `/lumen/…`, chargé par le script d'une ligne en fin de `index.html` uniquement sur `*.github.io` et sans `skipgc` (détail : `docs/TRD.md`, section Traceurs). `privacy.html` le déclare dans toutes ses langues, avec le bouton « Ne pas être compté ». Test : `tests/statistiques.test.js` (identique dans les 4 jeux, seul `PREFIXE` change).

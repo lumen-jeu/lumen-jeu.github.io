@@ -8,9 +8,16 @@
 
 ## PWA
 - Hébergement : GitHub Pages, `https://lumen-jeu.github.io/` (organisation dédiée).
-- `sw.js` : cache d'abord ; constante `CACHE` (`lumen-v2.2.6` au 28/10/2026) à monter à **chaque** fichier publié modifié ; ne purge que les caches `lumen-*`.
+- `sw.js` : cache d'abord ; constante `CACHE` (`lumen-v2.2.7` au 28/10/2026) à monter à **chaque** fichier publié modifié ; ne purge que les caches `lumen-*`.
 - `manifest.webmanifest` sans `id` (id = `start_url`) : ne pas en ajouter.
-- CSP en balise meta : `script-src 'self'` (aucun script en ligne exécutable ; le JSON-LD n'est pas exécuté).
+- CSP en balise meta : `script-src 'self'` + empreinte `sha256` du seul script en ligne exécutable (compteur GoatCounter) + `https://gc.zgo.at` ; `connect-src`/`img-src` + `https://aulit42369.goatcounter.com` (le JSON-LD n'est pas exécuté).
+
+## Traceurs (28/10/2026)
+- Aucun cookie. Seul traceur : **GoatCounter**, mesure d'audience sans cookie (compte `aulit42369.goatcounter.com`, le même que le Site et la vitrine de La Cabane), chemins préfixés `/lumen/…` (option `path`) pour distinguer le jeu dans le tableau de bord.
+- Script d'une ligne en fin de `index.html` : charge `count.v4.js` (version figée + SRI `sha384`, comme le Site) **seulement** si `location.hostname` se termine par `github.io` (jamais dans une appli Android, une WebView, `file://` ni en local) et si `localStorage.skipgc` ≠ `'t'`.
+- CSP : empreinte `sha256` de ce script + `https://gc.zgo.at` dans `script-src`, `https://aulit42369.goatcounter.com` dans `connect-src` et `img-src`. Modifier le script = recalculer l'empreinte (`tests/statistiques.test.js` échoue sinon).
+- Le SW ignore les requêtes d'autres origines : `count.js` et les envois ne sont jamais mis en cache.
+- Opposition : bouton « Ne pas être compté » de `privacy.html` (toutes les langues), clé locale `skipgc` ; bouton masqué hors `github.io`.
 
 ## Android
 - Appli Kotlin native séparée : `F:\Stream\files\JEUX\lumen\android` (hors de ce dépôt).

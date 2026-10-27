@@ -20,12 +20,13 @@
 - **25/10** : relecture de l'anglais avec DeepL (334 textes : `i18n.js`, `privacy.html` #english, fiche Play en-US), journal `JEUX\lumen\RELECTURE-DEEPL.md`. 3 corrections mineures : « Little Dipper » → « Ursa Minor » (noms latins comme les autres chapitres), « Soft pads » → « Soft soundscapes generated live », phrase des cookies complétée dans `privacy.html`. Mêmes corrections dans `TextesEn.kt` (Android). Cache `lumen-v2.2.3`. 28 tests verts.
 - **26/10** : politique conforme LCEN/RGPD : mentions légales complètes (éditeur et directeur de la publication Aulit42369, personne physique non professionnelle anonyme, identité communiquée à l'hébergeur ; GitHub, Inc. avec adresse, téléphone, page de contact), transferts hors UE (DPF / clauses types) dans « Hébergement », contact et réclamation CNIL dans « Vos droits » (FR + EN, le français fait foi). Cache `lumen-v2.2.5`.
 - **28/10** : accessibilité : écrans enveloppés dans `<main>` (comme Fragments), rendu et comportement identiques (positions de tous les éléments comparées avant/après dans Chromium sans tête, 0 erreur console) ; pas de pied de page (casserait le plein écran), lien de confidentialité gardé dans les Réglages. Cache `lumen-v2.2.6`. Docs de cadrage créées dans `docs/` (PRD, TRD, APP_FLOW, DESIGN_BRIEF, BACKEND_SCHEMA, IMPLEMENTATION_PLAN).
+- **28/10** : mesure d'audience **GoatCounter sans cookie** (même compte et même méthode que le Site) : chemins `/lumen/…`, comptée seulement sur `*.github.io` (jamais dans l'appli Android, une WebView, en local), opposition `skipgc` + bouton « Ne pas être compté » dans `privacy.html` (toutes les langues, texte repris du Site, liste des traceurs et date mises à jour), CSP élargie (empreinte du script, `gc.zgo.at`, `aulit42369.goatcounter.com`), cache `lumen-v2.2.7`, `tests/statistiques.test.js`. Vérifié dans Chrome sans tête (URL github.io simulée : un envoi `/lumen/` ; local et `skipgc` : aucun ; 0 erreur console/CSP).
 
 ## En cours
 - Rien.
 
 ## À faire
-- Play Console (à la publication) : fiche « Sécurité des données » cohérente avec `privacy.html` (aucune donnée collectée).
+- Play Console (à la publication) : fiche « Sécurité des données » cohérente avec `privacy.html` (appli : aucune donnée collectée ; GoatCounter ne tourne que sur la version web, rien à déclarer pour l'appli).
 - Android : AAB signé par Olivier quand le compte Play Console sera validé. (25/10 : `JEUX\lumen\android` 2.0.1 a le même Défi du jour, `game/Defi.kt`, testé contre `defi.js`.)
 - Les tests de parité de `JEUX\lumen` pointent vers un `pwa\` vide : les faire pointer vers ce dépôt.
 - `engine.js` (586), `progress.js` (490), `style.css` (587) dépassent 400 lignes : à découper seulement avec leurs jumeaux Android (`GameEngine.kt`, `Progression.kt`) et l'API `require` des tests (décision à prendre).
@@ -34,7 +35,7 @@
 
 - Décision d'Olivier : garder « Awards » pour Succès ou passer à « Achievements » (plus courant, plus long ; à changer partout, fiche Play comprise).
 
-- Mesure d'audience : rien d'installé (à décider ; option sans cookie si oui).
+- Mesure d'audience : vérifier dans le tableau de bord `aulit42369.goatcounter.com` que les visites arrivent sous `/lumen/` (quelques minutes après une visite).
 
 ## Décisions prises
 - **25/10** : langue par défaut = navigateur (`fr*` → français, toute autre langue → anglais) ; changer de langue recharge la page (plus simple et sûr que de tout redessiner).

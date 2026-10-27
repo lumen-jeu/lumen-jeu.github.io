@@ -9,7 +9,7 @@
 <link rel="icon" href="icons/icon-192.png" type="image/png">
 <link rel="preload" href="fonts/unbounded-latin-900-normal.woff2" as="font" type="font/woff2" crossorigin>
 <style>
-  /* Même nuit violette que le jeu ; page lisible, imprimable, sans script. */
+  /* Même nuit violette que le jeu ; page lisible, imprimable ; un seul script, pour le bouton des statistiques. */
   @font-face { font-family: 'Unbounded'; font-weight: 900; font-display: swap; src: url('fonts/unbounded-latin-900-normal.woff2') format('woff2'); }
   @font-face { font-family: 'Unbounded'; font-weight: 700; font-display: swap; src: url('fonts/unbounded-latin-700-normal.woff2') format('woff2'); }
   @font-face { font-family: 'Instrument Sans'; font-weight: 400; font-display: swap; src: url('fonts/instrument-sans-latin-400-normal.woff2') format('woff2'); }
@@ -32,6 +32,7 @@
   ul { padding-left: 20px; }
   .date { color: var(--brume); font-size: 14px; }
   a { color: var(--ambre); }
+.gc { font: inherit; font-size: .92em; color: inherit; background: transparent; border: 1px solid currentColor; border-radius: 999px; padding: 5px 14px; cursor: pointer; }
   :focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; border-radius: 6px; }
 </style>
 </head>
@@ -46,9 +47,9 @@
 
   <section id="confidentialite">
     <h2>Politique de confidentialité</h2>
-    <p class="date">Dernière mise à jour : 26 octobre 2026</p>
+    <p class="date">Dernière mise à jour : 28 octobre 2026</p>
     <h3>Aucune donnée collectée</h3>
-    <p>LUMEN ne collecte, ne transmet et ne vend aucune donnée personnelle. Le jeu ne contient ni publicité, ni outil de mesure d'audience, ni compte utilisateur. Il ne contacte aucun serveur : il charge seulement ses propres fichiers, puis fonctionne hors ligne.</p>
+    <p>LUMEN ne collecte, ne transmet et ne vend aucune donnée personnelle. Le jeu ne contient ni publicité, ni compte utilisateur. L'appli ne contacte aucun serveur ; la version web charge ses propres fichiers, compte les visites de façon anonyme (voir « Statistiques de visite »), puis fonctionne hors ligne.</p>
     <h3>Données gardées sur votre appareil</h3>
     <p>Votre progression (étoiles, éclats, boosters, thèmes, succès, records, missions, série de jours), vos réglages (sons, musique, vibrations, langue) et la série du Défi du jour sont enregistrés uniquement dans le stockage local de votre navigateur ou de l'appli. Ils sont effacés si vous désinstallez le jeu, videz ses données ou utilisez « Réinitialiser la progression » dans les Réglages.</p>
     <h3>Code de sauvegarde</h3>
@@ -59,8 +60,11 @@
     <p>Après votre troisième Défi du jour réussi, l'appli Android peut afficher une seule fois la fenêtre de notation de Google Play. Cette fenêtre est gérée par Google Play, selon ses propres règles ; LUMEN ne reçoit ni votre note ni votre commentaire.</p>
     <h3>Liens vers les autres jeux</h3>
     <p>La carte « Les autres jeux d'Aulit » des Réglages contient de simples liens vers les sites des autres jeux. Rien n'est envoyé tant que vous n'appuyez pas dessus.</p>
+    <h3>Statistiques de visite (version web seulement)</h3>
+    <p>La version web du jeu utilise <a href="https://www.goatcounter.com/help/privacy" rel="noopener">GoatCounter</a>, service de mesure d'audience exploité depuis l'Irlande et hébergé dans l'Union européenne (serveurs en Finlande et en Allemagne). Il compte les pages vues sans cookie et sans identifiant qui vous suivrait d'une visite à l'autre. Votre adresse IP sert seulement à déduire le pays et à ne pas compter deux fois la même visite : elle n'est jamais enregistrée (gardée quelques heures au plus en mémoire, puis oubliée). Seules des statistiques globales sont conservées : pages vues, site d'origine, navigateur, pays et taille d'écran approximatifs. Cette mesure sert uniquement à connaître la fréquentation du jeu : elle est exemptée de consentement, selon les recommandations de la CNIL. Base légale : l'intérêt légitime à connaître la fréquentation du jeu. L'appli Android ne mesure rien. Vous pouvez vous y opposer à tout moment sur ce navigateur :</p>
+    <p class="gc-choix"><button type="button" class="gc" data-gc="Ne pas être compté|Être compté de nouveau" aria-pressed="false">Ne pas être compté</button> <span data-gc-etat="Vos visites sont comptées, de façon anonyme.|Vos visites ne sont pas comptées sur ce navigateur."></span></p>
     <h3>Cookies</h3>
-    <p>LUMEN n'utilise aucun cookie ni traceur. C'est pourquoi aucun bandeau de consentement ne s'affiche : rien n'est déposé à des fins de mesure ou de publicité.</p>
+    <p>LUMEN n'utilise aucun cookie ni traceur publicitaire. La version web utilise seulement la mesure d'audience sans cookie décrite ci-dessus, exemptée de consentement : c'est pourquoi aucun bandeau ne s'affiche. Si vous choisissez « Ne pas être compté », la clé <code>skipgc</code> est enregistrée dans le stockage local de votre navigateur pour retenir ce choix.</p>
     <h3>Fonctions de l'appareil</h3>
     <p>Vibration : retours tactiles pendant la partie, désactivables dans les Réglages. Les sons et la musique sont générés en direct par l'appareil.</p>
     <h3>Hébergement</h3>
@@ -85,9 +89,9 @@
 
   <section id="english" lang="en">
     <h2>Privacy policy (English)</h2>
-    <p class="date">Last updated: 26 October 2026. The French version above is the reference text.</p>
+    <p class="date">Last updated: 28 October 2026. The French version above is the reference text.</p>
     <h3>No data collected</h3>
-    <p>LUMEN does not collect, transmit or sell any personal data. The game has no ads, no analytics and no user account. It contacts no server: it only loads its own files, then works offline.</p>
+    <p>LUMEN does not collect, transmit or sell any personal data. The game has no ads and no user account. The app contacts no server; the web version loads its own files, counts visits anonymously (see “Visit statistics”), then works offline.</p>
     <h3>Data kept on your device</h3>
     <p>Your progress (stars, shards, boosters, themes, achievements, best scores, missions, daily streak), your settings (sound, music, vibration, language) and your Daily Challenge streak are stored only in the local storage of your browser or of the app. They are erased if you uninstall the game, clear its data or use “Reset progress” in Settings.</p>
     <h3>Save code</h3>
@@ -98,8 +102,11 @@
     <p>After your third completed Daily Challenge, the Android app may show the Google Play rating window once. That window is run by Google Play under its own rules; LUMEN never receives your rating or your comment.</p>
     <h3>Links to other games</h3>
     <p>The “Aulit's other games” card in Settings holds plain links to the other games' websites. Nothing is sent unless you tap one.</p>
+    <h3>Visit statistics (web version only)</h3>
+    <p>The web version of the game uses <a href="https://www.goatcounter.com/help/privacy" rel="noopener">GoatCounter</a>, an audience measurement service operated from Ireland and hosted in the European Union (servers in Finland and Germany). It counts page views without cookies and without any identifier that would follow you from one visit to the next. Your IP address is only used to work out your country and to avoid counting the same visit twice: it is never stored (kept in memory for a few hours at most, then forgotten). Only overall statistics are kept: pages viewed, referring site, browser, approximate country and screen size. This measurement is only used to know how many people visit the game: it is exempt from consent under the CNIL's guidelines. Legal basis: legitimate interest in knowing the game's audience. The Android app measures nothing. You can opt out at any time on this browser:</p>
+    <p class="gc-choix"><button type="button" class="gc" data-gc="Don't count me|Count me again" aria-pressed="false">Don't count me</button> <span data-gc-etat="Your visits are counted anonymously.|Your visits are not counted on this browser."></span></p>
     <h3>Cookies</h3>
-    <p>LUMEN uses no cookies or trackers, which is why no consent banner is shown: nothing is stored for analytics or advertising.</p>
+    <p>LUMEN uses no cookies and no advertising trackers. The web version only uses the cookie-free audience measurement described above, which is exempt from consent: that is why no consent banner is shown. If you choose “Don't count me”, the <code>skipgc</code> key is saved in your browser's local storage to remember that choice.</p>
     <h3>Device features</h3>
     <p>Vibration: haptic feedback during play, which you can turn off in Settings. Sounds and music are generated live by your device.</p>
     <h3>Hosting</h3>
@@ -116,5 +123,25 @@
     <p>Questions: <a href="mailto:aulit42369@gmail.com">aulit42369@gmail.com</a>, or open an issue on <a href="https://github.com/lumen-jeu/lumen-jeu.github.io/issues" rel="noopener">the game's GitHub page</a>.</p>
   </section>
 </main>
+<script>
+// « Ne pas être compté » : GoatCounter ne compte rien quand localStorage.skipgc === 't' (même règle que le Site).
+// Hors github.io (appli Android, local) le jeu ne compte rien : le bouton est masqué.
+(function () {
+  var web = /(^|\.)github\.io$/.test(location.hostname);
+  function off() { try { return localStorage.getItem('skipgc') === 't'; } catch (e) { return false; } }
+  function maj() {
+    var i = off() ? 1 : 0;
+    document.querySelectorAll('.gc-choix').forEach(function (el) { el.hidden = !web; });
+    document.querySelectorAll('[data-gc]').forEach(function (b) { b.textContent = b.getAttribute('data-gc').split('|')[i]; b.setAttribute('aria-pressed', String(!!i)); });
+    document.querySelectorAll('[data-gc-etat]').forEach(function (s) { s.textContent = s.getAttribute('data-gc-etat').split('|')[i]; });
+  }
+  document.addEventListener('click', function (e) {
+    if (!e.target.closest('[data-gc]')) return;
+    try { if (off()) localStorage.removeItem('skipgc'); else localStorage.setItem('skipgc', 't'); } catch (err) { /* stockage bloqué */ }
+    maj();
+  });
+  maj();
+})();
+</script>
 </body>
 </html>
