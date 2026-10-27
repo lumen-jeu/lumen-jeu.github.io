@@ -45,6 +45,9 @@ listent les 8 fichiers dans cet ordre, après `autres-jeux.js` ; `defi.js` reste
 Hors périmètre : `engine.js` (~590) et `progress.js` (~490), modules purs testés et portés à l'identique sous Android
 (parité ligne à ligne avec `GameEngine.kt`/`Progression.kt`) ; `style.css` (~590, une feuille, pas de logique).
 
+Accessibilité (28/10) : les 8 `<section class="screen">` sont dans un `<main>` sans style (élément statique : les écrans restent positionnés par rapport à `body`) ; feuilles, carte d'intro et bandeau restent hors du `<main>`. Pas de pied de page (plein écran) : lien `privacy.html` en bas des Réglages.
+Documents de cadrage dans `docs/` : `PRD.md`, `TRD.md`, `APP_FLOW.md`, `DESIGN_BRIEF.md`, `BACKEND_SCHEMA.md`, `IMPLEMENTATION_PLAN.md`.
+
 ## 2. Sources de vérité uniques
 - Date du jour, numéro `#N`, graine du défi, série du défi, format du texte partagé : `defi.js`.
 - Jour du jeu (série d'ouverture, missions, événement, défi) : `P.today()` = date de Paris via `defi.js`.
@@ -67,7 +70,7 @@ Aucun secret, aucun serveur, aucun appel réseau sauf le chargement des fichiers
 
 ## 5. Identité
 Domaine `lumen-jeu.github.io` (organisation dédiée). Manifeste sans `id` (donc id = `start_url`) : ne pas en ajouter.
-Cache SW `lumen-v2.2.2`, le SW ne supprime que les caches `lumen-*`. Identifiant de jeu dans la graine : `'lumen'`.
+Cache SW `lumen-v2.2.6`, le SW ne supprime que les caches `lumen-*`. Identifiant de jeu dans la graine : `'lumen'`.
 
 ## 6. Dépendances externes
 Aucune. Polices et icônes locales. Partage texte : `navigator.share` → presse-papiers → zone de texte à copier. Partage image : `navigator.share` avec fichier si `canShare({files})`, sinon téléchargement du PNG. Liens sortants vers les 3 autres jeux (nouvel onglet).

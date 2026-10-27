@@ -19,6 +19,7 @@
 - **25/10** : décision d'Olivier : « Succès » se dit **Achievements** en anglais (et non Awards), partout : interface, `privacy.html`, fiche Play en-US, `TextesEn.kt`. Cache `lumen-v2.2.4`.
 - **25/10** : relecture de l'anglais avec DeepL (334 textes : `i18n.js`, `privacy.html` #english, fiche Play en-US), journal `JEUX\lumen\RELECTURE-DEEPL.md`. 3 corrections mineures : « Little Dipper » → « Ursa Minor » (noms latins comme les autres chapitres), « Soft pads » → « Soft soundscapes generated live », phrase des cookies complétée dans `privacy.html`. Mêmes corrections dans `TextesEn.kt` (Android). Cache `lumen-v2.2.3`. 28 tests verts.
 - **26/10** : politique conforme LCEN/RGPD : mentions légales complètes (éditeur et directeur de la publication Aulit42369, personne physique non professionnelle anonyme, identité communiquée à l'hébergeur ; GitHub, Inc. avec adresse, téléphone, page de contact), transferts hors UE (DPF / clauses types) dans « Hébergement », contact et réclamation CNIL dans « Vos droits » (FR + EN, le français fait foi). Cache `lumen-v2.2.5`.
+- **28/10** : accessibilité : écrans enveloppés dans `<main>` (comme Fragments), rendu et comportement identiques (positions de tous les éléments comparées avant/après dans Chromium sans tête, 0 erreur console) ; pas de pied de page (casserait le plein écran), lien de confidentialité gardé dans les Réglages. Cache `lumen-v2.2.6`. Docs de cadrage créées dans `docs/` (PRD, TRD, APP_FLOW, DESIGN_BRIEF, BACKEND_SCHEMA, IMPLEMENTATION_PLAN).
 
 ## En cours
 - Rien.
