@@ -29,6 +29,10 @@
     return s;
   }
   var S = loadSave();
+  // Mode calme : aucune série affichée ni partagée (classe `calm` sur <html>, voir style.css)
+  function applyCalm() { document.documentElement.classList.toggle('calm', !!S.set.calm); }
+  function serieDefi(jour) { return S.set.calm ? 0 : D.serie('lumen', jour); }
+  applyCalm();
   function save() { lsSet(KEY, JSON.stringify(S)); }
   var DAY = P.today();
   var todaySeed = P.dailyFor().num; // date de Paris AAAAMMJJ (S.daily.seed)

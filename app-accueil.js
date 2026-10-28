@@ -97,7 +97,7 @@
     drawAdvConst(n);
     $('homeBest').textContent = tr('Record {0}', fmt(S.best));
     // défi du jour : « #24 · à faire » / « #24 · fait ✓ · 7 420 » + série du défi (distincte de la série d'ouverture)
-    var td = P.dailyFor(), played = D.aJoue('lumen', td), dsr = D.serie('lumen', td);
+    var td = P.dailyFor(), played = D.aJoue('lumen', td), dsr = serieDefi(td);
     $('homeDaily').innerHTML = '#' + td.n + ' · ' + (played ? tr('fait ✓ · ') + fmt(D.load('lumen').jours[td.key].score) : tr('à faire')) +
       (dsr ? ' <span class="defi-serie" title="' + tr('Série du défi') + '">' + FLAME + dsr + '<span class="sr">' + trn(dsr, ' jour de défi de suite', ' jours de défi de suite') + '</span></span>' : '');
     $('homeDaily').parentNode.classList.toggle('done', played);

@@ -55,7 +55,7 @@
       <p class="tagline">Reliez. Fusionnez. Faites monter la lumière.</p>
     </div>
 
-    <button class="streak-row" data-act="open" data-to="missions" aria-label="Série de connexion">
+    <button class="streak-row calm-hide" data-act="open" data-to="missions" aria-label="Série de connexion">
       <span class="sr-n" id="srN">0<small>jours</small></span>
       <span class="moons" id="moons"></span>
     </button>
@@ -175,8 +175,8 @@
     <div class="panel-body">
       <div class="mis-list" id="misList"></div>
       <p class="fine" id="misReset">Nouvelles missions à minuit.</p>
-      <h3 class="sect">Série</h3>
-      <div class="streak-card" id="streakCard"></div>
+      <h3 class="sect calm-hide">Série</h3>
+      <div class="streak-card calm-hide" id="streakCard"></div>
       <h3 class="sect">Événement de la semaine</h3>
       <div class="event-card" id="eventCard"></div>
     </div>
@@ -227,6 +227,7 @@
         <label class="toggle"><span>Sons</span><input type="checkbox" id="setSnd"><i></i></label>
         <label class="toggle"><span>Musique d'ambiance<small>Nappes douces générées en direct</small></span><input type="checkbox" id="setMus"><i></i></label>
         <label class="toggle"><span>Vibrations</span><input type="checkbox" id="setVib"><i></i></label>
+        <label class="toggle"><span>Mode calme<small>Sans série de jours ni compte à rebours</small></span><input type="checkbox" id="setCalm"><i></i></label>
       </div>
       <div class="set-group">
         <button class="set-row" data-act="replayTuto">Rejouer le tutoriel</button>

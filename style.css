@@ -604,3 +604,4 @@ textarea:focus { outline: 2px solid color-mix(in srgb, var(--accent) 60%, transp
 .autre:focus-visible { outline: 2px solid var(--cyan); outline-offset: -2px; }
 .tile-name { line-height: 1.15; }
 html[lang="en"] .tile.daily .tile-name { font-size: 13px; }
+.calm .calm-hide, .calm .defi-serie { display: none !important; }

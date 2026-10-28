@@ -87,7 +87,7 @@
     $('statGrid').innerHTML = cells.map(function (c) { return '<div class="stat-cell"><b>' + c[0] + '</b><span>' + tr(c[1]) + '</span></div>'; }).join('');
   }
   function renderSettings() {
-    $('setSnd').checked = !!S.set.snd; $('setMus').checked = !!S.set.mus; $('setVib').checked = !!S.set.vib;
+    $('setSnd').checked = !!S.set.snd; $('setMus').checked = !!S.set.mus; $('setVib').checked = !!S.set.vib; $('setCalm').checked = !!S.set.calm;
     $('saveCode').value = P.exportCode(S);
     $('importBox').hidden = true; $('importErr').hidden = true; $('importCode').value = '';
     $('resetConfirm').hidden = true; $('resetBtn').hidden = false;
@@ -99,6 +99,7 @@
     var r = P.checkIn(S, DAY);
     if (!r) return;
     save();
+    if (S.set.calm) { refreshEc(true); refreshHome(); if (r.events.length) ticker(r.events); return; } // récompense créditée sans fenêtre « série »
     $('giftTitle').textContent = r.broke ? tr('La série repart à zéro') : tr('Jour {0} de votre série', r.day);
     $('giftAmount').innerHTML = '+' + r.ec + ' ' + SHARD;
     $('giftText').textContent = tr(r.spark ? 'Septième jour : une Étincelle en prime. Le cycle recommence demain.' : r.broke ? 'Un jour a été manqué. Revenez demain pour le jour 2.' : r.day < 6 ? 'Revenez demain : la récompense grandit chaque jour jusqu\'au 7e.' : 'Demain : 150 éclats et une Étincelle.');
@@ -190,7 +191,7 @@
       case 'doImport':
         var imp = P.importCode($('importCode').value);
         if (!imp) { $('importErr').hidden = false; sfx.deny(); break; }
-        S = imp; save(); applyTheme(S.theme); syncAudio(); toastAny(tr('Progression restaurée')); renderSettings(); refreshEc(false);
+        S = imp; save(); applyCalm(); applyTheme(S.theme); syncAudio(); toastAny(tr('Progression restaurée')); renderSettings(); refreshEc(false);
         break;
       case 'reset': $('resetConfirm').hidden = false; $('resetBtn').hidden = true; break;
       case 'resetCancel': $('resetConfirm').hidden = true; $('resetBtn').hidden = false; break;
@@ -217,9 +218,9 @@
     save();
     if (res.events.length) setTimeout(function () { ticker(res.events); }, 400);
   }
-  ['setSnd', 'setMus', 'setVib'].forEach(function (id) {
+  ['setSnd', 'setMus', 'setVib', 'setCalm'].forEach(function (id) {
     $(id).addEventListener('change', function () {
-      S.set.snd = $('setSnd').checked ? 1 : 0; S.set.mus = $('setMus').checked ? 1 : 0; S.set.vib = $('setVib').checked ? 1 : 0;
+      S.set.snd = $('setSnd').checked ? 1 : 0; S.set.mus = $('setMus').checked ? 1 : 0; S.set.vib = $('setVib').checked ? 1 : 0; S.set.calm = $('setCalm').checked ? 1 : 0; applyCalm();
       save(); A.unlock(); syncAudio(); if (id === 'setVib' && S.set.vib) vibrate(30);
     });
   });

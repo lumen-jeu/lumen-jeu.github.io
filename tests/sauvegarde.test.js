@@ -42,3 +42,10 @@ test('sauvegarde normale inchangée', () => {
   s.ec = 1234; s.xp = 5678; s.adv = [3, 2, 1, 3]; s.streak.last = 20000; s.ach.fusions = 2; s.mis.p = [12, 0, 40];
   assert.deepEqual(P.importCode(P.exportCode(s)), s);
 });
+
+test('mode calme : réglage conservé, absent = désactivé, valeur forgée bornée', () => {
+  assert.equal(P.newSave().set.calm, 0);
+  assert.equal(P.normalize({ set: { calm: 1 } }).set.calm, 1);
+  assert.equal(P.normalize({ set: { snd: 0 } }).set.calm, 0);
+  assert.equal(P.normalize({ set: { calm: 'x' } }).set.calm, 0);
+});

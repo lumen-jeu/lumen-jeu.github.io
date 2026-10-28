@@ -181,11 +181,11 @@
     if (mode === 'daily') {
       prev.textContent = lastShare;
       D.record('lumen', gameCtx.defi, game.score, lastShare);
-      var ds = D.load('lumen'), sr = D.serie('lumen', gameCtx.defi);
+      var ds = D.load('lumen'), sr = serieDefi(gameCtx.defi);
       prev.setAttribute('aria-label', tr('Défi {0} terminé, score {1}', gameCtx.defi.n, fmt(game.score)) + (sr >= 2 ? tr(', série de {0} jours', sr) : ''));
       var left = P.msToNextDaily(), h = Math.floor(left / 3600000), mn = Math.floor(left / 60000) % 60;
       $('defiLine').innerHTML = '<span class="defi-serie' + (sr >= 2 ? ' hot' : '') + '">' + FLAME + tr('Série du défi : ') + '<b>' + trn(sr, '{0} jour', '{0} jours') + '</b> ' + tr('(record {0})', ds.best) + '</span>' +
-        '<span>' + tr('Prochain défi dans ') + '<b>' + h + ' h ' + (mn < 10 ? '0' : '') + mn + '</b></span>';
+        '<span class="calm-hide">' + tr('Prochain défi dans ') + '<b>' + h + ' h ' + (mn < 10 ? '0' : '') + mn + '</b></span>';
     }
     // boutons
     var rb = $('replayBtn'), lb = $('leaveBtn');
@@ -199,7 +199,7 @@
   }
 
   function shareText() {
-    if (game.mode === 'daily') return P.shareDaily(gameCtx.defi.day, game.score, game.history, game.peak, game.st.longest, D.serie('lumen', gameCtx.defi));
+    if (game.mode === 'daily') return P.shareDaily(gameCtx.defi.day, game.score, game.history, game.peak, game.st.longest, serieDefi(gameCtx.defi));
     return otherShare() + '\n' + P.URL;
   }
   function otherShare() {
@@ -226,7 +226,7 @@
   function shareImage() {
     if (!game || game.mode !== 'daily') return;
     var m = window.LumenCarte.model({ n: gameCtx.defi.n, score: fmt(game.score), history: game.history, peak: game.peak, longest: game.st.longest,
-      serie: D.serie('lumen', gameCtx.defi), url: P.URL, t: tr, tn: trn });
+      serie: serieDefi(gameCtx.defi), url: P.URL, t: tr, tn: trn });
     window.LumenCarte.share(m, { theme: THEME, orb: orbSprite, text: lastShare || shareText() }).then(function (r) {
       if (r === 'partage') $('shareStatus').textContent = tr('Image partagée');
       else if (r === 'fichier') $('shareStatus').textContent = tr('Image enregistrée dans vos téléchargements');

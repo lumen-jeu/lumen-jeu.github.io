@@ -100,7 +100,7 @@
       mis: { day: -1, p: [0, 0, 0], done: [0, 0, 0] },
       ev: { week: -1, best: 0, claimed: 0 },
       daily: { seed: 0, best: 0, plays: 0 },
-      set: { snd: 1, mus: 0, vib: 1 },
+      set: { snd: 1, mus: 0, vib: 1, calm: 0 },
       tuto: 0, seen: []
     };
   }
