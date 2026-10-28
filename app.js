@@ -181,6 +181,7 @@
         if (P.buyTheme(S, b.getAttribute('data-id'))) { S.theme = b.getAttribute('data-id'); save(); applyTheme(S.theme); sfx.coin(); showScreen(current, false); }
         break;
       case 'useTheme': S.theme = b.getAttribute('data-id'); save(); applyTheme(S.theme); sfx.tap(); showScreen(current, false); break;
+      case 'calm': S.set.calm = S.set.calm ? 0 : 1; applyCalm(); save(); sfx.tap(); break;
       case 'replayTuto': startGame('tutorial'); break;
       case 'exportSave':
         var code = P.exportCode(S); $('saveCode').value = code;

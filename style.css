@@ -605,3 +605,5 @@ textarea:focus { outline: 2px solid color-mix(in srgb, var(--accent) 60%, transp
 .tile-name { line-height: 1.15; }
 html[lang="en"] .tile.daily .tile-name { font-size: 13px; }
 .calm .calm-hide, .calm .defi-serie { display: none !important; }
+.calm-chip { display: block; margin: 0 auto 12px; padding: 7px 16px; border-radius: 999px; border: 0; font: inherit; font-size: 13px; color: var(--brume); background: rgba(255,255,255,.05); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); cursor: pointer; }
+.calm-chip[aria-pressed="true"] { color: var(--lin); background: rgba(140,200,255,.16); box-shadow: inset 0 0 0 1px rgba(140,200,255,.55); }

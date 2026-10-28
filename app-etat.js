@@ -30,7 +30,11 @@
   }
   var S = loadSave();
   // Mode calme : aucune série affichée ni partagée (classe `calm` sur <html>, voir style.css)
-  function applyCalm() { document.documentElement.classList.toggle('calm', !!S.set.calm); }
+  function applyCalm() {
+    document.documentElement.classList.toggle('calm', !!S.set.calm);
+    var c = document.getElementById('calmChip'); if (c) c.setAttribute('aria-pressed', String(!!S.set.calm));
+    var t = document.getElementById('setCalm'); if (t) t.checked = !!S.set.calm;
+  }
   function serieDefi(jour) { return S.set.calm ? 0 : D.serie('lumen', jour); }
   applyCalm();
   function save() { lsSet(KEY, JSON.stringify(S)); }
