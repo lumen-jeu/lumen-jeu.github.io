@@ -48,3 +48,4 @@
 - **24/10** : série du défi **séparée** de la série d'ouverture, sans récompense (Q2, option sûre). Libellés : « jours de suite » (ouverture) / « Série du défi ».
 - **24/10** : un défi compte dans la série quand la partie se termine (feuille de fin, y compris « Abandonner » une fois bloqué) ; quitter en cours de partie ne compte pas.
 - **24/10** : `S.daily` (meilleur du jour dans la sauvegarde) inchangé ; la tuile d'accueil lit `lumen.defi.v1`.
+- **28/10** : bouton **Mode calme** ajouté sur l'accueil (sous le titre, synchronisé avec Réglages), cache `lumen-v2.3.1`. **Publié le 28/10** (push ce14e30). Cause du « je ne le vois pas » : il n'était que dans Réglages.
