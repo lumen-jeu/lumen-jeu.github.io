@@ -1,5 +1,5 @@
 /* LUMEN — service worker : cache d'abord, hors ligne après le premier chargement. */
-var CACHE = 'lumen-v2.3.1';
+var CACHE = 'lumen-v2.3.2';
 var ASSETS = [
   './',
   'index.html',
@@ -33,7 +33,7 @@ var ASSETS = [
 ];
 
 self.addEventListener('install', function (e) {
-  e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(ASSETS); }).then(function () { return self.skipWaiting(); }));
+  e.waitUntil(caches.open(CACHE).then(function (c) { return Promise.all(ASSETS.map(function (u) { return c.add(new Request(u, { cache: 'reload' })); })); }).then(function () { return self.skipWaiting(); }));
 });
 
 self.addEventListener('activate', function (e) {

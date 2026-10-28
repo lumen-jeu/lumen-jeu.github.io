@@ -280,7 +280,10 @@
   }
   requestAnimationFrame(loop);
   if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js').catch(function () {}); });
+    // PWA installée : l'ancien cache sert la page, on recharge une fois quand le nouveau SW prend la main (accueil seulement, jamais en pleine partie)
+    var hadSW = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.addEventListener('controllerchange', function () { if (hadSW && current === 'home') location.reload(); hadSW = true; });
+    window.addEventListener('load', function () { navigator.serviceWorker.register('sw.js', { updateViaCache: 'none' }).catch(function () {}); });
   }
 
   // accès pour les tests automatisés
