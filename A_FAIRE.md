@@ -52,3 +52,4 @@
 - 28/10 : correctif mise à jour PWA publié (cache v2.3.2). Reste : ouvrir/fermer l'appli sur le téléphone 2 fois.
 
 - **29/10** : accessibilité et cohérence des 4 jeux + CRA : zoom de la page autorisé (viewport sans `user-scalable=no`), `touch-action:none` gardé sur la zone de jeu ; `:focus-visible` rétabli ; test commun `tests/manifest-sw.test.js` (identique dans les 4 jeux et CRA). `id: "/"` ajouté au manifest (= identité déjà calculée par Chrome), cache `lumen-v2.3.3`. Meta description réécrite.
+- **29/10** : ÉCHO a déménagé sur https://echo-jeu.github.io/ : lien « autres jeux » mis à jour, cache `lumen-v2.3.4`, test commun `manifest-sw` recopié (ÉCHO `/`).
