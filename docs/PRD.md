@@ -9,7 +9,7 @@ Gratuit, hors ligne, sans compte, sans achat en argent réel (les éclats se gag
 ## Joueurs visés
 - Joueurs mobiles occasionnels qui cherchent un « jeu de puzzle gratuit » (requête SEO visée).
 - Communauté du stream d'Aulit42369 (Défi du jour commun aux 4 jeux, partage du résultat).
-- Profil précis (âge, pays) : à confirmer par Olivier.
+- Profil estimé : 13 ans et plus, surtout France et pays francophones, anglophones via la langue anglaise du jeu (proposé par Claude le 29/10/2026, à corriger si besoin).
 
 ## Fonctions (présentes dans le code)
 | Fonction | Détail |
