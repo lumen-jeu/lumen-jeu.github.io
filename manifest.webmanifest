@@ -3,6 +3,7 @@
   "short_name": "LUMEN",
   "description": "Reliez les orbes de même éclat, fusionnez-les et faites monter la lumière.",
   "lang": "fr",
+  "id": "/",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

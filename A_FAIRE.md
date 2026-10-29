@@ -50,3 +50,5 @@
 - **24/10** : `S.daily` (meilleur du jour dans la sauvegarde) inchangé ; la tuile d'accueil lit `lumen.defi.v1`.
 - **28/10** : bouton **Mode calme** ajouté sur l'accueil (sous le titre, synchronisé avec Réglages), cache `lumen-v2.3.1`. **Publié le 28/10** (push ce14e30). Cause du « je ne le vois pas » : il n'était que dans Réglages.
 - 28/10 : correctif mise à jour PWA publié (cache v2.3.2). Reste : ouvrir/fermer l'appli sur le téléphone 2 fois.
+
+- **29/10** : accessibilité et cohérence des 4 jeux + CRA : zoom de la page autorisé (viewport sans `user-scalable=no`), `touch-action:none` gardé sur la zone de jeu ; `:focus-visible` rétabli ; test commun `tests/manifest-sw.test.js` (identique dans les 4 jeux et CRA). `id: "/"` ajouté au manifest (= identité déjà calculée par Chrome), cache `lumen-v2.3.3`. Meta description réécrite.
