@@ -56,7 +56,7 @@ test('chaque texte passé à tr()/trn()/T() dans le code a sa traduction anglais
 
 test('carte du défi : mêmes informations que le texte partagé', () => {
   const hist = Array.from({ length: 43 }, (_, i) => (i % 11) + 2);
-  const m = C.model({ n: 25, score: '7 420', history: hist, peak: 9, longest: 6, serie: 3, url: 'https://lumen-jeu.github.io/' });
+  const m = C.model({ n: 25, score: '7 420', history: hist, peak: 9, longest: 6, serie: 3, url: 'https://lumen.aulit42369.fr/' });
   assert.equal(m.titre, 'LUMEN');
   assert.equal(m.kicker, 'Défi du jour #25');
   assert.equal(m.score, '7 420');
@@ -65,7 +65,7 @@ test('carte du défi : mêmes informations que le texte partagé', () => {
   assert.deepEqual(m.rows[0], hist.slice(0, 8));
   assert.equal(m.detail, 'Niveau max 9, chaîne de 6');
   assert.equal(m.serie, '3 jours de suite');
-  assert.equal(m.url, 'https://lumen-jeu.github.io/');
+  assert.equal(m.url, 'https://lumen.aulit42369.fr/');
   assert.equal(m.fichier, 'lumen-defi-25.png');
   assert.equal(C.W, 1080); assert.equal(C.H, 1920);
   const court = C.model({ n: 3, score: '120', history: [2, 3, 4], peak: 4, longest: 3, serie: 1, url: 'u' });
@@ -82,7 +82,7 @@ test('carte du défi : mêmes informations que le texte partagé', () => {
 test('autres jeux : les 3 autres, liens web en https', () => {
   assert.equal(J.JEUX.length, 4);
   assert.deepEqual(J.autres().map((j) => j.id), ['echo', 'fragments', 'resonance']);
-  J.JEUX.forEach((j) => assert.match(j.url, /^https:\/\/[a-z0-9.-]+\.github\.io\//));
+  J.JEUX.forEach((j) => assert.equal(j.url, 'https://' + j.id + '.aulit42369.fr/'));
   assert.equal(J.JEUX.find((j) => j.id === 'echo').texte, 'Un labyrinthe dans le noir, guidé par l\'écho');
 });
 

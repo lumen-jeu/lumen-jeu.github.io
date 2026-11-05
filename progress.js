@@ -467,7 +467,7 @@
     if (lv <= 10) return SQUARES[7];
     return SQUARES[8];
   }
-  var URL = 'https://lumen-jeu.github.io/';
+  var URL = 'https://lumen.aulit42369.fr/';
   /** Texte commun aux 4 jeux (defi.js) : titre, grille de carrés (8 par ligne, 5 lignes = 40 coups), détail, série, lien. */
   function shareDaily(day, score, history, peak, longest, serie) {
     var pal = {}; history.forEach(function (lv) { pal[lv] = squareFor(lv); });

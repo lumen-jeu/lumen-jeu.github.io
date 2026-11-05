@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://lumen-jeu.github.io/sitemap.xml
+Sitemap: https://lumen.aulit42369.fr/sitemap.xml

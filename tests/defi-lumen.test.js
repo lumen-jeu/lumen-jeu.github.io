@@ -38,7 +38,7 @@ test('P.shareDaily : grille de carrés, série, lien canonique', () => {
   assert.equal(sans[1], '🟫🟥🟧🟨🟩🟦🟪⬜');
   assert.equal(sans[2], '🟫🟥');
   assert.equal(sans[3], 'Niveau max 9, chaîne de 6');
-  assert.equal(sans[4], 'https://lumen-jeu.github.io/');
+  assert.equal(sans[4], 'https://lumen.aulit42369.fr/');
   assert.equal(sans.length, 5, 'pas de ligne série sous 2 jours');
   const avec = P.shareDaily(day, 7420, Array(40).fill(12), 12, 9, 4);
   const l = avec.split('\n');

@@ -51,7 +51,7 @@ Documents de cadrage dans `docs/` : `PRD.md`, `TRD.md`, `APP_FLOW.md`, `DESIGN_B
 ## 2. Sources de vérité uniques
 - Date du jour, numéro `#N`, graine du défi, série du défi, format du texte partagé : `defi.js`.
 - Jour du jeu (série d'ouverture, missions, événement, défi) : `P.today()` = date de Paris via `defi.js`.
-- URL canonique de partage : `P.URL` (`https://lumen-jeu.github.io/`), jamais `location.href`.
+- URL canonique de partage : `P.URL` (`https://lumen.aulit42369.fr/`), jamais `location.href`.
 - Thèmes, prix, récompenses : `progress.js`. Niveaux : `levels.json`.
 - Textes : français dans le code (= clés) ; anglais **uniquement** dans `EN` de `i18n.js`. `app.js` appelle `tr()`/`trn()`, `progress.js` appelle `T()` (identité sous Node), la page statique est traduite par `I18N.apply`, les chapitres de `levels.json` au chargement.
 - Liens des autres jeux : `JEUX` de `autres-jeux.js` (à remplacer par les liens Play Store une fois publiés).
@@ -69,7 +69,7 @@ Aucun secret, aucun serveur, aucun appel réseau sauf le chargement des fichiers
 (FNV sans clé) : `normalize()` borne toutes les valeurs. `lumen.defi.v1` est relu de façon défensive (objet neuf si invalide).
 
 ## 5. Identité
-Domaine `lumen-jeu.github.io` (organisation dédiée). Manifeste sans `id` (donc id = `start_url`) : ne pas en ajouter.
+Adresse officielle `lumen.aulit42369.fr` (05/11/2026 : serveur d'Olivier, recopie `main` toutes les 5 min) ; `lumen-jeu.github.io` (organisation dédiée, GitHub Pages) reste en secours. Manifeste sans `id` (donc id = `start_url`) : ne pas en ajouter.
 Cache SW `lumen-v2.3.4 (installation sans cache HTTP, rechargement auto de l accueil au changement de SW)`, le SW ne supprime que les caches `lumen-*`. Identifiant de jeu dans la graine : `'lumen'`.
 
 ## 6. Dépendances externes
@@ -90,4 +90,4 @@ Aucune. Polices et icônes locales. Partage texte : `navigator.share` → presse
 Voir `PIEGES.md`. Le défi Android (`game/Defi.kt`, 25/10) suit la même date de Paris et la même graine que `defi.js`.
 
 ## Statistiques de visite (28/10/2026)
-GoatCounter sans cookie, chemins `/lumen/…`, chargé par le script d'une ligne en fin de `index.html` uniquement sur `*.github.io` et sans `skipgc` (détail : `docs/TRD.md`, section Traceurs). `privacy.html` le déclare dans toutes ses langues, avec le bouton « Ne pas être compté ». Test : `tests/statistiques.test.js` (identique dans les 4 jeux, seul `PREFIXE` change).
+GoatCounter sans cookie, chemins `/lumen/…`, chargé par le script d'une ligne en fin de `index.html` uniquement sur `*.github.io` et `*.aulit42369.fr` et sans `skipgc` (détail : `docs/TRD.md`, section Traceurs). `privacy.html` le déclare dans toutes ses langues, avec le bouton « Ne pas être compté ». Test : `tests/statistiques.test.js` (identique dans les 4 jeux, seul `PREFIXE` change).

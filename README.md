@@ -1,7 +1,7 @@
 # LUMEN
 
 Jeu puzzle mobile : reliez les orbes de même éclat, fusionnez-les et faites monter la lumière.
-PWA publiée sur https://lumen-jeu.github.io/ (GitHub Pages). L'appli Android (Kotlin natif) vit dans
+PWA publiée sur https://lumen.aulit42369.fr/ (adresse officielle depuis le 05/11/2026 : serveur d'Olivier, copie de `main` toutes les 5 min ; https://lumen-jeu.github.io/ reste en ligne en secours). L'appli Android (Kotlin natif) vit dans
 `F:\Stream\files\JEUX\lumen\android` et n'est pas dans ce dépôt.
 
 ## Modes

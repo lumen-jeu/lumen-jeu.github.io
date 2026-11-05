@@ -4,7 +4,7 @@
   modifier le fichier = le recopier dans ÉCHO, Fragments, Résonance et changer la constante `EMPREINTE` dans les 4 tests.
 - **Fins de ligne** : `core.autocrlf=true` convertit en CRLF sous Windows ; l'empreinte est calculée après conversion en LF, ne pas retirer ce `replace`.
 - **`404.html` est servie à n'importe quelle profondeur** (`/a/b/c`) : tous ses liens, polices et icônes en chemin absolu (`/…`), jamais relatif. Elle n'est pas mise en cache par le SW.
-- **Aperçus de liens** : `og:image` doit rester une URL absolue (`https://lumen-jeu.github.io/og-image.png`) ; après modification de l'image, Facebook/Discord gardent l'ancienne en cache plusieurs jours.
+- **Aperçus de liens** : `og:image` doit rester une URL absolue (`https://lumen.aulit42369.fr/og-image.png`) ; après modification de l'image, Facebook/Discord gardent l'ancienne en cache plusieurs jours.
 - **`--brume`** sert au texte secondaire : ne pas l'assombrir sous #a19bc9 (contraste AA sur le fond `--bas` de tous les thèmes).
 - **Ne pas écrire `node --test tests/`** sous Node 24 (échoue) : lancer `node --test` à la racine.
 - **Version du cache** : tout fichier publié modifié → monter `CACHE` dans `sw.js` (le SW sert le cache d'abord).
@@ -27,7 +27,7 @@
 
 - **Anglais partagé avec Android (25/10)** : `TextesEn.kt` (appli) doit garder les mêmes traductions que `EN` ; le test Android `memes_traductions_que_la_pwa` lit ce `i18n.js` et échoue au moindre écart. Corriger un anglais ici = le corriger aussi dans `TextesEn.kt`.
 
-- **Compteur GoatCounter (28/10)** : script en ligne d'une ligne en fin de `index.html`, son empreinte `sha256` est dans la CSP : le modifier = recalculer l'empreinte (`tests/statistiques.test.js`). Ne jamais retirer la garde `github.io` : compter dans une appli Android obligerait à déclarer des analytics sur le Play Store. Garder `count.v4.js` + `integrity` (pas `count.js`), comme le Site.
+- **Compteur GoatCounter (28/10)** : script en ligne d'une ligne en fin de `index.html`, son empreinte `sha256` est dans la CSP : le modifier = recalculer l'empreinte (`tests/statistiques.test.js`). Ne jamais retirer la garde `github.io` / `aulit42369.fr` : compter dans une appli Android obligerait à déclarer des analytics sur le Play Store. Garder `count.v4.js` + `integrity` (pas `count.js`), comme le Site.
 
 ## Identités d'appli (manifest `id`) — NE JAMAIS CHANGER (29/10)
 Chrome identifie une PWA installée par son `id` ; en changer = une autre appli, l'ancienne reste orpheline. Valeurs en ligne des 5 apps :

@@ -48,8 +48,13 @@ test('compte seulement sur github.io, avec count.v4.js figé + SRI et le chemin 
   assert.strictEqual(gc.path(canon), PREFIXE + '/');
 });
 
-test('ne compte jamais hors github.io (appli Android, WebView, fichier, local)', () => {
-  for (const h of ['', 'localhost', '127.0.0.1', 'appassets.androidplatform.net', 'github.io.exemple.com', 'faux-github.io.net']) {
+test('compte aussi sur le domaine officiel aulit42369.fr (05/11/2026)', () => {
+  assert.ok(lancer('lumen.aulit42369.fr', null).ajoute, 'rien chargé sur lumen.aulit42369.fr');
+  assert.strictEqual(lancer('lumen.aulit42369.fr', 't').ajoute, null);
+});
+
+test('ne compte jamais hors github.io / aulit42369.fr (appli Android, WebView, fichier, local)', () => {
+  for (const h of ['', 'localhost', '127.0.0.1', 'appassets.androidplatform.net', 'github.io.exemple.com', 'faux-github.io.net', 'aulit42369.fr.exemple.com', 'fauxaulit42369.fr']) {
     assert.strictEqual(lancer(h, null).ajoute, null, 'compté sur « ' + h + ' »');
   }
 });
