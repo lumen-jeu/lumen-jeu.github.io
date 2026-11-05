@@ -29,7 +29,7 @@ function nomsDePremierNiveau(src) {
 test('index.html charge les modules de l\'interface dans l\'ordre, après les modules purs', () => {
   const html = fs.readFileSync(path.join(racine, 'index.html'), 'utf8');
   const scripts = [...html.matchAll(/<script src="([^"]+)"><\/script>/g)].map((m) => m[1]);
-  assert.deepEqual(scripts, AVANT.concat(MODULES));
+  assert.deepEqual(scripts, AVANT.concat(MODULES, ['stats.js'])); // stats.js (GoatCounter) en dernier, hors du jeu
 });
 
 test('sw.js met en cache chaque module de l\'interface', () => {

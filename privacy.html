@@ -3,6 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
 <title>LUMEN · Confidentialité et conditions</title>
 <meta name="description" content="Politique de confidentialité, conditions d'utilisation et mentions légales du jeu LUMEN.">
 <meta name="theme-color" content="#100b29">
@@ -127,25 +128,6 @@
     <p>Questions: <a href="mailto:aulit42369@gmail.com">aulit42369@gmail.com</a>, or open an issue on <a href="https://github.com/lumen-jeu/lumen-jeu.github.io/issues" rel="noopener">the game's GitHub page</a>.</p>
   </section>
 </main>
-<script>
-// « Ne pas être compté » : GoatCounter ne compte rien quand localStorage.skipgc === 't' (même règle que le Site).
-// Hors github.io et aulit42369.fr (appli Android, local) le jeu ne compte rien : le bouton est masqué.
-(function () {
-  var web = /(^|\.)(github\.io|aulit42369\.fr)$/.test(location.hostname);
-  function off() { try { return localStorage.getItem('skipgc') === 't'; } catch (e) { return false; } }
-  function maj() {
-    var i = off() ? 1 : 0;
-    document.querySelectorAll('.gc-choix').forEach(function (el) { el.hidden = !web; });
-    document.querySelectorAll('[data-gc]').forEach(function (b) { b.textContent = b.getAttribute('data-gc').split('|')[i]; b.setAttribute('aria-pressed', String(!!i)); });
-    document.querySelectorAll('[data-gc-etat]').forEach(function (s) { s.textContent = s.getAttribute('data-gc-etat').split('|')[i]; });
-  }
-  document.addEventListener('click', function (e) {
-    if (!e.target.closest('[data-gc]')) return;
-    try { if (off()) localStorage.removeItem('skipgc'); else localStorage.setItem('skipgc', 't'); } catch (err) { /* stockage bloqué */ }
-    maj();
-  });
-  maj();
-})();
-</script>
+<script src="privacy.js"></script>
 </body>
 </html>

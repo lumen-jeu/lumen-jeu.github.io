@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-V75d0Iy6DwC0pSsf8qnXqQHhj0de/ijN2JDSjXDQO3s=' https://gc.zgo.at; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https://aulit42369.goatcounter.com; media-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' data: blob: https://aulit42369.goatcounter.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://gc.zgo.at; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://aulit42369.goatcounter.com; media-src 'self'; font-src 'self'; connect-src 'self' https://aulit42369.goatcounter.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>Jeu de puzzle gratuit : reliez les orbes de lumière | LUMEN</title>
   <meta name="description" content="Tu traces un chemin entre des orbes de même éclat pour les fusionner en une plus grosse. Le but : faire monter la lumière, niveau après niveau.">
   <meta name="theme-color" content="#100b29">
@@ -392,7 +392,7 @@
   }
 }
   </script>
-<!-- Statistiques sans cookie (GoatCounter, chemins /lumen/…) : web public github.io ou aulit42369.fr seulement, jamais dans l'appli ni en local ; opposition : localStorage.skipgc (bouton de privacy.html). Empreinte sha256 dans la CSP : à recalculer si ce script change. -->
-<script>(function(){try{if(!/(^|\.)(github\.io|aulit42369\.fr)$/.test(location.hostname)||localStorage.getItem('skipgc')==='t')return}catch(e){return}window.goatcounter={path:function(p){return '/lumen'+p}};var s=document.createElement('script');s.async=true;s.crossOrigin='anonymous';s.integrity='sha384-nRw6qfbWyJha9LhsOtSb2YJDyZdKvvCFh0fJYlkquSFjUxp9FVNugbfy8q1jdxI+';s.src='https://gc.zgo.at/count.v4.js';s.setAttribute('data-goatcounter','https://aulit42369.goatcounter.com/count');document.head.appendChild(s)})()</script>
+<!-- Statistiques sans cookie (GoatCounter, chemins /lumen/…) : web public github.io ou aulit42369.fr seulement, jamais dans l'appli ni en local ; opposition : localStorage.skipgc (bouton de privacy.html). Code dans stats.js (CSP sans script en ligne). -->
+<script src="stats.js"></script>
 </body>
 </html>
