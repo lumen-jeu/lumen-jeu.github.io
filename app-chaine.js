@@ -50,7 +50,10 @@
     if (v === PRISM && game.grid[last.r][last.c] === PRISM && !lv) return;
     chain.push(hit);
     sfx.step(chain.length - 1);
-    vibrate(chain.length >= 5 ? 14 : 8);
+    // paliers 5 / 7 / 9 : anneau doré sous la tête de chaîne (le joueur sent le seuil en traçant)
+    var palier = chain.length === game.rules.longAt || chain.length === game.rules.bombAt || chain.length === 9;
+    if (palier && !reduceMotion) { rings.push({ x: cx(hit.c), y: cy(hit.r), col: '#ffd66b', t0: performance.now(), big: true }); burst(cx(hit.c), cy(hit.r), '#ffd66b', 6, false); }
+    vibrate(palier ? [14, 30, 20] : chain.length >= 5 ? 14 : 8);
   }
   function release() {
     if (!dragging) return;
@@ -108,7 +111,10 @@
       rings.push({ x: cx(b.c), y: cy(b.r), col: '#ff8a4a', t0: now, big: true, wide: false, blast: true });
       shake = now;
     });
-    if (res.blasts.length) { sfx.bomb(); vibrate([40, 30, 60]); }
+    if (res.blasts.length) {
+      sfx.bomb(); vibrate([40, 30, 60]);
+      if (!reduceMotion) { flash = now; delay += 80; } // flash blanc + micro-arrêt avant la chute
+    }
     animateFalls(res.falls, delay);
     vis[res.target.r][res.target.c].pop = now + delay - 40;
 

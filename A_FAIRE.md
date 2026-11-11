@@ -29,6 +29,8 @@
 - **05/11/2026** : adresse officielle lumen.aulit42369.fr ; github.io en secours ; appli Android à recompiler par Olivier. Canonical, og:url/og:image, JSON-LD (jeu + lien vers https://aulit42369.fr/Site/), sitemap, robots, lien partagé (`P.URL`), « autres jeux » (echo/fragments/resonance.aulit42369.fr) ; GoatCounter compte aussi sur `*.aulit42369.fr` (empreinte CSP recalculée) ; cache `lumen-v2.3.5` ; 41 tests verts. Android (`JEUX\lumen\android`) : mêmes adresses dans `Progression.kt`, `PanneauReglages.kt`, `ReglagesPlus.kt` et les tests.
 - **05/11/2026** : privacy.html (FR + EN) : hébergeur OVH SAS (serveur à Beauharnois, Canada, aucun journal des visites), GitHub Pages présenté comme copie de secours ; date au 5 novembre 2026 ; cache lumen-v2.3.6. Puis (audit légal) : décision d'adéquation UE pour le Canada (2002/2/CE) ajoutée en FR + EN ; cache lumen-v2.3.7. L’appli Android ouvre la page en ligne (pas de copie embarquée).
 
+- **11/11/2026** : animations L1, L3, L5, L6 (Pack animations) : flash blanc + micro-arrêt de 80 ms avant la chute (bombe `app-chaine.js`, marteau `app-fin.js`, flash dessiné dans `app-rendu.js`) ; anneau doré + éclat + double vibration aux paliers 5/7/9 de la chaîne ; 24 confettis à la victoire d'un niveau ; « Nouveau record » en tampon (`@keyframes stamp`). Tout coupé si `reduceMotion`. Cache `lumen-v2.3.9`. 49 tests verts ; vérifié dans Chrome (0 erreur console, anneaux aux coups 5 et 7, flash après une bombe, confettis, tampon). Android : pas porté.
+
 ## En cours
 - Rien.
 

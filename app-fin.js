@@ -75,7 +75,8 @@
       burst(x, y, res.level === STONE ? '#a49cb4' : res.level === PRISM ? '#ffffff' : lvColor(res.level)[1], 22, true);
       rings.push({ x: x, y: y, col: '#ff9a5a', t0: now, big: true });
       shake = now; sfx.stone(); vibrate([30, 20, 40]);
-      animateFalls(res.falls, 60);
+      if (!reduceMotion) flash = now;
+      animateFalls(res.falls, reduceMotion ? 60 : 140); // 80 ms de micro-arrêt
     } else {
       syncVis(); vis[hit.r][hit.c].pop = now;
       burst(x, y, '#ffe066', 20, true);
@@ -147,6 +148,9 @@
     save();
     if (mode === 'daily') D.record('lumen', gameCtx.defi, game.score);
     if (game.won) sfx.win(); else sfx.over();
+    if (game.won && !reduceMotion) { // confettis : 24 grains aux couleurs des orbes, qui retombent (gravité de app.js)
+      for (var ci = 0; ci < 24; ci++) particles.push({ x: W * (0.1 + 0.8 * Math.random()), y: oy + cell, vx: (Math.random() - 0.5) * cell * 4, vy: -cell * (3 + Math.random() * 3), life: 0, max: 1 + Math.random() * 0.6, size: 3 + Math.random() * 3, col: lvColor(2 + Math.floor(Math.random() * 7))[1] });
+    }
     vibrate([30, 60, 30]);
     var title = tr('Plus aucune chaîne possible'), bestVal = 0, bestLbl = tr('Record');
     if (mode === 'daily') { title = game.movesLeft === 0 ? tr('Défi du jour terminé') : title; isNew = game.score > prevDaily && prevDaily > 0; bestVal = S.daily.best; bestLbl = tr('Meilleur du jour'); }
@@ -159,6 +163,8 @@
     else st.hidden = true;
     $('finalScore').textContent = fmt(game.score);
     $('newBest').hidden = !isNew;
+    $('newBest').classList.remove('stamp');
+    if (isNew && !reduceMotion) { void $('newBest').offsetWidth; $('newBest').classList.add('stamp'); }
     $('newBest').textContent = tr(mode === 'daily' ? 'Meilleur score du jour' : mode === 'event' ? 'Record de la semaine' : 'Nouveau record');
     $('overBest').textContent = fmt(bestVal);
     $('overBestLbl').textContent = bestLbl;

@@ -170,6 +170,10 @@
       g.fillText(pu.text, Math.max(cell, Math.min(W - cell, pu.x)), pu.y - cell * 0.3 + yoff);
       g.shadowBlur = 0; g.globalAlpha = 1;
     }
+    if (flash) { // flash blanc d'impact (bombe, marteau), ~110 ms
+      var fp = (now - flash) / 110;
+      if (fp >= 1) flash = 0; else { g.fillStyle = 'rgba(255,255,255,' + 0.6 * (1 - fp) + ')'; g.fillRect(-20, -20, W + 40, H + 40); }
+    }
   }
   function roundRect(g, x, y, w, h, r) {
     g.beginPath();

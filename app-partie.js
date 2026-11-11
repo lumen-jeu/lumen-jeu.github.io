@@ -42,7 +42,7 @@
   /* ================= État de partie ================= */
   var game = null, gameCtx = null; // gameCtx = {mode, levelN, eventWeek}
   var spectrumLv = 0, vis = null, chain = [], finger = null, dragging = false;
-  var ghosts = [], particles = [], popups = [], rings = [], shake = 0;
+  var ghosts = [], particles = [], popups = [], rings = [], shake = 0, flash = 0;
   var lastAction = performance.now(), hint = null, targeting = null, finalized = false;
   var tuto = null; // {step, expect:[cells]}
 
