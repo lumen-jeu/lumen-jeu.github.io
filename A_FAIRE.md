@@ -1,6 +1,7 @@
 # LUMEN — à faire
 
 ## Fait
+- **16/11/2026 : passe vitesse** : `<link rel="preload" as="script">` pour chaque script de `index.html` (avant `</head>`). La CSP en `<meta>` empêchait Chrome de repérer les scripts en avance : ils se chargeaient un par un (≈ 0,1 s chacun depuis la France). Mesure locale : tous partent ensemble. Cache `lumen-v2.3.10`. Aucun changement visuel.
 - **05/11/2026 : CSP stricte sur toutes les pages** (`index`, `privacy`, `404`) : plus aucun script en ligne (compteur GoatCounter → `stats.js`, code de `privacy.html` → `privacy.js`), `script-src 'self' https://gc.zgo.at`, `base-uri`/`object-src`/`form-action` `'none'`, `data:`/`blob:` retirés là où rien ne s'en sert ; cache `lumen-v2.3.8` ; `tests/csp.test.js` (commun aux 4 jeux). Vérifié dans Chromium sans tête : 0 violation CSP, 0 erreur JS, GoatCounter envoie bien sur le domaine officiel.
 - **24/10** : code de sauvegarde `LUMEN2` validé et borné + `tests/sauvegarde.test.js`.
 - **24/10** : Défi du jour commun aux 4 jeux (idée 14) : `defi.js`, jour à minuit heure de Paris, graine

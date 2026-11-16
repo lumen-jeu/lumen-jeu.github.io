@@ -28,6 +28,23 @@
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preload" href="fonts/unbounded-latin-900-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="style.css">
+<!-- Préchargement : la CSP en <meta> empêche Chrome de repérer les scripts en avance (chargés un par un sinon) -->
+<link rel="preload" href="defi.js" as="script">
+<link rel="preload" href="i18n.js" as="script">
+<link rel="preload" href="engine.js" as="script">
+<link rel="preload" href="progress.js" as="script">
+<link rel="preload" href="audio.js" as="script">
+<link rel="preload" href="carte.js" as="script">
+<link rel="preload" href="autres-jeux.js" as="script">
+<link rel="preload" href="app-etat.js" as="script">
+<link rel="preload" href="app-sprites.js" as="script">
+<link rel="preload" href="app-partie.js" as="script">
+<link rel="preload" href="app-chaine.js" as="script">
+<link rel="preload" href="app-fin.js" as="script">
+<link rel="preload" href="app-rendu.js" as="script">
+<link rel="preload" href="app-accueil.js" as="script">
+<link rel="preload" href="app.js" as="script">
+<link rel="preload" href="stats.js" as="script">
 </head>
 <body>
   <noscript><p style="padding:24px;color:#fff8ec;font:16px/1.5 system-ui,sans-serif">LUMEN est un jeu de puzzle gratuit : reliez les orbes de même éclat, fusionnez-les et faites monter la lumière. 120 niveaux d'Aventure, un Défi du jour, jouable hors ligne. Activez JavaScript pour jouer.</p></noscript>

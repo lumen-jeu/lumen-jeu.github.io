@@ -91,3 +91,7 @@ Voir `PIEGES.md`. Le défi Android (`game/Defi.kt`, 25/10) suit la même date de
 
 ## Statistiques de visite (28/10/2026)
 GoatCounter sans cookie, chemins `/lumen/…`, chargé par le script d'une ligne en fin de `index.html` uniquement sur `*.github.io` et `*.aulit42369.fr` et sans `skipgc` (détail : `docs/TRD.md`, section Traceurs). `privacy.html` le déclare dans toutes ses langues, avec le bouton « Ne pas être compté ». Test : `tests/statistiques.test.js` (identique dans les 4 jeux, seul `PREFIXE` change).
+
+## Performances (16/11/2026)
+- Scripts préchargés en parallèle (`rel=preload` dans `<head>`, voir PIEGES) ; polices `.woff2` gardées un an par Caddy
+  (`serveur-aulit/Caddyfile`, snippet `statique`), le reste 10 min.

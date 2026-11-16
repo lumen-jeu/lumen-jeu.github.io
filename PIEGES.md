@@ -35,3 +35,8 @@ Chrome identifie une PWA installée par son `id` ; en changer = une autre appli,
 `tests/manifest-sw.test.js` (identique dans les 5 projets) fige ces valeurs : si tu le modifies, copie-le à l'identique dans les 4 autres.
 
 - **Zoom** : le viewport n'interdit plus le zoom (accessibilité) ; `touch-action: none` sur `#board` empêche le pincement pendant le jeu. Ne pas le retirer.
+
+## Préchargement des scripts (16/11/2026)
+- La CSP est en `<meta>` : Chrome ne repère alors plus les `<script src>` à l'avance et les charge **un par un**. D'où le bloc
+  `<link rel="preload" … as="script">` avant `</head>` : **ajouter / renommer un script = mettre aussi à jour sa ligne de préchargement**
+  (même adresse exacte, `?v=` compris). Un oubli ne casse rien, il ralentit seulement.
