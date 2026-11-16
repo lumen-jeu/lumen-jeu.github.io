@@ -106,13 +106,14 @@
     $('boosters').classList.toggle('three', mode !== 'adventure');
     $('targetBar').hidden = true;
     $('coach').hidden = true;
+    renderGoals(false); // objectifs et bulle du tutoriel placés AVANT layout() : le plateau ne saute plus (CLS)
+    if (tuto) { coach(tr(TUTO_STEPS[0].text)); $('coach').style.visibility = 'hidden'; }
     showScreen('game');
     layout();
     spectrumLv = 0;
-    renderGoals(false);
     updateHud(false);
     lastAction = now; hint = null;
-    if (tuto) setTimeout(function () { coach(tr(TUTO_STEPS[0].text)); }, 700);
+    if (tuto) setTimeout(function () { $('coach').style.visibility = ''; }, 700);
     else setTimeout(checkIntro, 900);
   }
 
