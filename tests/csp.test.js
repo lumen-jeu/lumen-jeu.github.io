@@ -57,3 +57,9 @@ test('index.html : GoatCounter (script + envoi) autorisé, rien d\'autre en exte
   for (const nom of ['connect-src', 'img-src']) assert.ok(d[nom].includes('https://aulit42369.goatcounter.com'), nom);
   for (const nom of ['worker-src', 'manifest-src']) assert.deepStrictEqual(d[nom], ["'self'"], nom);
 });
+
+test('index.html : style-src sans \'unsafe-inline\', aucun <style> ni attribut style (audit du 18/11/2026)', () => {
+  const html = fs.readFileSync(path.join(racine, 'index.html'), 'utf8');
+  assert.deepStrictEqual(directives(html.match(META)[1])['style-src'], ["'self'"]);
+  assert.doesNotMatch(html, /<style|\sstyle="/);
+});

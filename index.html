@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://gc.zgo.at; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://aulit42369.goatcounter.com; media-src 'self'; font-src 'self'; connect-src 'self' https://aulit42369.goatcounter.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' https://gc.zgo.at; style-src 'self'; img-src 'self' data: https://aulit42369.goatcounter.com; media-src 'self'; font-src 'self'; connect-src 'self' https://aulit42369.goatcounter.com; worker-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
   <title>Jeu de puzzle gratuit : reliez les orbes de lumière | LUMEN</title>
   <meta name="description" content="Tu traces un chemin entre des orbes de même éclat pour les fusionner en une plus grosse. Le but : faire monter la lumière, niveau après niveau.">
   <meta name="theme-color" content="#100b29">
@@ -47,7 +47,7 @@
 <link rel="preload" href="stats.js" as="script">
 </head>
 <body>
-  <noscript><p style="padding:24px;color:#fff8ec;font:16px/1.5 system-ui,sans-serif">LUMEN est un jeu de puzzle gratuit : reliez les orbes de même éclat, fusionnez-les et faites monter la lumière. 120 niveaux d'Aventure, un Défi du jour, jouable hors ligne. Activez JavaScript pour jouer.</p></noscript>
+  <noscript><p class="noscript">LUMEN est un jeu de puzzle gratuit : reliez les orbes de même éclat, fusionnez-les et faites monter la lumière. 120 niveaux d'Aventure, un Défi du jour, jouable hors ligne. Activez JavaScript pour jouer.</p></noscript>
   <main>
   <!-- ================= Accueil ================= -->
   <section id="home" class="screen" aria-label="Accueil">
@@ -247,6 +247,7 @@
         <label class="toggle"><span>Musique d'ambiance<small>Nappes douces générées en direct</small></span><input type="checkbox" id="setMus"><i></i></label>
         <label class="toggle"><span>Vibrations</span><input type="checkbox" id="setVib"><i></i></label>
         <label class="toggle"><span>Mode calme<small>Sans série de jours ni compte à rebours</small></span><input type="checkbox" id="setCalm"><i></i></label>
+        <label class="toggle"><span>Mouvement réduit<small>Coupe secousses, confettis et rebonds</small></span><input type="checkbox" id="setMotion"><i></i></label>
       </div>
       <div class="set-group">
         <button class="set-row" data-act="replayTuto">Rejouer le tutoriel</button>
@@ -277,7 +278,7 @@
         </div>
       </div>
       <div id="autresJeux"></div>
-      <p class="fine center">LUMEN v2 · aucune donnée ne quitte votre appareil<br><a href="privacy.html">Confidentialité, conditions et mentions légales</a></p>
+      <p class="fine center">LUMEN v2 · aucune donnée ne quitte votre appareil<br><a class="lien-legal" href="privacy.html">Confidentialité, conditions et mentions légales</a></p>
     </div>
   </section>
 
@@ -289,11 +290,11 @@
       <h2>Pause</h2>
       <div class="final" id="pauseScore">0</div>
       <div class="pause-goals" id="pauseGoals"></div>
-      <div class="actions three" style="margin-top:20px">
+      <div class="actions three pause-actions">
         <button class="btn solid" data-act="resume">Reprendre</button>
         <button class="btn" data-act="restart">Recommencer</button>
+        <button class="btn" data-act="quit">Menu</button>
       </div>
-      <button class="link" data-act="quit">Quitter la partie</button>
     </div>
   </div>
 
@@ -321,6 +322,7 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2.5" width="16" height="19" rx="3"/><circle cx="12" cy="9.5" r="3"/><path d="M8 17h8"/></svg>
           <span>Partager l'image</span>
         </button>
+        <button class="btn" data-act="home" id="menuBtn" hidden>Menu</button>
         <button class="btn solid" data-act="replay" id="replayBtn">Rejouer</button>
       </div>
       <p class="share-status" id="shareStatus" role="status" aria-live="polite"></p>

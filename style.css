@@ -183,11 +183,15 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; bord
 }
 .btn:active { transform: scale(.97); }
 .btn svg { width: 18px; height: 18px; }
-.link { margin-top: 16px; color: var(--brume); font-size: 15px; padding: 8px 12px; }
+.link { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; margin-top: 16px; color: var(--brume); font-size: 15px; padding: 8px 12px; }
+.pause-actions { margin-top: 20px; }
+.noscript { padding: 24px; color: #fff8ec; font: 16px/1.5 system-ui, sans-serif; }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
 }
+/* même effet quand « Mouvement réduit » est coché dans les Réglages (classe rm sur <html>) */
+html.rm *, html.rm *::before, html.rm *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
 @media (min-width: 560px) {
   .screen { max-width: 480px; margin: 0 auto; }
   .sheet { max-width: 480px; margin: 0 auto; border-radius: 30px; margin-bottom: 20px; }
@@ -215,7 +219,7 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; bord
 .rank-txt b { display: block; font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: .01em; }
 .rank-txt small { display: block; color: var(--brume); font-size: 12px; margin-top: 1px; }
 .eclats {
-  display: inline-flex; align-items: center; gap: 6px; height: 36px; padding: 0 14px 0 10px; border-radius: 999px;
+  display: inline-flex; align-items: center; gap: 6px; height: 44px; padding: 0 14px 0 10px; border-radius: 999px;
   background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
   box-shadow: inset 0 0 0 1px rgba(255,255,255,.09);
   font-family: var(--display); font-weight: 700; font-size: 14px; font-variant-numeric: tabular-nums;
@@ -321,7 +325,7 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; bord
 .dock-nav button { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 6px 0; color: var(--brume); font-size: 11.5px; }
 .dock-nav svg { width: 22px; height: 22px; fill: none; stroke: currentColor; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
 .dock-nav button:active { color: var(--lin); }
-.badge { position: absolute; top: 2px; left: calc(50% + 8px); min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #ff5ce0; color: #fff; font: 700 10px/16px var(--body); font-style: normal; box-shadow: 0 0 10px rgba(255,92,224,.7); }
+.badge { position: absolute; top: 2px; left: calc(50% + 8px); min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #ff5ce0; color: #1a0f2e; font: 700 10px/16px var(--body); font-style: normal; box-shadow: 0 0 10px rgba(255,92,224,.7); }
 
 /* ---------- Panneaux ---------- */
 .panel { padding-left: 0; padding-right: 0; padding-bottom: 0; }
@@ -333,6 +337,8 @@ button:focus-visible { outline: 2px solid var(--cyan); outline-offset: 3px; bord
 .fine { color: var(--brume); font-size: 13px; line-height: 1.45; margin: 10px 2px; }
 .fine.center { text-align: center; margin-top: 26px; }
 .fine a { display: inline-block; padding: 10px 4px; color: var(--accent); }
+/* lien légal : même place (bas des réglages) et même taille dans les 4 jeux */
+.lien-legal { display: inline-flex !important; align-items: center; min-height: 44px; font-size: 14px; text-decoration: underline; text-underline-offset: 3px; }
 .sect { font-family: var(--display); font-weight: 700; font-size: 14px; margin: 26px 2px 10px; color: var(--lin); }
 
 /* boutique */
@@ -594,7 +600,7 @@ textarea:focus { outline: 2px solid color-mix(in srgb, var(--accent) 60%, transp
 .lang-row > span { font-size: 15px; }
 .lang-row small { display: block; color: var(--brume); font-size: 12px; margin-top: 2px; }
 .seg { display: inline-flex; padding: 4px; border-radius: 14px; background: rgba(0,0,0,.25); box-shadow: inset 0 0 0 1px rgba(255,255,255,.08); }
-.seg button { height: 38px; padding: 0 14px; border-radius: 10px; font-size: 14px; font-weight: 600; color: var(--brume); transition: background .2s, color .2s; }
+.seg button { height: 44px; padding: 0 14px; border-radius: 10px; font-size: 14px; font-weight: 600; color: var(--brume); transition: background .2s, color .2s; }
 .seg button[aria-pressed="true"] { color: #22140a; background: linear-gradient(180deg, #ffe7a8, var(--accent)); box-shadow: 0 6px 18px -8px var(--accent); }
 .actions.defi .btn { font-size: 13.5px; line-height: 1.15; padding: 0 10px; text-align: center; }
 .actions.defi .btn svg { flex: none; }
@@ -613,5 +619,5 @@ textarea:focus { outline: 2px solid color-mix(in srgb, var(--accent) 60%, transp
 .tile-name { line-height: 1.15; }
 html[lang="en"] .tile.daily .tile-name { font-size: 13px; }
 .calm .calm-hide, .calm .defi-serie { display: none !important; }
-.calm-chip { display: block; margin: 0 auto 12px; padding: 7px 16px; border-radius: 999px; border: 0; font: inherit; font-size: 13px; color: var(--brume); background: rgba(255,255,255,.05); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); cursor: pointer; }
+.calm-chip { display: flex; align-items: center; min-height: 44px; margin: -7px auto 5px; /* zone de touche 44 px sans pousser l accueil (même encombrement qu avant) */  padding: 0 16px; border-radius: 999px; border: 0; font: inherit; font-size: 13px; color: var(--brume); background: rgba(255,255,255,.05); box-shadow: inset 0 0 0 1px rgba(255,255,255,.12); cursor: pointer; }
 .calm-chip[aria-pressed="true"] { color: var(--lin); background: rgba(140,200,255,.16); box-shadow: inset 0 0 0 1px rgba(140,200,255,.55); }

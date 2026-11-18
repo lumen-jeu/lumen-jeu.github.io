@@ -3,33 +3,60 @@
 'use strict';
   /* ================= Rendu plateau ================= */
   function easeIn(p) { return p * p; }
-  function draw(now) {
-    var g = bctx;
+  // Fond du plateau (plaque + 48 creux en dégradé) dessiné une fois dans un canvas hors écran, refait seulement
+  // si la taille ou le thème change : avant, 48 createRadialGradient par image (15 images/s sur un téléphone lent).
+  var fondCache = null, fondCle = '';
+  function fondPlateau() {
+    var tint = THEME.bg[3], cle = [board.width, board.height, cell, ox, oy, tint].join();
+    if (fondCache && fondCle === cle) return fondCache;
+    fondCle = cle; fondCache = fondCache || document.createElement('canvas');
+    fondCache.width = board.width; fondCache.height = board.height;
+    var g = fondCache.getContext('2d');
     g.setTransform(DPR, 0, 0, DPR, 0, 0);
-    g.clearRect(0, 0, W, H);
-    if (!game || !vis) return;
-    if (shake) {
-      var sp0 = (now - shake) / 380;
-      if (sp0 < 1 && !reduceMotion) g.translate(Math.sin(now * 0.09) * 6 * (1 - sp0), Math.cos(now * 0.11) * 4 * (1 - sp0)); else if (sp0 >= 1) shake = 0;
-    }
-    var tint = THEME.bg[3];
     var pw = cell * COLS + cell * 0.24, ph = cell * ROWS + cell * 0.24;
     var plate = g.createLinearGradient(0, oy, 0, oy + ph);
     plate.addColorStop(0, hexA(tint, 0.055)); plate.addColorStop(1, hexA(tint, 0.015));
     g.fillStyle = plate;
     roundRect(g, ox - cell * 0.12, oy - cell * 0.12, pw, ph, cell * 0.42); g.fill();
     g.strokeStyle = hexA(tint, 0.07); g.lineWidth = 1; g.stroke();
-    var r, c;
-    for (r = 0; r < ROWS; r++) for (c = 0; c < COLS; c++) {
+    for (var r = 0; r < ROWS; r++) for (var c = 0; c < COLS; c++) {
       var x = cx(c), y = cy(r);
       var grad = g.createRadialGradient(x, y - cell * 0.1, cell * 0.1, x, y, cell * 0.44);
       grad.addColorStop(0, 'rgba(10,6,30,0.0)'); grad.addColorStop(0.75, 'rgba(10,6,30,0.35)'); grad.addColorStop(1, hexA(tint, 0.045));
       g.fillStyle = grad; g.beginPath(); g.arc(x, y, cell * 0.44, 0, Math.PI * 2); g.fill();
     }
+    return fondCache;
+  }
+  // Plateau immobile = rien à redessiner : on compare un résumé de l'état, et on ne saute l'image que si rien n'anime.
+  var drawSig = '';
+  function boardAnimates(now) {
+    if (shake || flash || dragging || tuto || hint || chain.length || ghosts.length || particles.length || rings.length || popups.length) return true;
+    for (var r = 0; r < ROWS; r++) for (var c = 0; c < COLS; c++) {
+      var v = vis[r][c];
+      if (v.dur || v.pop || v.land) return true;
+      if (!reduceMotion && ((v.lv >= 8 && v.lv <= PRISM) || v.m === E.BOMB)) return true; // grosses orbes qui respirent, prismes, bombes qui tournent
+    }
+    return false;
+  }
+  function draw(now) {
+    var g = bctx;
+    if (!game || !vis) { g.setTransform(DPR, 0, 0, DPR, 0, 0); g.clearRect(0, 0, W, H); drawSig = ''; return; }
+    if (!dragging && !game.over && !tuto && now - lastAction > 8000 && !hint) hint = E.findHint(game.grid, game.mods);
+    var sig = [board.width, board.height, THEME.id, targeting, game.over, game.grid.join(';'), game.mods.join(';')].join('|');
+    if (boardAnimates(now)) drawSig = '';
+    else if (sig === drawSig) return;
+    else drawSig = sig;
+    g.setTransform(DPR, 0, 0, DPR, 0, 0);
+    g.clearRect(0, 0, W, H);
+    if (shake) {
+      var sp0 = (now - shake) / 380;
+      if (sp0 < 1 && !reduceMotion) g.translate(Math.sin(now * 0.09) * 6 * (1 - sp0), Math.cos(now * 0.11) * 4 * (1 - sp0)); else if (sp0 >= 1) shake = 0;
+    }
+    g.drawImage(fondPlateau(), 0, 0, W, H);
+    var r, c;
     var sel = {};
     chain.forEach(function (p) { sel[p.r * COLS + p.c] = true; });
     var clv = chainLv();
-    if (!dragging && !game.over && !tuto && now - lastAction > 8000 && !hint) hint = E.findHint(game.grid, game.mods);
     var hintSet = {};
     if (hint) hint.forEach(function (p) { hintSet[p.r * COLS + p.c] = true; });
     if (tuto && TUTO_STEPS[tuto.step] && !dragging) TUTO_STEPS[tuto.step].cells.forEach(function (p) { hintSet[p[0] * COLS + p[1]] = true; });
@@ -176,6 +203,7 @@
     }
   }
   function roundRect(g, x, y, w, h, r) {
+    r = Math.max(0, Math.min(r, w / 2, h / 2)); // arcTo refuse un rayon négatif (IndexSizeError)
     g.beginPath();
     g.moveTo(x + r, y); g.arcTo(x + w, y, x + w, y + h, r); g.arcTo(x + w, y + h, x, y + h, r);
     g.arcTo(x, y + h, x, y, r); g.arcTo(x, y, x + w, y, r); g.closePath();

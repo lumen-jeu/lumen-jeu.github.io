@@ -176,6 +176,7 @@
     $('gains').innerHTML = gains;
     // partage
     $('shareBtn').hidden = mode === 'adventure' && !game.won;
+    $('menuBtn').hidden = !$('shareBtn').hidden; // niveau manqué : « Réessayer » + « Menu » côte à côte, plus un bouton seul collé à gauche
     $('shareLbl').textContent = tr(mode === 'daily' ? 'Partager le résultat' : 'Partager');
     $('shareImgBtn').hidden = mode !== 'daily';
     $('overVeil').querySelector('.actions').classList.toggle('defi', mode === 'daily');

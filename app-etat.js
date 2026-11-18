@@ -6,7 +6,18 @@
   I.apply(document);
   var COLS = E.COLS, ROWS = E.ROWS, PRISM = E.PRISM, STONE = E.STONE;
   var $ = function (id) { return document.getElementById(id); };
-  var reduceMotion = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  // Mouvement réduit : préférence du système OU réglage du jeu (clé lumen.mouvement, hors code LUMEN2 comme lumen.lang)
+  var reduceMotion = false;
+  function lireMouvement() { try { return localStorage.getItem('lumen.mouvement') === '1'; } catch (e) { return false; } }
+  function applyMotion() {
+    var choix = lireMouvement();
+    reduceMotion = choix || !!(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+    document.documentElement.classList.toggle('rm', choix);
+    var c = document.getElementById('setMotion'); if (c) c.checked = choix;
+  }
+  applyMotion();
+  // CSP sans 'unsafe-inline' : aucun attribut style dans le HTML généré ; les valeurs passent par data-s puis le CSSOM (autorisé)
+  function styler(root) { root.querySelectorAll('[data-s]').forEach(function (el) { el.style.cssText = el.getAttribute('data-s'); el.removeAttribute('data-s'); }); return root; }
   var FLAME = '<svg class="flame" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5c.6 3.4 5.5 5.6 5.5 11a5.5 5.5 0 0 1-11 0c0-2.6 1.5-4.4 2.6-5.3.1 1.8.9 2.9 2 3.2-.4-3 .1-6.2.9-8.9z"/></svg>';
   var SHARD = '<svg class="shard" viewBox="0 0 24 24"><path d="M12 2l5 9-5 11-5-11z"/></svg>';
   var STAR = function (on, cls) { return '<svg class="' + (on ? 'on ' : '') + (cls || '') + '" viewBox="0 0 24 24"><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.3l-5.9 3.3 1.3-6.6-4.9-4.6 6.6-.8z" fill="' + (on ? '#ffd36a' : 'rgba(255,255,255,.12)') + '" stroke="' + (on ? '#fff3c8' : 'rgba(255,255,255,.1)') + '" stroke-width="1"/></svg>'; };

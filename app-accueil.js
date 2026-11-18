@@ -162,16 +162,16 @@
     var html = '';
     labels.forEach(function (l) {
       var locked = l.n > cur;
-      html += '<div class="chapter-label' + (locked ? ' locked' : '') + (l.n > 120 ? ' endless-label' : '') + '" style="top:' + (l.y - 40) + 'px;--cc:' + l.ch.hue + '"><b>' + esc(l.ch.name) + '</b><span>' + (l.n > 120 ? tr('Au-delà des 120 niveaux') : tr('Chapitre {0}, niveaux {1} à {2}', l.ch.n, l.n, l.n + 19)) + '</span></div>';
+      html += '<div class="chapter-label' + (locked ? ' locked' : '') + (l.n > 120 ? ' endless-label' : '') + '" data-s="top:' + (l.y - 40) + 'px;--cc:' + l.ch.hue + '"><b>' + esc(l.ch.name) + '</b><span>' + (l.n > 120 ? tr('Au-delà des 120 niveaux') : tr('Chapitre {0}, niveaux {1} à {2}', l.ch.n, l.n, l.n + 19)) + '</span></div>';
     });
     nodes.forEach(function (nd) {
       var st = S.adv[nd.n - 1] || 0, locked = nd.n > cur, isCur = nd.n === cur;
       var cls = 'node' + (locked ? ' locked' : '') + (isCur ? ' current' : '') + (st === 3 ? ' perfect' : '');
-      html += '<button class="' + cls + '" data-act="level" data-n="' + nd.n + '" style="left:' + nd.x.toFixed(1) + 'px;top:' + nd.y.toFixed(1) + 'px;--nc:' + nd.ch.hue + ';--nc2:' + nd.ch.hue2 + '"' + (locked ? ' aria-disabled="true"' : '') + ' aria-label="' + tr('Niveau {0}', nd.n) + (locked ? tr(', verrouillé') : '') + (st ? tr(', {0} étoiles', st) : '') + '">' +
+      html += '<button class="' + cls + '" data-act="level" data-n="' + nd.n + '" data-s="left:' + nd.x.toFixed(1) + 'px;top:' + nd.y.toFixed(1) + 'px;--nc:' + nd.ch.hue + ';--nc2:' + nd.ch.hue2 + '"' + (locked ? ' aria-disabled="true"' : '') + ' aria-label="' + tr('Niveau {0}', nd.n) + (locked ? tr(', verrouillé') : '') + (st ? tr(', {0} étoiles', st) : '') + '">' +
         '<span class="core">' + (locked ? '' : nd.n) + '</span>' +
         (!locked ? '<span class="st">' + [1, 2, 3].map(function (i) { return '<i class="' + (st >= i ? 'on' : '') + '"></i>'; }).join('') + '</span>' : '') + '</button>';
     });
-    inner.innerHTML = html;
+    inner.innerHTML = html; styler(inner);
     var rng = new E.Rng(99);
     mapStars = [];
     for (var k = 0; k < 260; k++) mapStars.push([rng.next() * w, rng.next() * mapH, rng.next() * 1.4 + 0.3, rng.next()]);

@@ -19,9 +19,12 @@
   function render(box, t) {
     if (!box) return;
     box.innerHTML = '<h3 class="sect">' + esc(t('Les autres jeux d\'Aulit')) + '</h3><div class="set-group autres">' + autres().map(function (j) {
-      return '<a class="autre" href="' + j.url + '" target="_blank" rel="noopener" style="--j:' + j.teinte + '"><i aria-hidden="true"></i>' +
+      return '<a class="autre" href="' + j.url + '" target="_blank" rel="noopener"><i aria-hidden="true"></i>' +
         '<span><b>' + esc(j.nom) + '</b><small>' + esc(t(j.texte)) + '</small></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg></a>';
     }).join('') + '</div>';
+    // teinte posée par le CSSOM : la CSP n'autorise aucun attribut style
+    var liens = box.querySelectorAll ? box.querySelectorAll('.autre') : [];
+    autres().forEach(function (j, i) { if (liens[i]) liens[i].style.setProperty('--j', j.teinte); });
   }
   return { JEUX: JEUX, autres: autres, render: render };
 });

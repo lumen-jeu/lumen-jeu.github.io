@@ -38,16 +38,17 @@
       var act = on ? '<span class="pill use">' + tr('Actif') + '</span>' : own ? '<button class="pill" data-act="useTheme" data-id="' + t.id + '">' + tr('Utiliser') + '</button>'
         : '<button class="pill" data-act="buyTheme" data-id="' + t.id + '"' + (S.ec < t.price ? ' disabled' : '') + '>' + SHARD + fmt(t.price) + '</button>';
       var sub = own ? tr(on ? 'Thème actuel' : 'Débloqué') : tr('Offert au rang {0}', t.rank);
-      return '<div class="theme-card' + (on ? ' on' : '') + '" style="--t-nuit:' + t.bg[0] + ';--t-haut:' + t.bg[2] + ';--t-acc:' + t.accent + '"><canvas></canvas><div><b>' + tr(t.name) + '</b><small>' + sub + '</small></div>' + act + '</div>';
+      return '<div class="theme-card' + (on ? ' on' : '') + '" data-s="--t-nuit:' + t.bg[0] + ';--t-haut:' + t.bg[2] + ';--t-acc:' + t.accent + '"><canvas></canvas><div><b>' + tr(t.name) + '</b><small>' + sub + '</small></div>' + act + '</div>';
     }).join('');
-    box.querySelectorAll('canvas').forEach(function (cv, i) { themeCanvas(P.THEMES[i], cv); });
+    styler(box).querySelectorAll('canvas').forEach(function (cv, i) { themeCanvas(P.THEMES[i], cv); });
   }
   function renderMissions() {
     var ms = P.ensureMissions(S, DAY);
     $('misList').innerHTML = ms.map(function (m, i) {
       var p = S.mis.p[i], done = S.mis.done[i];
-      return '<div class="mission' + (done ? ' done' : '') + '"><b>' + esc(m.text) + '</b><span class="rw">+' + m.reward + ' ' + SHARD + '</span><div class="bar"><i style="width:' + Math.round(100 * Math.min(1, p / m.target)) + '%"></i></div><span class="val">' + fmt(Math.min(p, m.target)) + ' / ' + fmt(m.target) + '</span></div>';
+      return '<div class="mission' + (done ? ' done' : '') + '"><b>' + esc(m.text) + '</b><span class="rw">+' + m.reward + ' ' + SHARD + '</span><div class="bar"><i data-s="width:' + Math.round(100 * Math.min(1, p / m.target)) + '%"></i></div><span class="val">' + fmt(Math.min(p, m.target)) + ' / ' + fmt(m.target) + '</span></div>';
     }).join('');
+    styler($('misList'));
     var sc = $('streakCard');
     var scn = S.streak.last >= DAY - 1 ? S.streak.count : 0;
     sc.innerHTML = '<strong>' + trn(scn, '{0} jour de suite', '{0} jours de suite') + '</strong><p>' + tr('Ouvrez LUMEN chaque jour. Le 7<sup>e</sup> jour offre 150 éclats et une Étincelle. Un jour manqué, et la série repart de zéro. Record : {0} jours.', S.streak.best) + '</p><div class="moons"></div>';
@@ -68,16 +69,17 @@
     $('achTotal').textContent = total + ' / ' + list.length * 3;
     $('achList').innerHTML = list.map(function (a) {
       var prev = a.tier ? a.tiers[a.tier - 1] : 0, f = a.tier >= 3 ? 1 : Math.max(0, Math.min(1, (a.value - prev) / (a.next - prev)));
-      return '<div class="ach"><div class="medal">' + MEDAL(a.tier) + '</div><div><span class="tiers"><i class="' + (a.tier >= 1 ? 't1' : '') + '"></i><i class="' + (a.tier >= 2 ? 't2' : '') + '"></i><i class="' + (a.tier >= 3 ? 't3' : '') + '"></i></span><b>' + esc(a.name) + '</b><p>' + (a.tier >= 3 ? tr('Terminé : ') : '') + esc(a.desc) + ' (' + fmt(Math.min(a.value, a.next)) + ' / ' + fmt(a.next) + ')</p><div class="bar"><i style="width:' + Math.round(f * 100) + '%"></i></div></div></div>';
+      return '<div class="ach"><div class="medal">' + MEDAL(a.tier) + '</div><div><span class="tiers"><i class="' + (a.tier >= 1 ? 't1' : '') + '"></i><i class="' + (a.tier >= 2 ? 't2' : '') + '"></i><i class="' + (a.tier >= 3 ? 't3' : '') + '"></i></span><b>' + esc(a.name) + '</b><p>' + (a.tier >= 3 ? tr('Terminé : ') : '') + esc(a.desc) + ' (' + fmt(Math.min(a.value, a.next)) + ' / ' + fmt(a.next) + ')</p><div class="bar"><i data-s="width:' + Math.round(f * 100) + '%"></i></div></div></div>';
     }).join('');
+    styler($('achList'));
   }
   function renderStats() {
     var rank = P.rankFor(S.xp), next = P.xpForRank(rank + 1), lo = P.xpForRank(rank);
     var nextTheme = P.THEMES.filter(function (t) { return t.rank > rank && S.themes.indexOf(t.id) < 0; })[0];
     var nextTitle = P.TITLES.filter(function (t) { return t[0] > rank; })[0];
-    $('rankCard').innerHTML = '<canvas id="rankBig"></canvas><div><b>' + P.titleFor(rank) + '</b><small>' + tr('Rang {0}, {1} / {2} lueur', rank, fmt(S.xp - lo), fmt(next - lo)) + '</small><div class="bar"><i style="width:' + Math.round(100 * (S.xp - lo) / (next - lo)) + '%"></i></div>' +
+    $('rankCard').innerHTML = '<canvas id="rankBig"></canvas><div><b>' + P.titleFor(rank) + '</b><small>' + tr('Rang {0}, {1} / {2} lueur', rank, fmt(S.xp - lo), fmt(next - lo)) + '</small><div class="bar"><i data-s="width:' + Math.round(100 * (S.xp - lo) / (next - lo)) + '%"></i></div>' +
       '<div class="unl">' + (nextTitle ? tr('Rang {0} : titre « {1} »', nextTitle[0], tr(nextTitle[1])) : tr('Tous les titres obtenus')) + (nextTheme ? '<br>' + tr('Rang {0} : thème {1}', nextTheme.rank, tr(nextTheme.name)) : '') + '</div></div>';
-    drawRing($('rankBig'), 84);
+    styler($('rankCard')); drawRing($('rankBig'), 84);
     var st = S.stats;
     var cells = [
       [fmt(st.games), 'Parties jouées'], [fmt(S.best), 'Meilleur score'], [st.maxLv, 'Niveau d\'orbe max'], [st.longest, 'Plus longue chaîne'],
@@ -87,7 +89,7 @@
     $('statGrid').innerHTML = cells.map(function (c) { return '<div class="stat-cell"><b>' + c[0] + '</b><span>' + tr(c[1]) + '</span></div>'; }).join('');
   }
   function renderSettings() {
-    $('setSnd').checked = !!S.set.snd; $('setMus').checked = !!S.set.mus; $('setVib').checked = !!S.set.vib; $('setCalm').checked = !!S.set.calm;
+    $('setSnd').checked = !!S.set.snd; $('setMus').checked = !!S.set.mus; $('setVib').checked = !!S.set.vib; $('setCalm').checked = !!S.set.calm; $('setMotion').checked = lireMouvement();
     $('saveCode').value = P.exportCode(S);
     $('importBox').hidden = true; $('importErr').hidden = true; $('importCode').value = '';
     $('resetConfirm').hidden = true; $('resetBtn').hidden = false;
@@ -133,6 +135,37 @@
     if (name === 'settings') renderSettings();
   }
   function back() { var to = stack.pop() || 'home'; showScreen(to, false); if (to === 'game') { /* rien */ } }
+
+  /* ================= Bouton Retour du téléphone (même schéma dans les 4 jeux) ================= */
+  // Une entrée d'historique tant qu'on n'est pas sur l'accueil nu. Retour = écran précédent ; en partie, il ouvre la pause
+  // (il ne ferme plus l'appli). L'entrée est posée pendant un geste du joueur (Chrome ignore celles posées sans geste).
+  var hist = { pose: false, retour: false };
+  function horsAccueil() { return current !== 'home' || !$('giftVeil').hidden; }
+  function histSync(deLaBoucle) {
+    if (hist.retour) return; // history.back() en cours : la popstate rappellera histSync
+    var hors = horsAccueil();
+    if (hors && !hist.pose) {
+      if (deLaBoucle && navigator.userActivation && !navigator.userActivation.isActive) return;
+      try { history.pushState({ lumen: 1 }, ''); hist.pose = true; } catch (e) {}
+    } else if (!hors && hist.pose) { hist.pose = false; hist.retour = true; try { history.back(); } catch (e) { hist.retour = false; } }
+  }
+  function boutonRetour() {
+    var ouvert = function (id) { return !$(id).hidden; }, clic = function (sel) { var b = document.querySelector(sel); if (b) b.click(); };
+    if (ouvert('giftVeil')) clic('[data-act=closeGift]');
+    else if (ouvert('levelVeil')) $('levelVeil').hidden = true;
+    else if (current === 'game') {
+      if (ouvert('pauseVeil')) clic('#pauseVeil [data-act=resume]');
+      else if (ouvert('overVeil')) $('leaveBtn').click();
+      else if (game && !game.over) clic('#game [data-act=pause]');
+      else showScreen('home');
+    } else if (current === 'map') showScreen('home');
+    else back();
+  }
+  window.addEventListener('popstate', function () {
+    if (hist.retour) { hist.retour = false; histSync(); return; }
+    hist.pose = false; boutonRetour(); histSync();
+  });
+  document.addEventListener('pointerdown', function () { histSync(); }, true);
 
   document.addEventListener('click', function (e) {
     var b = e.target.closest('[data-act]');
@@ -201,6 +234,7 @@
         if (window.top !== window.self) { toastAny(tr('Ouvrez LUMEN directement pour effacer')); sfx.deny(); break; }
         var keepSet = S.set; S = P.newSave(); S.set = keepSet; S.tuto = 1; save(); applyTheme('nuit'); toastAny(tr('Progression effacée')); showScreen('home'); break;
     }
+    histSync(); // pendant le geste du joueur
   });
   function openLevelFromGame(n) { showScreen('map'); setTimeout(function () { openLevel(n); }, 350); }
   function restart() {
@@ -225,16 +259,23 @@
       save(); A.unlock(); syncAudio(); if (id === 'setVib' && S.set.vib) vibrate(30);
     });
   });
+  $('setMotion').addEventListener('change', function () {
+    try { localStorage.setItem('lumen.mouvement', $('setMotion').checked ? '1' : '0'); } catch (e) {}
+    applyMotion();
+  });
 
   /* ================= Boucle ================= */
   var lastT = performance.now();
   function loop(now) {
+    requestAnimationFrame(loop); // en tête : une erreur de dessin ne doit plus jamais figer le jeu
     var dt = Math.min(0.05, (now - lastT) / 1000); lastT = now;
-    for (var i = 0; i < particles.length; i++) { var q = particles[i]; q.life += dt; q.x += q.vx * dt; q.y += q.vy * dt; q.vy += cell * 5 * dt; q.vx *= 0.97; }
-    if (current === 'game') draw(now);
-    else if (current === 'home') drawHero(reduceMotion ? 0 : now);
-    else if (current === 'map') drawMap(reduceMotion ? 0 : now);
-    requestAnimationFrame(loop);
+    try {
+      for (var i = 0; i < particles.length; i++) { var q = particles[i]; q.life += dt; q.x += q.vx * dt; q.y += q.vy * dt; q.vy += cell * 5 * dt; q.vx *= 0.97; }
+      if (current === 'game') draw(now);
+      else if (current === 'home') drawHero(reduceMotion ? 0 : now);
+      else if (current === 'map') drawMap(reduceMotion ? 0 : now);
+    } catch (e) { if (!loop.erreur) { loop.erreur = true; console.error(e); } } // signalée une fois, la boucle continue
+    histSync(true);
   }
 
   window.addEventListener('resize', function () {

@@ -95,3 +95,9 @@ GoatCounter sans cookie, chemins `/lumen/…`, chargé par le script d'une ligne
 ## Performances (16/11/2026)
 - Scripts préchargés en parallèle (`rel=preload` dans `<head>`, voir PIEGES) ; polices `.woff2` gardées un an par Caddy
   (`serveur-aulit/Caddyfile`, snippet `statique`), le reste 10 min.
+
+## Audit du 18/11/2026 (pause, Retour, rendu, accessibilité)
+- Bouton Retour : `histSync()` (dans `app.js`) pose une entrée d'historique tant qu'on n'est pas sur l'accueil nu (appelé à chaque clic, au toucher et à chaque image, jamais sans geste récent) ; `popstate` → `boutonRetour()` : cadeau / fiche de niveau fermés, en partie pause ⇄ reprise, fin → bouton du bas, carte → accueil, panneaux → `back()`.
+- Rendu du plateau (`app-rendu.js`) : `fondPlateau()` dessine plaque + 48 creux une fois (clé : taille, `cell`, teinte) ; `draw()` saute l'image si `boardAnimates()` est faux et que le résumé de l'état (`drawSig` : taille, thème, ciblage, grille, mods) n'a pas changé. Le calcul de l'indice (8 s d'inactivité) se fait avant ce test.
+- `styler(root)` (`app-etat.js`) : les valeurs variables du HTML généré passent par `data-s` puis le CSSOM (CSP sans `'unsafe-inline'`).
+- Mouvement réduit : `reduceMotion` = préférence du système **ou** `lumen.mouvement` (`applyMotion()`), classe `rm` sur `<html>` pour les animations CSS.

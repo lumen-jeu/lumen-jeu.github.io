@@ -40,3 +40,9 @@ Chrome identifie une PWA installée par son `id` ; en changer = une autre appli,
 - La CSP est en `<meta>` : Chrome ne repère alors plus les `<script src>` à l'avance et les charge **un par un**. D'où le bloc
   `<link rel="preload" … as="script">` avant `</head>` : **ajouter / renommer un script = mettre aussi à jour sa ligne de préchargement**
   (même adresse exacte, `?v=` compris). Un oubli ne casse rien, il ralentit seulement.
+
+## Audit du 18/11/2026
+- **Plus d'attribut `style="…"` dans le HTML généré** (CSP sans `'unsafe-inline'`, `tests/csp.test.js`) : écrire `data-s="…"` puis appeler `styler(conteneur)` après `innerHTML` ; `el.style.setProperty(…)` reste permis.
+- **Redessin seulement quand ça bouge** : un nouvel effet animé du plateau doit être signalé dans `boardAnimates()` (sinon il ne s'affichera qu'à la prochaine action) ; un nouvel état visible sans animation doit entrer dans `drawSig`.
+- **`requestAnimationFrame(loop)` reste en tête de `loop()`** : une exception de dessin figeait tout le jeu (bug L1).
+- **Historique** : ne jamais appeler `history.pushState` ailleurs que dans `histSync()` (une seule entrée à la fois).

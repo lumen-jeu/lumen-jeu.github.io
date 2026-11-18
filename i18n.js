@@ -33,7 +33,7 @@
     'Garder ma progression': 'Keep my progress', 'Tout effacer': 'Erase everything',
     'LUMEN v2 · aucune donnée ne quitte votre appareil': 'LUMEN v2 · no data ever leaves your device',
     'Confidentialité, conditions et mentions légales': 'Privacy, terms and legal notice',
-    'Reprendre': 'Resume', 'Recommencer': 'Restart', 'Quitter la partie': 'Quit game', 'Fin de partie': 'Game over',
+    'Reprendre': 'Resume', 'Recommencer': 'Restart', 'Menu': 'Menu', 'Mouvement réduit': 'Reduced motion', 'Coupe secousses, confettis et rebonds': 'No shaking, confetti or bouncing', 'Objectif : orbe {0}': 'Goal: orb {0}', 'Quitter la partie': 'Quit game', 'Fin de partie': 'Game over',
     'Plus aucune chaîne possible': 'No chains left', 'Nouveau record': 'New best', 'Niveau max': 'Top level', 'Record': 'Best',
     'Fusions': 'Merges', 'Texte à copier': 'Text to copy', 'Partager': 'Share', 'Rejouer': 'Play again', 'Retour à l\'accueil': 'Back to home',
     'Niveau': 'Level', 'Fermer': 'Close', 'Jouer': 'Play', 'Récompense': 'Reward', 'Récupérer': 'Collect', 'Nouvelle orbe': 'New orb',

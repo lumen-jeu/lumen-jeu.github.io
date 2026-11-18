@@ -22,8 +22,8 @@
       setTimeout(function () {
         var d = document.createElement('div');
         d.className = 'tick-item ' + ev.kind;
-        d.innerHTML = (ev.kind === 'ach' ? '<i style="background:' + tierCol[ev.tier] + '"></i>' : '') + '<span>' + esc(ev.text) + '</span>' + (ev.ec ? '<b>+' + ev.ec + '</b>' + SHARD : '');
-        box.appendChild(d);
+        d.innerHTML = (ev.kind === 'ach' ? '<i data-s="background:' + tierCol[ev.tier] + '"></i>' : '') + '<span>' + esc(ev.text) + '</span>' + (ev.ec ? '<b>+' + ev.ec + '</b>' + SHARD : '');
+        styler(d); box.appendChild(d);
         if (ev.ec) sfx.coin();
         setTimeout(function () { d.remove(); }, 3500);
       }, i * 700);
@@ -53,7 +53,8 @@
     DPR = Math.min(window.devicePixelRatio || 1, 3);
     W = r.width; H = r.height;
     board.width = Math.round(W * DPR); board.height = Math.round(H * DPR);
-    cell = Math.floor(Math.min((W - 8) / COLS, (H - 8) / ROWS));
+    // jamais nul ni négatif (plateau masqué : W = H = 0) : un rayon négatif ferait planter roundRect et figerait le plateau
+    cell = Math.max(1, Math.floor(Math.min((W - 8) / COLS, (H - 8) / ROWS)));
     ox = (W - cell * COLS) / 2; oy = (H - cell * ROWS) / 2;
     orbSize = Math.round(cell * 0.8 * DPR);
     spriteCache = {};
@@ -161,7 +162,7 @@
       prog.forEach(function (q, i) { paintGoalIcon(box.children[i].querySelector('canvas'), q.type, q.target); });
     }
     prog.forEach(function (q, i) {
-      var el = box.children[i], txt = q.type === 'level' ? (q.done ? '' : tr('Niveau {0}', q.target)) : fmt(q.value) + ' / ' + fmt(q.target);
+      var el = box.children[i], txt = q.type === 'level' ? (q.done ? '' : tr('Objectif : orbe {0}', q.target)) : fmt(q.value) + ' / ' + fmt(q.target);
       var span = el.querySelector('span');
       if (span.textContent !== txt) { span.textContent = txt; if (tick && !reduceMotion) { el.classList.remove('tick'); void el.offsetWidth; el.classList.add('tick'); } }
       el.classList.toggle('done', q.done);
